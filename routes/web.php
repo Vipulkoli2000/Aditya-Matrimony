@@ -122,6 +122,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::resource('packages', PackagesController::class);
         Route::resource('blocks', BlocksController::class);
         Route::resource('pages', AdminPagesController::class);
+        Route::resource('listing-categories', App\Http\Controllers\admin\ListingCategoriesController::class);
+        Route::resource('listing', App\Http\Controllers\ListingController::class);
         Route::get('/import/packages/', [PackagesController::class, 'import'])->name('packages.import');
         Route::post('/import_packages', [PackagesController::class, 'importPackagesExcel'])->name('packages.importPackagesExcel');
         Route::get('refresh_status', [UsersController::class, 'refresh_status'])->name('refresh_status.refresh');

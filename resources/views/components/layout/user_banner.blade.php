@@ -84,11 +84,47 @@
 
         <!-- Added Responsive CSS for Mobile -->
         <style>
+        /* Navbar animation for scrolling */
+        .navbar {
+            transition: all 0.3s ease;
+        }
+        
+        /* 3D Button Styling */
+        .btn-primary {
+            background: linear-gradient(to bottom, #f27272, #e63946);
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transform: translateY(0);
+            transition: all 0.2s ease;
+            font-weight: 500;
+            padding: 0.375rem 1.2rem;
+            height: 36px;
+            line-height: 1.5;
+        }
+        
+        /* Button size standardization */
+        .btn-sm.btn-primary {
+            height: 32px;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+            background: linear-gradient(to bottom, #f15b5b, #d62c39);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
+        }
+        
         @media (max-width: 768px) {
-            /* Adjust logo size */
+            /* Adjust navbar logo size on small screens */
             .navbar-brand img {
-                height: 50px;
-                width: auto;
+                height: 35px;
             }
             /* Smaller breadcrumb text for smaller screens */
             .breadcrumb-overlay {
@@ -105,20 +141,19 @@
     </head>
     
 
-    <body data-bs-spy="scroll" data-bs-target="#navBar" id="weddingHome">
+    <body data-bs-spy="scroll" data-bs-target="#navBar" id="weddingHome" style="padding-top: 80px;">
 
         <!-- Navbar start -->
-        <div class="container-fluid sticky-top px-0">
-            <div class="container-fluid">
-                <div class="container px-0">
-                    <nav class="navbar navbar-light navbar-expand-xl py-2" id="navBar">
-                        <a href="#" class="navbar-brand">
-                            <img src="{{asset('assets/user/img/logo.png')}}" class="img-fluid" style="height: 60px;">
-                        </a>
-                        <button class="navbar-toggler py-1 px-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                            <span class="fa fa-bars text-primary"></span>
-                        </button>
-                        <div class="collapse navbar-collapse py-2" id="navbarCollapse">
+        <div class="container-fluid fixed-top px-4 py-3">
+            <div class="container">
+                <nav class="navbar navbar-light navbar-expand-xl py-1 px-3 rounded-pill shadow-sm" id="navBar" style="background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); max-height: 65px;">
+                    <a href="#" class="navbar-brand">
+                        <img src="{{asset('assets/user/img/logo.png')}}" class="img-fluid" style="height: 38px;">
+                    </a>
+                    <button class="navbar-toggler py-1 px-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="fa fa-bars text-primary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse py-0" id="navbarCollapse">
                             <div class="navbar-nav mx-auto border-top">
                                 <a href="/" class="nav-item nav-link {{ Request::is('/') ? 'active' : '' }}">Home</a>
                                 <a href="/about" class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">About Us</a>
@@ -167,7 +202,6 @@
                 </div>
             </div>
         </div>
-        
         <!-- Navbar End -->
 
         <!-- Carousel Start -->

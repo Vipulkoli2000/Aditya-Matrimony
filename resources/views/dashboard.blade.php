@@ -256,7 +256,32 @@
                                       
                                         </div>
                                 </div>
-                                <a class="btn btn-primary btn-primary-outline-0 py-3 px-5 mt-4" href="/about">Know More</a>
+                                <style>
+.know-more-btn {
+  min-width: 150px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+  transition: all 0.2s ease;
+  background: linear-gradient(to bottom, #f27272, #e63946) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.know-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(to bottom, #f15b5b, #d62c39) !important;
+}
+
+.know-more-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+</style>
+<div class="text-start"><a class="btn btn-primary btn-primary-outline-0 mt-3 know-more-btn" href="/about"><span style="position: relative; top: -1px;">Know More</span></a></div>
                             </div>
                             <div class="col-lg-5 wow fadeInUp order-first order-md-last" data-wow-delay="0.3s">
                                 <img src="{{ asset('assets/images/aboutbanner.jpg') }}" 
