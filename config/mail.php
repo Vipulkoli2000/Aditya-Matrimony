@@ -104,7 +104,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'noreply@marathavivahmandaldombivli.com'),
-        'name' => env('MAIL_FROM_NAME', 'Matrimony via Brevo'),
+        'name' => env('MAIL_FROM_NAME', 'Matrimony'),
     ],
 
     /*
