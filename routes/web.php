@@ -68,6 +68,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/contact-us', function () {
         return view('default.view.pages.contact_us');
     })->name('contact_us');
+    Route::get('/wedding-resources', [App\Http\Controllers\ListingController::class, 'weddingResources'])->name('wedding.resources');
     
     
 

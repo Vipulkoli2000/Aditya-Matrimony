@@ -171,7 +171,7 @@
                                 <a href="{{route('logout')}}" class="btn  btn-light btn-light-outline-0 me-2">Logosadut</a>
                             @else
                                 <a href="{{route('register')}}" class="btn  btn-light btn-light-outline-0 me-2">  Register</a>
-                                <a href="{{route('login')}}" class="btn  btn-light btn-light-outline-0 me-2">  Login</a>
+                                <a href="{{route('login')}}" class="btn  btn-light btn-light-outline-0 me-2">  Lssogin</a>
                             </div>
                             @endauth
                         </div>

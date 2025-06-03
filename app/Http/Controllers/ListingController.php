@@ -11,6 +11,45 @@ use Illuminate\Support\Facades\Validator;
 class ListingController extends Controller
 {
     /**
+     * Display wedding resources for users with optional filtering.
+     */
+    public function weddingResources(Request $request)
+    {
+        // Start with a base query
+        $query = Listing::with('category')->orderBy('business_name');
+        
+        // Apply filters if they exist
+        if ($request->filled('country')) {
+            $query->where('country', $request->country);
+        }
+        
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
+        
+        if ($request->filled('city')) {
+            $query->where('city', 'like', '%' . $request->city . '%');
+        }
+        
+        if ($request->filled('listing_category_id') && $request->listing_category_id != 'all') {
+            $query->where('listing_category_id', $request->listing_category_id);
+        }
+        
+        // Get the listings based on filters
+        $listings = $query->get();
+        
+        // Get data for filter dropdowns
+        $countries = config('data.country');
+        $states = config('data.state');
+        $categories = ListingCategory::orderBy('listing_category')->get();
+        
+        // Get unique cities from the database for the dropdown
+        $cities = Listing::select('city')->distinct()->orderBy('city')->pluck('city');
+        
+        return view('wedding-resources', compact('listings', 'countries', 'states', 'categories', 'cities'));
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)

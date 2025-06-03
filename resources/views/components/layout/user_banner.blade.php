@@ -158,6 +158,7 @@
                                 <a href="/" class="nav-item nav-link {{ Request::is('/') ? 'active' : '' }}">Home</a>
                                 <a href="/about" class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">About Us</a>
                                 <a href="{{ route('basic_details.index') }}" class="nav-item nav-link {{ request()->routeIs('basic_details.index') ? 'active' : '' }}">Profile</a>
+                                <a href="{{ route('wedding.resources') }}" class="nav-item nav-link {{ Request::is('wedding-resources') ? 'active' : '' }}">Wedding Resources</a>
                                 <a href="{{ route('contact_us') }}" class="nav-item nav-link {{ Request::is('contact-us') ? 'active' : '' }}">Contact Us</a>
                             </div>
                             @auth
@@ -388,8 +389,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             <p class="text-white">Aditya Matrimony is a community-driven platform dedicated to facilitating matrimonial alliances within the community, focusing on cultural heritage and tradition. We offer a personalized, respectful approach to matchmaking, helping individuals and families find compatible life partners.
                             </p>
                             {{-- <div class="btn-link d-flex justify-content-center">
-                                <a href="#" class="btn  btn-light btn-light-outline-0 me-2">  Register</a>
-                                <a href="#" class="btn  btn-light btn-light-outline-0 me-2">  Login</a>
+                                <a href="#" class="btn  btn-light btn-light-outline-0 me-2">Register</a>
+                                <a href="#" class="btn  btn-light btn-light-outline-0 me-2">Login</a>
                             </div> --}}
                         </div>
                     </div>

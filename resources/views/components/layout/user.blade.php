@@ -133,6 +133,7 @@
               <a href="/" class="nav-item nav-link active">Home</a>
               <a href="/about" class="nav-item nav-link">About Us</a>
               <a href="{{ route('basic_details.index') }}" class="nav-item nav-link">Profile</a>
+              <a href="{{ route('wedding.resources') }}" class="nav-item nav-link {{ Request::is('wedding-resources') ? 'active' : '' }}">Wedding Resources</a>
               <a href="{{ route('contact_us') }}" class="nav-item nav-link {{ Request::is('contact-us') ? 'active' : '' }}">Contact Us</a>
             </div>
             @auth
@@ -303,6 +304,7 @@
           <div class="footer-item d-flex flex-column">
             <h4 class="mb-4 text-white">Quick Links</h4>
             <a href="/" class="btn-link">Home</a>
+            <a href="/wedding-resource" class="btn-link">Wedding Resource</a>
             <a href="/terms-and-conditions" class="btn-link">Terms and Conditions</a>
             <a href="/privacy-policy" class="btn-link">Privacy Policy</a>
             <a href="/disclaimer" class="btn-link">Disclaimer</a>
