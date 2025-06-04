@@ -144,9 +144,7 @@
             </div>
         </div>
         
-        <div id="sidebar">
-            <x-common.usersidebar />
-        </div>
+     
     </div>
 </x-layout.user_banner>
 

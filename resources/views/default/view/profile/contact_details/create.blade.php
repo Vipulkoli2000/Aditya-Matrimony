@@ -300,9 +300,7 @@
             </div>
         </form>
 
-        <div class="sidebar">
-            <x-common.usersidebar />
-        </div>
+     
     </div>
 
     <script>

@@ -561,9 +561,7 @@
                 </div>
             </form>
         </div>
-        <div class="sidebar">
-            <x-common.usersidebar />
-        </div>
+  
     </div>
     <script>
         // Insert textarea dynamically (if required)

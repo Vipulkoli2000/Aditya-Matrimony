@@ -189,7 +189,7 @@
                         <input id="remember_me" name="remember" type="checkbox" class="form-check-input" />
                         <label for="remember_me" class="form-check-label">{{ __('Remember me') }}</label>
                     </div>
-                    <button type="submit" class="btn text-white btn-primary w-100">SIGN IN</button>
+                    <button type="submit" class="btn text-white btn-primary w-100 d-flex justify-content-center align-items-center">SIGN IN</button>
                 </form>
                 @if (Route::has('password.request'))
                     <p class="text-center my-4">

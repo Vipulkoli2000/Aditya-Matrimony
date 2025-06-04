@@ -124,9 +124,7 @@
           <button type="submit" class="btn">Update Password</button>
         </form>
       </div>
-      <div class="sidebar">
-        <x-common.usersidebar />
-      </div>
+    
     </body>
     </html>
 </x-layout.user_banner>

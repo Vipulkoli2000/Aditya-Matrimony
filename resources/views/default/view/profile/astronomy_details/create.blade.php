@@ -714,9 +714,7 @@
         
           </form>
 {{-- dropdown end --}}  
-<div class="sidebar">
-    <x-common.usersidebar />
-</div>
+
 </div>
   
 <script>

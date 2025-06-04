@@ -531,9 +531,7 @@
 </div>
 </div>
   <div class="col-md-3">
-    <div class="sidebar">
-        <x-common.usersidebar />
- </div>
+
 </div> 
 </div>
     </div>

@@ -156,9 +156,7 @@
                 </div>
             </div>
 
-            <div class="sidebar">
-                <x-common.usersidebar />
-            </div>
+          
         </div>
 
         {{-- Image display --}}

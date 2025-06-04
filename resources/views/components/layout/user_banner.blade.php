@@ -138,6 +138,184 @@
         }
         </style>
        
+        <style>
+        /* Mobile Sidebar Styles - New Design */
+        .mobile-sidebar {
+            height: 100%;
+            width: 300px; /* Or your preferred width, e.g., 85vw */
+            position: fixed;
+            z-index: 1050;
+            top: 0;
+            left: -300px; /* Match width */
+            background-color: #fff;
+            overflow: hidden; /* Changed from overflow-x: hidden */
+            transition: left 0.3s ease-in-out;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-sidebar.open {
+            left: 0;
+        }
+
+        .mobile-sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            flex-shrink: 0;
+            background-color: #fff; /* Header background */
+        }
+
+        .mobile-sidebar-header .back-btn {
+            font-size: 20px;
+            color: #333;
+            margin-right: 15px;
+            text-decoration: none;
+            padding: 5px;
+        }
+        .mobile-sidebar-header .back-btn:hover {
+            color: #e63946;
+        }
+
+        .mobile-sidebar-header .user-info-details {
+            flex-grow: 1;
+        }
+
+        .mobile-sidebar-header .user-name {
+            display: block;
+            font-weight: 600; /* Bold */
+            font-size: 1rem; /* 16px */
+            color: #212529;
+        }
+
+        .mobile-sidebar-header .user-followers {
+            font-size: 0.75rem; /* 12px */
+            color: #6c757d;
+        }
+
+        .mobile-sidebar-header .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-left: 10px;
+        }
+
+        .mobile-sidebar-content {
+            display: flex;
+            flex-grow: 1;
+            overflow-y: auto; /* Allow scrolling if content overflows */
+        }
+
+        .mobile-sidebar-primary-nav {
+            width: 70px;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(180deg, #FFD1D1 0%, #E06C75 100%); /* Soft red gradient */
+            flex-shrink: 0;
+        }
+
+        .mobile-sidebar-primary-nav a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            color: #ffffff; /* White icon color */
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .mobile-sidebar-primary-nav a.active-primary-nav-item,
+        .mobile-sidebar-primary-nav a:hover {
+            background-color: #C95B63; /* Darker red background for active/hover */
+            color: #fff;
+        }
+        .mobile-sidebar-primary-nav a:last-child {
+            margin-bottom: 0;
+        }
+
+        .mobile-sidebar-secondary-nav {
+            flex-grow: 1;
+            padding: 15px 10px 15px 15px; /* Top, Right, Bottom, Left */
+            background-color: #fff;
+        }
+
+        .mobile-sidebar-secondary-nav .menu-section a {
+            display: flex;
+            align-items: center;
+            padding: 10px 0; /* Reduced vertical padding */
+            text-decoration: none;
+            font-size: 0.9rem; /* Slightly smaller text */
+            color: #333;
+            transition: color 0.2s ease, background-color 0.2s ease;
+            margin-bottom: 10px; /* Spacing between items */
+            border-radius: 4px;
+        }
+
+        .mobile-sidebar-secondary-nav .menu-section a i {
+            margin-right: 12px;
+            font-size: 1rem; /* Icon size in menu */
+            width: 20px;
+            text-align: center;
+            color: #555;
+        }
+
+        .mobile-sidebar-secondary-nav .menu-section a:hover {
+            color: #e63946; /* Primary color on hover */
+            /* background-color: #f8f9fa; */ /* Optional: light bg on hover */
+        }
+        .mobile-sidebar-secondary-nav .menu-section a.active {
+             color: #e63946; /* Primary color for active item */
+             font-weight: 500;
+        }
+
+        .mobile-sidebar-secondary-nav .menu-section a .badge {
+            margin-left: auto;
+            background-color: #17a2b8; /* Info blue for badge */
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 6px;
+            border-radius: 10px; /* Pill shape */
+            line-height: 1;
+        }
+
+        .mobile-sidebar-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-top: 1px solid #e0e0e0;
+            background-color: #f8f9fa; /* Light footer background */
+            flex-shrink: 0;
+            height: 50px;
+        }
+
+        .mobile-sidebar-footer .btn-logout-icon {
+            background: none;
+            border: none;
+            color: #555; /* Dark grey icon */
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .mobile-sidebar-footer .btn-logout-icon:hover {
+            color: #e63946; /* Primary color on hover */
+        }
+
+        .mobile-sidebar-footer .app-version {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+        </style>
     </head>
     
 
@@ -150,7 +328,7 @@
                     <a href="#" class="navbar-brand">
                         <img src="{{asset('assets/user/img/logo.png')}}" class="img-fluid" style="height: 38px;">
                     </a>
-                    <button class="navbar-toggler py-1 px-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <button class="navbar-toggler py-1 px-2" type="button" onclick="toggleMobileSidebar()">
                         <span class="fa fa-bars text-primary"></span>
                     </button>
                     <div class="collapse navbar-collapse py-0" id="navbarCollapse">
@@ -335,8 +513,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
  
 
-              {{ $slot }}
-              
+
+            <div class="container-fluid my-3">
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        {{ $slot }}
+                    </div>
+                    <div class="col-lg-4 d-none d-lg-block">
+                        <x-common.usersidebar />
+                    </div>
+                </div>
+            </div>
   
 
         <!-- Footer Start -->
@@ -454,4 +641,211 @@ document.addEventListener("DOMContentLoaded", function() {
 
     </body>
 
+<!-- Mobile Sidebar - New Design -->
+<div id="mobileSidebar" class="mobile-sidebar">
+    <!-- Sidebar Header -->
+    <div class="mobile-sidebar-header">
+        <a href="javascript:void(0)" class="back-btn" onclick="toggleMobileSidebar()" aria-label="Close sidebar">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="user-info-details">
+            <span class="user-name">{{ Auth::user()->name ?? 'Gabrielle Irene' }}</span>
+            <span class="user-followers">{{-- 5.2M Followers --}} {{ Auth::user()->email ?? ''}}</span>
+        </div>
+        <span id="userProfileIconFallback" style="display:none; width: 40px; height: 40px; border-radius: 50%; margin-left: 10px; background-color: #C95B63; color: white; align-items: center; justify-content: center; font-size: 24px;">
+            <i class="fas fa-user-circle"></i>
+        </span>
+    </div>
+
+    <!-- Sidebar Content (Primary Nav + Secondary Nav) -->
+    <div class="mobile-sidebar-content">
+        <!-- Primary Navigation (Icon Column) -->
+        <div class="mobile-sidebar-primary-nav">
+            <a href="#" class="active-primary-nav-item" data-menu="dashboard" title="Dashboard">
+                <i class="fas fa-th-large"></i>
+            </a>
+            <a href="#" data-menu="notifications" title="Notifications">
+                <i class="fas fa-bell"></i>
+            </a>
+            <a href="#" data-menu="account" title="Account">
+                <i class="fas fa-user-circle"></i>
+            </a>
+            <a href="#" data-menu="settings" title="Settings">
+                <i class="fas fa-cog"></i>
+            </a>
+        </div>
+
+        <!-- Secondary Navigation (Menu Items) -->
+        <div class="mobile-sidebar-secondary-nav">
+            @auth
+            <ul class="profile-sidebar-nav" id="menu-dashboard">
+                <li class="profile-sidebar-item {{ request()->is('/') ? 'active' : '' }}">
+                    <a href="{{ url('/') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-home" style="margin-right: 8px;"></i> Home
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('search.create') ? 'active' : '' }}">
+                    <a href="{{ route('search.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-search" style="margin-right: 8px;"></i> Search
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('view_profile.create') ? 'active' : '' }}">
+                    <a href="{{ route('view_profile.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-eye" style="margin-right: 8px;"></i> View&nbsp;Profile
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('basic_details.index') ? 'active' : '' }}">
+                    <a href="{{ route('basic_details.index') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-user" style="margin-right: 8px;"></i> Basic&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('religious_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('religious_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-pray" style="margin-right: 8px;"></i> Religious&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('family_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('family_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-users" style="margin-right: 8px;"></i> Family&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('astronomy_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('astronomy_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-star" style="margin-right: 8px;"></i> Astronomy&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('educational_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('educational_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-graduation-cap" style="margin-right: 8px;"></i> Educational&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('occupation_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('occupation_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-briefcase" style="margin-right: 8px;"></i> Occupational&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('contact_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('contact_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-address-book" style="margin-right: 8px;"></i> Contact&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('life_partner.create') ? 'active' : '' }}">
+                    <a href="{{ route('life_partner.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-heart" style="margin-right: 8px;"></i> About&nbsp;Life&nbsp;Partner
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('profiles.view_interested') ? 'active' : '' }}">
+                    <a href="{{ route('profiles.view_interested') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-thumbs-up" style="margin-right: 8px;"></i> Interested
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('profiles.view_favorite') ? 'active' : '' }}">
+                    <a href="{{ route('profiles.view_favorite') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-bookmark" style="margin-right: 8px;"></i> Favorites
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('user_packages.create') ? 'active' : '' }}">
+                    <a href="{{ route('user_packages.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Buy&nbsp;Packages
+                    </a>
+                </li>
+            </ul>
+           
+            @else
+                <div class="menu-section p-3">
+                    <a href="{{ route('login') }}" class="btn btn-primary d-block mb-2">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-outline-primary d-block">Register</a>
+                </div>
+            @endauth
+        </div>
+    </div>
+
+    <!-- Sidebar Footer -->
+    @auth
+    <div class="mobile-sidebar-footer">
+        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+            @csrf
+            <button type="submit" class="btn-logout-icon" aria-label="Logout">
+                <i class="fas fa-power-off"></i>
+            </button>
+        </form>
+        <a href="{{ route('profiles.update_password') }}" title="Update Password" aria-label="Update Password" class="btn-update-password-icon">
+            <i class="fas fa-key"></i>
+        </a>
+    </div>
+    @endauth
+</div>
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
+
+<script>
+    function toggleMobileSidebar() {
+        document.getElementById('mobileSidebar').classList.toggle('open');
+        document.getElementById('sidebarOverlay').classList.toggle('show');
+    }
+
+    // Function to handle logout confirmation from sidebar
+    function confirmSidebarLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6', // Standard blue
+            cancelButtonColor: '#d33',    // Standard red
+            confirmButtonText: 'Yes, logout!',
+            cancelButtonText: 'No, cancel!',
+            customClass: {
+                popup: 'swal2-popup-zindex' // Ensure SweetAlert is above sidebar overlay
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('sidebar-logout-form').submit();
+            }
+        });
+    }
+
+    // Function to handle logout confirmation from bottom sidebar button
+    function confirmBottomSidebarLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+            cancelButtonText: 'No, cancel!',
+            customClass: {
+                popup: 'swal2-popup-zindex'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('bottom-sidebar-logout-form').submit();
+            }
+        });
+    }
+
+    // Optional: Close sidebar if a non-button link is clicked
+    document.querySelectorAll('.mobile-sidebar .sidebar-links a').forEach(link => {
+        // Check if it's not a button and not a form submission trigger
+        if (!link.classList.contains('btn') && link.getAttribute('onclick') === null && link.closest('form') === null) {
+            link.addEventListener('click', (event) => {
+                const sidebar = document.getElementById('mobileSidebar');
+                if (sidebar.classList.contains('open')) {
+                    const href = link.getAttribute('href');
+                    // Only toggle if it's a real navigation link, not a JS action or an anchor on the same page
+                    if (href && href !== '#' && !href.toLowerCase().startsWith('javascript:') && !href.startsWith('#')) {
+                        toggleMobileSidebar();
+                    }
+                }
+            });
+        }
+    });
+</script>
+<style>
+/* Ensure SweetAlert is above sidebar and overlay */
+.swal2-container {
+  z-index: 1060 !important;
+}
+</style>
 </html>
