@@ -207,6 +207,7 @@
             display: flex;
             flex-grow: 1;
             overflow-y: auto; /* Allow scrolling if content overflows */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         .mobile-sidebar-primary-nav {
@@ -246,6 +247,7 @@
             flex-grow: 1;
             padding: 15px 10px 15px 15px; /* Top, Right, Bottom, Left */
             background-color: #fff;
+            margin-right: 0; /* Explicitly remove any right margin */
         }
 
         .mobile-sidebar-secondary-nav .menu-section a {
@@ -514,14 +516,40 @@ document.addEventListener("DOMContentLoaded", function() {
  
 
 
+@php
+    // Routes that are linked in the common user sidebar
+    $routesWithSidebarLink = [
+        'search.create',
+        'view_profile.create',
+        'basic_details.index',
+        'religious_details.create',
+        'family_details.create',
+        'astronomy_details.create',
+        'educational_details.create',
+        'occupation_details.create',
+        'contact_details.create',
+        'life_partner.create',
+        'user_packages.create',
+        'profiles.view_interested',
+        'profiles.view_favorite',
+    ];
+@endphp
+
             <div class="container-fluid my-3">
-                <div class="row">
-                    <div class="col-12 col-lg-8">
+                <div class="row justify-content-center">
+                    {{-- Main content column --}}
+                    <div class="col-12 {{ (Auth::check() && request()->routeIs($routesWithSidebarLink)) ? 'col-lg-8' : 'col-lg-12' }}">
                         {{ $slot }}
                     </div>
-                    <div class="col-lg-4 d-none d-lg-block">
-                        <x-common.usersidebar />
-                    </div>
+
+                    {{-- Sidebar column --}}
+                    @auth
+                        @if (request()->routeIs($routesWithSidebarLink))
+                            <div class="col-lg-4 d-none d-lg-block">
+                                <x-common.usersidebar />
+                            </div>
+                        @endif
+                    @endauth
                 </div>
             </div>
   
@@ -649,8 +677,8 @@ document.addEventListener("DOMContentLoaded", function() {
             <i class="fas fa-arrow-left"></i>
         </a>
         <div class="user-info-details">
-            <span class="user-name">{{ Auth::user()->name ?? 'Gabrielle Irene' }}</span>
-            <span class="user-followers">{{-- 5.2M Followers --}} {{ Auth::user()->email ?? ''}}</span>
+            <span class="user-name">{{ Auth::user()->name ?? 'Guest User' }}</span>
+            <span class="user-followers">{{-- 5.2M Followers --}} {{ Auth::user()->email ?? 'Welcome!!'}}</span>
         </div>
         <span id="userProfileIconFallback" style="display:none; width: 40px; height: 40px; border-radius: 50%; margin-left: 10px; background-color: #C95B63; color: white; align-items: center; justify-content: center; font-size: 24px;">
             <i class="fas fa-user-circle"></i>
@@ -661,29 +689,26 @@ document.addEventListener("DOMContentLoaded", function() {
     <div class="mobile-sidebar-content">
         <!-- Primary Navigation (Icon Column) -->
         <div class="mobile-sidebar-primary-nav">
-            <a href="#" class="active-primary-nav-item" data-menu="dashboard" title="Dashboard">
-                <i class="fas fa-th-large"></i>
+            <a href="{{ url('/') }}" class="{{ Request::is('/') ? 'active-primary-nav-item' : '' }}" title="Home">
+                <i class="fas fa-home"></i>
             </a>
-            <a href="#" data-menu="notifications" title="Notifications">
-                <i class="fas fa-bell"></i>
+            <a href="{{ url('/about') }}" class="{{ Request::is('about') ? 'active-primary-nav-item' : '' }}" title="About Us">
+                <i class="fas fa-info-circle"></i>
             </a>
-            <a href="#" data-menu="account" title="Account">
-                <i class="fas fa-user-circle"></i>
+            <a href="{{ route('wedding.resources') }}" class="{{ Request::routeIs('wedding.resources') ? 'active-primary-nav-item' : '' }}" title="Wedding Resources">
+                <i class="fas fa-map-marker-alt"></i>
             </a>
-            <a href="#" data-menu="settings" title="Settings">
-                <i class="fas fa-cog"></i>
+            <a href="{{ route('contact_us') }}" class="{{ Request::routeIs('contact_us') ? 'active-primary-nav-item' : '' }}" title="Contact Us">
+                <i class="fas fa-envelope"></i>
             </a>
+           
         </div>
 
         <!-- Secondary Navigation (Menu Items) -->
         <div class="mobile-sidebar-secondary-nav">
             @auth
             <ul class="profile-sidebar-nav" id="menu-dashboard">
-                <li class="profile-sidebar-item {{ request()->is('/') ? 'active' : '' }}">
-                    <a href="{{ url('/') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-home" style="margin-right: 8px;"></i> Home
-                    </a>
-                </li>
+              
                 <li class="profile-sidebar-item {{ request()->routeIs('search.create') ? 'active' : '' }}">
                     <a href="{{ route('search.create') }}" style="display: flex; align-items: center;">
                         <i class="fas fa-search" style="margin-right: 8px;"></i> Search
@@ -734,6 +759,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         <i class="fas fa-heart" style="margin-right: 8px;"></i> About&nbsp;Life&nbsp;Partner
                     </a>
                 </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('user_packages.create') ? 'active' : '' }}">
+                    <a href="{{ route('user_packages.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Buy&nbsp;Packages
+                    </a>
+                </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('profiles.view_interested') ? 'active' : '' }}">
                     <a href="{{ route('profiles.view_interested') }}" style="display: flex; align-items: center;">
                         <i class="fas fa-thumbs-up" style="margin-right: 8px;"></i> Interested
@@ -744,11 +774,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <i class="fas fa-bookmark" style="margin-right: 8px;"></i> Favorites
                     </a>
                 </li>
-                <li class="profile-sidebar-item {{ request()->routeIs('user_packages.create') ? 'active' : '' }}">
-                    <a href="{{ route('user_packages.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Buy&nbsp;Packages
-                    </a>
-                </li>
+             
             </ul>
            
             @else

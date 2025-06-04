@@ -2,10 +2,10 @@
     {{-- about start --}}
     <div>
     <div class="" id="weddingAbout">
-        <div class="position-absolute" style="top: px; right: 0;">
+        <div class="position-absolute d-none d-md-block" style="top: px; right: 0;">
             <img src="{{asset('assets/images/tamp-bg-1.png')}}" alt="Aditya Matrimony, Dombivili" class="hands">
         </div>
-        <div class="position-absolute" style="top: px; left: 0; transform: rotate(150deg);">
+        <div class="position-absolute d-none d-md-block" style="top: px; left: 0; transform: rotate(150deg);">
             <img src="{{asset('assets/images/tamp-bg-1.png')}}" alt="Aditya Matrimony, Dombivili" class="hands">
         </div>
         <div class="container position-relative py-5">
@@ -14,8 +14,8 @@
                 <div class="col-lg-12">
                     <div class="row g-4 align-items-center">
                         <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.3s">
-                            <div class="mx-auto  mb-3 wow fadeInUp" data-wow-delay="0.1s" >
-                                <h2 class="display-1 text-primary" style="margin-left: 40px; margin-top: 40px;">Contact Us</h2>
+                            <div class="mb-4 wow fadeInUp" data-wow-delay="0.1s" >
+                                <h2 class="display-4 fw-bold text-primary text-center text-lg-start">Contact Us</h2>
                             </div>
                             <div class="d-flex">
                                 <div class="my-auto">  
@@ -38,23 +38,25 @@
 								        </p>
 								    </div>
 								</div>
-								<p>
-								  <a href="tel://+919320717501" class="btn-link">
-									<em class="fas fa-phone text-secondary me-2"></em>+91 9320717501
-								  </a>
-								 
-								</p>
-                                <p> <a href="mailto://info@adityamatrimony.com" class="btn-link mb-3">
-									<em class="fas fa-envelope text-secondary me-2"></em>info@adityamatrimony.com
-								  </a>
-                                </p>
+                                <div class="mt-3">
+                                    <p class="mb-2">
+                                        <a href="tel://+919320717501" class="btn-link text-decoration-none fs-5">
+                                            <em class="fas fa-phone text-secondary me-2"></em>+91 9320717501
+                                        </a>
+                                    </p>
+                                    <p class="mb-0">
+                                        <a href="mailto://info@adityamatrimony.com" class="btn-link text-decoration-none fs-5">
+                                            <em class="fas fa-envelope text-secondary me-2"></em>info@adityamatrimony.com
+                                        </a>
+                                    </p>
+                                </div>
                                 </div>
                                 
                             </div>
                             {{-- <a class="btn btn-primary btn-primary-outline-0 py-3 px-5 mt-4" href="#">Know More</a> --}}
                         </div>
                         <div class="col-lg-5 wow fadeInUp order-first order-md-last" data-wow-delay="0.3s">
-                            <img src="{{asset('assets/images/aboutbanner.jpg')}}" alt="Aditya Matrimony, Dombivili" class="about-image" style="width: 400px; height: 400px;">
+                            <img src="{{asset('assets/images/aboutbanner.jpg')}}" alt="Aditya Matrimony, Dombivili" class="about-image img-fluid w-100 rounded shadow-sm">
                         </div>
                         
                        

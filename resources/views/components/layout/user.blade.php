@@ -115,62 +115,295 @@
       padding-top: 80px;
     }
   </style>
+  <style>
+    /* Mobile Sidebar Styles - New Design */
+    .mobile-sidebar {
+        height: 100%;
+        width: 300px; /* Fixed width for the sidebar */
+        position: fixed;
+        z-index: 1050; /* Ensure sidebar is above overlay and other content */
+        top: 0;
+        left: -300px; /* Start off-screen */
+        background-color: #fff;
+        overflow: hidden; /* Prevents scrollbars on the container itself */
+        transition: left 0.3s ease-in-out;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-sidebar.open {
+        left: 0; /* Slide in */
+    }
+
+    .mobile-sidebar-header {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        flex-shrink: 0; /* Prevent header from shrinking */
+        background-color: #fff;
+    }
+
+    .mobile-sidebar-header .back-btn {
+        font-size: 20px;
+        color: #333;
+        margin-right: 15px;
+        text-decoration: none;
+        padding: 5px; /* Clickable area */
+    }
+    .mobile-sidebar-header .back-btn:hover {
+        color: #e63946; /* Theme color */
+    }
+
+    .mobile-sidebar-header .user-info-details {
+        flex-grow: 1; /* Allow text to take available space */
+        overflow: hidden; /* Prevent long text from breaking layout */
+    }
+
+    .mobile-sidebar-header .user-name {
+        display: block;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #212529;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mobile-sidebar-header .user-followers {
+        font-size: 0.75rem;
+        color: #6c757d;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mobile-sidebar-header .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-left: 10px;
+        flex-shrink: 0;
+    }
+    .mobile-sidebar-header #userProfileIconFallback {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 10px;
+        background-color: #C95B63; /* Fallback background */
+        color: white;
+        display: flex; /* Use flex to center icon */
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem; /* Adjust icon size */
+        flex-shrink: 0;
+    }
+
+    .mobile-sidebar-content {
+        display: flex; /* Key for two-column layout */
+        flex-grow: 1; /* Allow content to fill available vertical space */
+        overflow-y: auto; /* Enable scrolling for the entire content area if needed */
+        overflow-x: hidden;
+    }
+
+    .mobile-sidebar-primary-nav {
+        width: 70px; /* Width of the icon-only primary navigation */
+        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: linear-gradient(180deg, #FFD1D1 0%, #E06C75 100%); /* Gradient from memory */
+        flex-shrink: 0;
+        overflow-y: auto; /* Scroll if many icons */
+    }
+
+    .mobile-sidebar-primary-nav a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 44px; /* Clickable area */
+        height: 44px; /* Clickable area */
+        color: #ffffff; /* White icon color */
+        font-size: 1.3rem;
+        margin-bottom: 25px;
+        border-radius: 50%; /* Circular background for active/hover */
+        text-decoration: none;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .mobile-sidebar-primary-nav a.active-primary-nav-item,
+    .mobile-sidebar-primary-nav a:hover {
+        background-color: #C95B63; /* Darker red for active/hover */
+        color: #fff;
+    }
+    .mobile-sidebar-primary-nav a:last-child {
+        margin-bottom: 0;
+    }
+
+    .mobile-sidebar-secondary-nav {
+        flex-grow: 1; /* Takes remaining width */
+        padding: 15px 10px 15px 15px; /* T, R, B, L */
+        background-color: #fff;
+        overflow-y: auto; /* Enable scrolling for secondary nav items */
+    }
+
+    .mobile-sidebar-secondary-nav .profile-sidebar-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .mobile-sidebar-secondary-nav .profile-sidebar-item a {
+        display: flex;
+        align-items: center;
+        padding: 10px 0; /* Reduced vertical padding */
+        text-decoration: none;
+        font-size: 0.9rem;
+        color: #333;
+        transition: color 0.2s ease, background-color 0.2s ease;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+
+    .mobile-sidebar-secondary-nav .profile-sidebar-item a i {
+        margin-right: 12px;
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+        color: #555;
+    }
+
+    .mobile-sidebar-secondary-nav .profile-sidebar-item a:hover {
+        color: #e63946;
+    }
+    .mobile-sidebar-secondary-nav .profile-sidebar-item.active a {
+         color: #e63946;
+         font-weight: 500;
+    }
+
+    .mobile-sidebar-footer {
+        display: flex;
+        justify-content: space-between; /* Pushes items to ends */
+        align-items: center;
+        padding: 10px 15px;
+        border-top: 1px solid #e0e0e0;
+        background-color: #f8f9fa; /* Light footer background */
+        flex-shrink: 0; /* Prevent footer from shrinking */
+        height: 50px; /* Fixed height for footer */
+    }
+
+    .mobile-sidebar-footer .btn-icon-style {
+        background: none;
+        border: none;
+        color: #555; /* Dark grey icon */
+        font-size: 1.4rem;
+        cursor: pointer;
+        padding: 5px;
+        line-height: 1; /* Ensure icon is vertically centered if text were present */
+    }
+    .mobile-sidebar-footer .btn-icon-style:hover {
+        color: #e63946; /* Theme color on hover */
+    }
+
+    /* Overlay for when the sidebar is open */
+    .sidebar-overlay {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+        z-index: 1049; /* Below sidebar (1050) but above other content */
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Added visibility transition */
+        visibility: hidden; /* Ensure it's not interactive when hidden */
+    }
+
+    .sidebar-overlay.show {
+        display: block; /* Or 'flex', 'grid' depending on needs, but 'block' is fine */
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* SweetAlert2 Customizations for smaller screens */
+    .swal2-popup.swal2-sm {
+        font-size: 0.8rem;
+        width: auto !important;
+        max-width: 90%;
+    }
+    .swal2-popup.swal2-sm .swal2-title {
+        font-size: 1.1rem;
+    }
+    .swal2-popup.swal2-sm .swal2-content,
+    .swal2-popup.swal2-sm .swal2-html-container {
+        font-size: 0.9rem;
+    }
+    .swal2-popup.swal2-sm .swal2-actions {
+        font-size: 0.8rem;
+    }
+  </style>
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#navBar" id="weddingHome">
   <!-- Navbar start -->
   <div class="container-fluid fixed-top px-4 py-3">
     <div class="container">
-      <nav class="navbar navbar-light navbar-expand-xl py-1 px-3 rounded-pill shadow-sm" id="navBar" style="background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); max-height: 65px;">
+      <nav class="navbar navbar-light navbar-expand-lg py-1 px-3 rounded-pill shadow-sm" id="navBar" style="background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); max-height: 65px;">
         <a href="#" class="navbar-brand">
           <img src="{{ asset('assets/user/img/logo.png') }}" class="img-fluid" style="height: 38px;">
         </a>
-        <button class="navbar-toggler py-1 px-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-          <span class="fa fa-bars text-primary"></span>
+        <!-- Hamburger for mobile sidebar -->
+        <button class="navbar-toggler d-lg-none" type="button" onclick="toggleMobileSidebar()" aria-label="Toggle mobile sidebar">
+            <span class="fa fa-bars"></span>
         </button>
         <div class="collapse navbar-collapse py-0" id="navbarCollapse">
             <div class="navbar-nav mx-auto border-top">
-              <a href="/" class="nav-item nav-link active">Home</a>
-              <a href="/about" class="nav-item nav-link">About Us</a>
-              <a href="{{ route('basic_details.index') }}" class="nav-item nav-link">Profile</a>
-              <a href="{{ route('wedding.resources') }}" class="nav-item nav-link {{ Request::is('wedding-resources') ? 'active' : '' }}">Wedding Resources</a>
-              <a href="{{ route('contact_us') }}" class="nav-item nav-link {{ Request::is('contact-us') ? 'active' : '' }}">Contact Us</a>
+                <a href="/" class="nav-item nav-link {{ Request::is('/') ? 'active' : '' }}">Home</a>
+                <a href="/about" class="nav-item nav-link {{ Request::is('about') ? 'active' : '' }}">About Us</a>
+                <a href="{{ route('basic_details.index') }}" class="nav-item nav-link {{ request()->routeIs('basic_details.index') ? 'active' : '' }}">Profile</a>
+                <a href="{{ route('wedding.resources') }}" class="nav-item nav-link {{ Request::is('wedding-resources') ? 'active' : '' }}">Wedding Resources</a>
+                <a href="{{ route('contact_us') }}" class="nav-item nav-link {{ Request::is('contact-us') ? 'active' : '' }}">Contact Us</a>
             </div>
             @auth
             <div class="d-flex align-items-center flex-nowrap">
-              <a href="{{ route('profiles.update_password') }}" class="btn btn-sm btn-primary py-1 px-3 ms-3 text-white">
-                Update Password
-              </a>
-              <form action="{{ route('logout') }}" method="POST" id="logout-form">
-                @csrf
-                <button type="button" class="btn btn-sm btn-primary py-1 px-3 ms-3 text-white" onclick="confirmLogout()">Logout</button>
-              </form>
+
+                <a href="{{ route('profiles.update_password') }}" class="btn btn-sm btn-primary py-1 px-3 ms-3 text-white">
+                    Update Password
+                </a>
+ 
+                <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                    @csrf
+                    <button type="button" class="btn btn-sm btn-primary py-1 px-3 ms-3 text-white" onclick="confirmLogout()">Logout</button>
+                </form>
             </div>
-
+            
             <script>
-              function confirmLogout() {
-                Swal.fire({
-                  title: 'Are you sure?',
-                  text: "You will be logged out!",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: 'Yes, logout!',
-                  cancelButtonText: 'No, cancel!'
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    document.getElementById('logout-form').submit();
-                  }
-                });
-              }
+                function confirmLogout() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You will be logged out!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, logout!',
+                        cancelButtonText: 'No, cancel!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('logout-form').submit();
+                        }
+                    });
+                }
             </script>
-
+            
+            
             @else
             <div class="d-flex align-items-center flex-nowrap">
-              <a href="{{ route('register') }}" class="btn btn-sm btn-primary py-1 px-3 ms-3 text-white">Register</a>
-              <a href="{{ route('login') }}" class="btn btn-sm btn-primary py-1 px-3 ms-3 text-white">Login</a>
+                <a href="{{route('register')}}" class="btn btn-sm btn-primary py-1 px-3 ms-3 text-white">Register</a>
+                <a href="{{route('login')}}" class="btn btn-sm btn-primary py-1 px-3 ms-3 text-white">Login</a>
             </div>
             @endauth
-          </div>
+        </div>
         </nav>
       </div>
     </div>
@@ -291,6 +524,157 @@
 
 
 </div>
+<!-- Mobile Sidebar - New Design -->
+<div id="mobileSidebar" class="mobile-sidebar d-md-none">
+    <!-- Sidebar Header -->
+    <div class="mobile-sidebar-header">
+        <a href="javascript:void(0)" class="back-btn" onclick="toggleMobileSidebar()" aria-label="Close sidebar">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        @auth
+        <div class="user-info-details">
+            <span class="user-name">{{ Str::limit(Auth::user()->name, 15) }}</span>
+            <span class="user-followers">{{ Str::limit(Auth::user()->email, 20) }}</span>
+        </div>
+        <img src="{{ Auth::user()->img_3 ?? Auth::user()->img_2 ?? Auth::user()->img_1 ?? Auth::user()->profile_photo_url ?? asset('assets/user/img/default-avatar.png') }}"
+             alt="User Profile"
+             class="profile-pic"
+             id="userProfilePic"
+             onerror="this.style.display='none'; document.getElementById('userProfileIconFallback').style.display='flex';"
+             />
+        <span id="userProfileIconFallback" style="display:none; width: 40px; height: 40px; border-radius: 50%; margin-left: 10px; background-color: #C95B63; color: white; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;" class="profile-pic">
+            @if(Auth::user() && Auth::user()->name)
+                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+            @else
+                <i class="fas fa-user"></i>
+            @endif
+        </span>
+        @else
+        <div class="user-info-details">
+            <span class="user-name">Guest User</span>
+            <span class="user-followers">Welcome!</span>
+        </div>
+        <span style="width: 40px; height: 40px; border-radius: 50%; background-color: #e9ecef; color: #495057; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;" class="profile-pic"><i class="fas fa-user-circle"></i></span>
+        @endauth
+    </div>
+
+    <!-- Sidebar Content -->
+    <div class="mobile-sidebar-content">
+        <!-- Primary Navigation (Icon Column) -->
+        <div class="mobile-sidebar-primary-nav">
+            <a href="{{ url('/') }}" class="{{ Request::is('/') ? 'active-primary-nav-item' : '' }}" title="Home">
+                <i class="fas fa-home"></i>
+            </a>
+            <a href="{{ url('/about') }}" class="{{ Request::is('about') ? 'active-primary-nav-item' : '' }}" title="About Us">
+                <i class="fas fa-info-circle"></i>
+            </a>
+            <a href="{{ route('wedding.resources') }}" class="{{ Request::routeIs('wedding.resources') ? 'active-primary-nav-item' : '' }}" title="Wedding Resources">
+                <i class="fas fa-map-marker-alt"></i>
+            </a>
+            <a href="{{ route('contact_us') }}" class="{{ Request::routeIs('contact_us') ? 'active-primary-nav-item' : '' }}" title="Contact Us">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+
+        <!-- Secondary Navigation (Text Menu from user.blade.php) -->
+        <div class="mobile-sidebar-secondary-nav">
+            @auth
+            <ul class="profile-sidebar-nav" id="menu-dashboard">
+                <li class="profile-sidebar-item {{ request()->is('/') ? 'active' : '' }}">
+                    <a href="{{ url('/') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-home" style="margin-right: 8px;"></i> Home
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('search.create') ? 'active' : '' }}">
+                    <a href="{{ route('search.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-search" style="margin-right: 8px;"></i> Search
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('view_profile.create') ? 'active' : '' }}">
+                    <a href="{{ route('view_profile.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-eye" style="margin-right: 8px;"></i> View&nbsp;Profile
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('basic_details.index') ? 'active' : '' }}">
+                    <a href="{{ route('basic_details.index') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-user" style="margin-right: 8px;"></i> Basic&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('religious_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('religious_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-pray" style="margin-right: 8px;"></i> Religious&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('family_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('family_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-users" style="margin-right: 8px;"></i> Family&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('astronomy_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('astronomy_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-star" style="margin-right: 8px;"></i> Astronomy&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('educational_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('educational_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-graduation-cap" style="margin-right: 8px;"></i> Educational&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('occupation_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('occupation_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-briefcase" style="margin-right: 8px;"></i> Occupational&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('contact_details.create') ? 'active' : '' }}">
+                    <a href="{{ route('contact_details.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-address-book" style="margin-right: 8px;"></i> Contact&nbsp;Details
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('life_partner.create') ? 'active' : '' }}">
+                    <a href="{{ route('life_partner.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-heart" style="margin-right: 8px;"></i> About&nbsp;Life&nbsp;Partner
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('profiles.view_interested') ? 'active' : '' }}">
+                    <a href="{{ route('profiles.view_interested') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-thumbs-up" style="margin-right: 8px;"></i> Interested
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('profiles.view_favorite') ? 'active' : '' }}">
+                    <a href="{{ route('profiles.view_favorite') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-bookmark" style="margin-right: 8px;"></i> Favorites
+                    </a>
+                </li>
+                <li class="profile-sidebar-item {{ request()->routeIs('user_packages.create') ? 'active' : '' }}">
+                    <a href="{{ route('user_packages.create') }}" style="display: flex; align-items: center;">
+                        <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Buy&nbsp;Packages
+                    </a>
+                </li>
+            </ul>
+            @else
+                <div class="menu-section p-3">
+                    <a href="{{ route('login') }}" class="btn btn-primary d-block mb-2">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-outline-primary d-block">Register</a>
+                </div>
+            @endauth
+        </div>
+    </div>
+
+    <!-- Sidebar Footer -->
+    @auth
+    <div class="mobile-sidebar-footer">
+        <form method="POST" action="{{ route('logout') }}" id="mobileSidebarLogoutForm" style="display: inline;">
+            @csrf
+            <button type="button" onclick="confirmMobileSidebarLogout()" class="btn-logout-icon" aria-label="Logout" title="Logout">
+                <i class="fas fa-power-off"></i>
+            </button>
+        </form>
+        <span class="app-version">App Version - V2.10</span>
+    </div>
+    @endauth
+</div>
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
+
     <div class="d-flex justify-content-evenly">
       {{ $slot }}
     </div>
@@ -384,6 +768,49 @@
   </style>
 
   <script>
+    function toggleMobileSidebar() {
+        const sidebar = document.getElementById('mobileSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const isOpen = sidebar.classList.contains('open');
+
+        if (isOpen) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+            document.body.style.overflow = ''; 
+        } else {
+            sidebar.classList.add('open');
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden'; 
+        }
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && document.getElementById('mobileSidebar').classList.contains('open')) {
+            toggleMobileSidebar();
+        }
+    });
+
+    @auth
+    function confirmMobileSidebarLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+            customClass: {
+                popup: 'swal2-sm' // Ensure this class is defined if you want smaller modals
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('mobileSidebarLogoutForm').submit();
+            }
+        });
+    }
+    @endauth
+
     document.addEventListener('DOMContentLoaded', function () {
       // Check if the welcome popup has been shown in this tab
       if (!sessionStorage.getItem('welcomePopupShown')) {
