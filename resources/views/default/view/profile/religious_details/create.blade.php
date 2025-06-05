@@ -122,9 +122,9 @@
                 <div class="l">
                     <div class="profile-completion">
                         <h3>Profile Completion</h3>
-                        <div class="progress">
+                        <div class="progress" style="background-color: transparent; border: 2px solid #60B5FF; border-radius: 10px;">
                             <div class="progress-bar" role="progressbar" 
-                                 style="width: {{ $profileCompletion }}%;" 
+                                 style="width: {{ $profileCompletion }}%; background-color: #60B5FF;" 
                                  aria-valuenow="{{ $profileCompletion }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="100">
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                     <div class="panel">
-                        <h2 style="color: #FF3846;">Religious Details</h2>
+                        <h2 style="color: #60B5FF;">Religious Details</h2>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="religion">Religion</label>

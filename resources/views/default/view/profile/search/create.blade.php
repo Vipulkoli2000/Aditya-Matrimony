@@ -179,7 +179,7 @@
                 border-radius: 8px;
             }
             .view-profile {
-                color: red;
+                color: #60B5FF;
                 font-weight: bold;
                 cursor: pointer;
                 display: inline-block;
@@ -300,7 +300,7 @@
             <!-- Basic Search (Left Side) -->
             <div class="col-md-6" id="basicSearch">
                 <div class="card">
-                <div class="card-header" style="background-color:rgb(250, 32, 32); color: white;">
+                <div class="card-header" style="background-color:#60B5FF; color: white;">
                  <h5 style="margin-bottom: 0; color: white;">Basic Search</h5>
                 </div>
 
@@ -384,7 +384,7 @@
                             </div>
                         </div>
                     </div>
-                         <button type="button" id="settingsButton" class="btn btn-primary d-md-none">Advance Search</button>
+                         <button type="button" id="settingsButton" style="background-color: #60B5FF;" class="btn btn-primary d-md-none">Advance Search</button>
                    
                 </div>
             </div>
@@ -392,7 +392,7 @@
             <!-- Advanced Search (Right Side, Initially Hidden) -->
             <div class="col-md-6" id="advancedSettings" style="display: none;">
                 <div class="card">
-                <div class="card-header" style="background-color:rgb(250, 32, 32); color: white;">
+                <div class="card-header" style="background-color:#60B5FF; color: white;">
                  <h5 style="margin-bottom: 0; color: white;">Advance Search</h5>
                 </div>
                     <div class="card-body">

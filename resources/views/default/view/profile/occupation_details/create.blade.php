@@ -105,9 +105,9 @@
                 <div>
                     <div class="profile-completion">
                         <h2>Profile Completion</h2>
-                        <div class="progress">
+                        <div class="progress" style="background-color: transparent; border: 2px solid #60B5FF; border-radius: 10px;">
                             <div class="progress-bar" role="progressbar" 
-                                 style="width: {{ $profileCompletion }}%;" 
+                                 style="width: {{ $profileCompletion }}%; background-color: #60B5FF;  border-radius: 10px; line-height: 20px; color: white;" 
                                  aria-valuenow="{{ $profileCompletion }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="100">
@@ -115,7 +115,7 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-center" style="color: #FF3846; margin: 20px;">Occupation Details</h3>
+                    <h3 class="text-center" style="color: #60B5FF; margin: 20px;">Occupation Details</h3>
                     <div class="panel">
                         <h4>Organisation Information</h4>
                         <div class="container mt-3" id="dropdowns">

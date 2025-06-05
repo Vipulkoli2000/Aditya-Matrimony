@@ -108,9 +108,9 @@
 
           <div class="profile-completion">
             <h2>Profile Completion</h2>
-            <div class="progress">
+            <div class="progress" style="background-color: transparent; border: 2px solid #60B5FF; border-radius: 10px;">
               <div class="progress-bar" role="progressbar" 
-                   style="width: {{ $profileCompletion }}%;" 
+                   style="width: {{ $profileCompletion }}%; background-color: #60B5FF;  border-radius: 10px; line-height: 20px; color: white;" 
                    aria-valuenow="{{ $profileCompletion }}" 
                    aria-valuemin="0" 
                    aria-valuemax="100">
@@ -201,11 +201,11 @@
      
 
       <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
-        <div style="background: #ffcccc; border: 2px solid #ff0000; border-radius: 8px; padding: 20px; max-width: 400px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <div style="background: #cce6ff; border: 2px solid #60B5FF; border-radius: 8px; padding: 20px; max-width: 400px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
           <p>You have unsaved changes. Save Changes?</p>
           <div style="margin-top: 20px;">
-            <button id="modalYes" style="background: #ff0000; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">Yes</button>
-            <button id="modalNo" style="background: #ff0000; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">No, leave without saving</button>
+            <button id="modalYes" style="background: #60B5FF; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">Yes</button>
+            <button id="modalNo" style="background: #60B5FF; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">No, leave without saving</button>
           </div>
         </div>
       </div>

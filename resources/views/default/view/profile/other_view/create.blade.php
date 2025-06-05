@@ -362,7 +362,7 @@
                 <div class="card">
                         <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
                             <div>
-                                <h3 class="text-center" style="color: #FF3846;">Astronomy Details</h3>
+                                <h3 class="text-center" style="">Astronomy Details</h3>
                                 <h5 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Personal Information</h5>
                                 <div class="card-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
                                     <p><strong>Date:</strong> {{ $user->date_of_birth }}</p>

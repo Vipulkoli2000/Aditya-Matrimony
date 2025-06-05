@@ -198,7 +198,7 @@
                     style="border-radius: 10px; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
                     
                     <div class="card-header text-white py-3 position-relative text-center" 
-                        style="background-color: #FF0000; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                        style="background-color: #60B5FF; border-top-left-radius: 10px; border-top-right-radius: 10px;">
                         <h5 class="mb-0 text-white fw-bold">
                             Welcome, {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}
                         </h5>
@@ -216,7 +216,7 @@
                         
                     </div>
                     <div class="card-body text-center p-4">
-                        <h3 class="fw-bold text-secondary">Profile Completion</h3>
+                        <h3 class="fw-bold" style="color: #60B5FF;">Profile Completion</h3>
                         <div class="progress mt-3 rounded-pill" style="height: 10px;">
                             <div class="progress-bar bg-success rounded-pill" role="progressbar"
                                 style="width: {{ $profileCompletion }}%;" 
@@ -228,7 +228,7 @@
                         <p class="mt-2 text-muted fw-semibold">{{ $profileCompletion }}% Completed</p>
                     </div>
                 </div>
-                <h3 class="text-center" style="color: #FF3846; margin: 20px;">Basic Details</h3>
+                <h3 class="text-center" style="color:rgb(32, 24, 18); margin: 20px; text-decoration: underline;">Basic Details</h3>
                 <div class="panel">
                     <h2>Personal Information</h2>
                     <!-- Row with First Name, Middle Name, and Last Name in one line -->    
@@ -550,11 +550,11 @@
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
-                        <div style="background: #ffcccc; border: 2px solid #ff0000; border-radius: 8px; padding: 20px; max-width: 400px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                        <div style="background: #cce5ff; border: 2px solid #007bff; border-radius: 8px; padding: 20px; max-width: 400px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
                           <p>You have unsaved changes. Do you really want to leave this page without saving?</p>
                           <div style="margin-top: 20px;">
-                            <button id="modalYes" style="background: #ff0000; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">Yes, leave page</button>
-                            <button id="modalNo" style="background: #ff0000; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">No, stay on page</button>
+                            <button id="modalYes" style="background: #007bff; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">Yes, leave page and save the made changes</button>
+                            <button id="modalNo" style="background: #007bff; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">No, stay on page</button>
                           </div>
                         </div>
                       </div>
@@ -600,11 +600,11 @@
     {{-- save changes popup --}}
 
     <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
-    <div style="background: #ffcccc; border: 2px solid #ff0000; border-radius: 8px; padding: 20px; max-width: 400px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+    <div style="background: #cce5ff; border: 2px solid #007bff; border-radius: 8px; padding: 20px; max-width: 400px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
       <p>You have unsaved changes. Do you really want to leave this page without saving?</p>
       <div style="margin-top: 20px;">
-        <button id="modalYes" style="background: #ff0000; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">Yes, leave page and save the made changes</button>
-        <button id="modalNo" style="background: #ff0000; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">No, stay on page</button>
+        <button id="modalYes" style="background: #007bff; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">Yes, leave page and save the made changes</button>
+        <button id="modalNo" style="background: #007bff; color: #fff; border: none; padding: 10px 15px; margin: 0 10px; border-radius: 4px; cursor: pointer;">No, stay on page</button>
       </div>
     </div>
   </div>

@@ -231,7 +231,7 @@
                 <div class="panel">
                     <h3>Your Profile</h3>
                     <div class="card">
-                        <h3 class="text-center" style="color: #FF3846;">Basic Profile</h3>
+                        <h3 class="text-center" style="color: #60B5FF;">Basic Profile</h3>
                         <br/>
                         <h4 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Personal Information</h4>
                         <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
@@ -269,7 +269,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <h3 class="text-center" style="color: #FF3846;">Religious Profile</h3>
+                        <h3 class="text-center" style="color: #60B5FF;">Religious Profile</h3>
                         <br/>
                         <div class="card-row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
                             <div>
@@ -286,7 +286,7 @@
                     <div class="card">
                         <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
                             <div>
-                                <h3 class="text-center" style="color: #FF3846;">Family Details</h3>
+                                <h3 class="text-center" style="color: #60B5FF;">Family Details</h3>
                                 <h5 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Father and Mother Details</h5>
                                 <div class="card-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                                     <p><strong>Father's Alive:</strong>
@@ -339,7 +339,7 @@
                     <div class="card">
                         <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
                             <div>
-                                <h3 class="text-center" style="color: #FF3846;">Astronomy Details</h3>
+                                <h3 class="text-center" style="color: #60B5FF;">Astronomy Details</h3>
                                 <h5 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Personal Information</h5>
                                 <div class="card-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
                                     <p><strong>Date:</strong> {{ $user->date_of_birth }}</p>
@@ -393,7 +393,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <h3 class="text-center" style="color: #FF3846;">Educational Profile</h3>
+                        <h3 class="text-center" style="color: #60B5FF;">Educational Profile</h3>
                         <div style="border-top: 1px solid #ccc; padding-top: 10px;" class="card-row">
                             <p><strong>Highest Education:</strong> {{ ucfirst($user->highest_education) }}</p>
                             <p><strong>Other Education:</strong> {{ ucfirst($user->other_education) }}</p>
@@ -403,7 +403,7 @@
                     </div>
                     <div class="card">
                         <div>
-                            <h4 class="text-center" style="color: #FF3846;">Occupation Details</h4>
+                            <h4 class="text-center" style="color: #60B5FF;">Occupation Details</h4>
                             <h5 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Organisation Information</h5>
                             <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                                 <p><strong>Occupation:</strong> {{ ucfirst($user->occupation) }}</p>
@@ -422,7 +422,7 @@
                     </div>
                     <div class="card">
                         <div>
-                            <h4 class="text-center" style="color: #FF3846;">Contact Details</h4>
+                            <h4 class="text-center" style="color: #60B5FF;">Contact Details</h4>
                             <h5 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Location Information</h5>
                             <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                                 <p><strong>Country:</strong> {{ config('data.country.'.$user->country) ?? ucfirst($user->country) }}</p>
@@ -444,7 +444,7 @@
                     </div>
                     <div class="card">
                         <div>
-                            <h4 class="text-center" style="color: #FF3846;">About Life Partner Profile</h4>
+                            <h4 class="text-center" style="color: #60B5FF;">About Life Partner Profile</h4>
                             <h5 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Age / Height Information</h5>
                             <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                                 <p><strong>Partner Min Age:</strong> {{ $user->partner_min_age }}</p>

@@ -50,7 +50,7 @@
               <div class="row g-4 align-items-center">
                 <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.3s">
                   <div class="mx-auto mb-3 wow fadeInUp" data-wow-delay="0.1s">
-                    <h2 class="display-1 text-primary" style="margin-left: 35px; margin-top: 35px;">About Us</h2>
+                    <h2 class="display-1" style="margin-left: 35px; margin-top: 35px; color: #60B5FF;">About Us</h2>
                   </div>
                   <div class="d-flex">
                     <div class="my-auto">

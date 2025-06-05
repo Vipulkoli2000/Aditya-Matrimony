@@ -14,7 +14,7 @@
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;500;600&family=Petit+Formal+Script&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
         <!-- Icon Font Stylesheet -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
@@ -77,7 +77,7 @@
         }
 
         .booking-link:hover {
-            color: #f24e4e; /* Love red color on hover */
+            color: #007bff; /* Blue Theme */
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), -2px -2px 8px rgba(0, 0, 0, 0.4); /* Create 3D shadow effect */
         }
         </style>
@@ -91,7 +91,7 @@
         
         /* 3D Button Styling */
         .btn-primary {
-            background: linear-gradient(to bottom, #f27272, #e63946);
+            background: linear-gradient(to bottom, #269bff, #007bff); /* Blue Theme */
             border: none;
             border-radius: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -113,7 +113,7 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-            background: linear-gradient(to bottom, #f15b5b, #d62c39);
+            background: linear-gradient(to bottom, #3da9fc, #0069d9); /* Blue Theme Hover */
         }
         
         .btn-primary:active {
@@ -176,7 +176,7 @@
             padding: 5px;
         }
         .mobile-sidebar-header .back-btn:hover {
-            color: #e63946;
+            color: #007bff;
         }
 
         .mobile-sidebar-header .user-info-details {
@@ -216,7 +216,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: linear-gradient(180deg, #FFD1D1 0%, #E06C75 100%); /* Soft red gradient */
+            background: linear-gradient(180deg, #ADD8E6 0%, #6495ED 100%); /* Soft blue gradient */
             flex-shrink: 0;
         }
 
@@ -236,7 +236,7 @@
 
         .mobile-sidebar-primary-nav a.active-primary-nav-item,
         .mobile-sidebar-primary-nav a:hover {
-            background-color: #C95B63; /* Darker red background for active/hover */
+            background-color: #007bff; /* Blue Theme */
             color: #fff;
         }
         .mobile-sidebar-primary-nav a:last-child {
@@ -271,11 +271,11 @@
         }
 
         .mobile-sidebar-secondary-nav .menu-section a:hover {
-            color: #e63946; /* Primary color on hover */
+            color: #007bff; /* Blue Theme */
             /* background-color: #f8f9fa; */ /* Optional: light bg on hover */
         }
         .mobile-sidebar-secondary-nav .menu-section a.active {
-             color: #e63946; /* Primary color for active item */
+             color: #007bff; /* Blue Theme */
              font-weight: 500;
         }
 
@@ -303,14 +303,14 @@
         .mobile-sidebar-footer .btn-logout-icon {
             background: none;
             border: none;
-            color: #555; /* Dark grey icon */
+            color: #007bff; /* Blue Theme */
             font-size: 1.4rem;
             cursor: pointer;
             padding: 5px;
         }
 
         .mobile-sidebar-footer .btn-logout-icon:hover {
-            color: #e63946; /* Primary color on hover */
+            color: #0056b3; /* Darker Blue Theme */
         }
 
         .mobile-sidebar-footer .app-version {
@@ -326,9 +326,9 @@
         <!-- Navbar start -->
         <div class="container-fluid fixed-top px-4 py-3">
             <div class="container">
-                <nav class="navbar navbar-light navbar-expand-xl py-1 px-3 rounded-pill shadow-sm" id="navBar" style="background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); max-height: 65px;">
+                <nav class="navbar navbar-light navbar-expand-xl py-1 px-3 rounded-pill shadow-sm d-flex justify-content-between align-items-center" id="navBar" style="background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); max-height: 65px;">
                     <a href="#" class="navbar-brand">
-                        <img src="{{asset('assets/user/img/logo.png')}}" class="img-fluid" style="height: 38px;">
+                        <img src="{{asset('assets/user/img/logo.png')}}" class="img-fluid" style="height: 40px;"> 
                     </a>
                     <button class="navbar-toggler py-1 px-2" type="button" onclick="toggleMobileSidebar()">
                         <span class="fa fa-bars text-primary"></span>
@@ -427,7 +427,7 @@
         }
 
         .booking-link:hover {
-          color: #f24e4e; /* Love red color on hover */
+          color: #007bff; /* Blue Theme */
           text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4), -2px -2px 8px rgba(0, 0, 0, 0.4); /* Create 3D shadow effect */
         }
         </style>
@@ -510,7 +510,14 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 @auth
-<p style="text-align: center; background-color: #FF0000; color: white; padding: 10px;">💌 <span style="color: white;"> Make it easier for others to find you by completing your profile today!</span></p>
+<style>
+@keyframes gradientAnimation {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+</style>
+<p style="text-align: center; background: linear-gradient(to right, #60B5FF, #007BFF); background-size: 200% auto; animation: gradientAnimation 5s linear infinite; color: white; padding: 10px;"> Make it easier for others to find you by completing your profile today!</p>
 @endauth
 
  
@@ -545,7 +552,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     {{-- Sidebar column --}}
                     @auth
                         @if (request()->routeIs($routesWithSidebarLink))
-                            <div class="col-lg-4 d-none d-lg-block">
+                            <div class="col-lg-1 d-none d-lg-block">
                                 <x-common.usersidebar />
                             </div>
                         @endif
@@ -632,7 +639,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="container">
                 <div class="row g-4 align-items-center">
                     <div class="col-md-6 text-center text-md-start mb-md-0">
-                        <span class="text-light">Aditya Matrimony | Developed By <a href="https://sanmisha.com" target="_blank">Sanmisha Technologies</a></span>
+                        <span class=>Aditya Matrimony | Developed By <a href="https://sanmisha.com" target="_blank">Sanmisha Technologies</a></span>
                     </div>                    
                 </div>
             </div>
@@ -688,7 +695,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <!-- Sidebar Content (Primary Nav + Secondary Nav) -->
     <div class="mobile-sidebar-content">
         <!-- Primary Navigation (Icon Column) -->
-        <div class="mobile-sidebar-primary-nav">
+        <div class="mobile-sidebar-primary-nav" style="background: linear-gradient(to right, #60B5FF, #007BFF);">
             <a href="{{ url('/') }}" class="{{ Request::is('/') ? 'active-primary-nav-item' : '' }}" title="Home">
                 <i class="fas fa-home"></i>
             </a>
@@ -707,80 +714,79 @@ document.addEventListener("DOMContentLoaded", function() {
         <!-- Secondary Navigation (Menu Items) -->
         <div class="mobile-sidebar-secondary-nav">
             @auth
-            <ul class="profile-sidebar-nav" id="menu-dashboard">
-              
+            <ul class="profile-sidebar-nav" id="menu-dashboard" style="display: flex; flex-direction: column; gap: 20px; list-style: none; margin: 0; padding: 0;">
                 <li class="profile-sidebar-item {{ request()->routeIs('search.create') ? 'active' : '' }}">
-                    <a href="{{ route('search.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-search" style="margin-right: 8px;"></i> Search
+                    <a href="{{ route('search.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-search" style="color: black;"></i><span style="color: black;"> Search</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('view_profile.create') ? 'active' : '' }}">
-                    <a href="{{ route('view_profile.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-eye" style="margin-right: 8px;"></i> View&nbsp;Profile
+                    <a href="{{ route('view_profile.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-eye" style="color: black;"></i><span style="color: black;"> View&nbsp;Profile</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('basic_details.index') ? 'active' : '' }}">
-                    <a href="{{ route('basic_details.index') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-user" style="margin-right: 8px;"></i> Basic&nbsp;Details
+                    <a href="{{ route('basic_details.index') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-user" style="color: black;"></i><span style="color: black;"> Basic&nbsp;Details</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('religious_details.create') ? 'active' : '' }}">
-                    <a href="{{ route('religious_details.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-pray" style="margin-right: 8px;"></i> Religious&nbsp;Details
+                    <a href="{{ route('religious_details.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-pray" style="color: black;"></i><span style="color: black;"> Religious&nbsp;Details</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('family_details.create') ? 'active' : '' }}">
-                    <a href="{{ route('family_details.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-users" style="margin-right: 8px;"></i> Family&nbsp;Details
+                    <a href="{{ route('family_details.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-users" style="color: black;"></i><span style="color: black;"> Family&nbsp;Details</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('astronomy_details.create') ? 'active' : '' }}">
-                    <a href="{{ route('astronomy_details.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-star" style="margin-right: 8px;"></i> Astronomy&nbsp;Details
+                    <a href="{{ route('astronomy_details.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-star" style="color: black;"></i><span style="color: black;"> Astronomy&nbsp;Details</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('educational_details.create') ? 'active' : '' }}">
-                    <a href="{{ route('educational_details.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-graduation-cap" style="margin-right: 8px;"></i> Educational&nbsp;Details
+                    <a href="{{ route('educational_details.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-graduation-cap" style="color: black;"></i><span style="color: black;"> Educational&nbsp;Details</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('occupation_details.create') ? 'active' : '' }}">
-                    <a href="{{ route('occupation_details.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-briefcase" style="margin-right: 8px;"></i> Occupational&nbsp;Details
+                    <a href="{{ route('occupation_details.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-briefcase" style="color: black;"></i><span style="color: black;"> Occupational&nbsp;Details</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('contact_details.create') ? 'active' : '' }}">
-                    <a href="{{ route('contact_details.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-address-book" style="margin-right: 8px;"></i> Contact&nbsp;Details
+                    <a href="{{ route('contact_details.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-address-book" style="color: black;"></i><span style="color: black;"> Contact&nbsp;Details</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('life_partner.create') ? 'active' : '' }}">
-                    <a href="{{ route('life_partner.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-heart" style="margin-right: 8px;"></i> About&nbsp;Life&nbsp;Partner
+                    <a href="{{ route('life_partner.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-heart" style="color: black;"></i><span style="color: black;"> About&nbsp;Life&nbsp;Partner</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('user_packages.create') ? 'active' : '' }}">
-                    <a href="{{ route('user_packages.create') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Buy&nbsp;Packages
+                    <a href="{{ route('user_packages.create') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-shopping-cart" style="color: black;"></i><span style="color: black;"> Buy&nbsp;Packages</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('profiles.view_interested') ? 'active' : '' }}">
-                    <a href="{{ route('profiles.view_interested') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-thumbs-up" style="margin-right: 8px;"></i> Interested
+                    <a href="{{ route('profiles.view_interested') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-thumbs-up" style="color: black;"></i><span style="color: black;"> Interested</span>
                     </a>
                 </li>
                 <li class="profile-sidebar-item {{ request()->routeIs('profiles.view_favorite') ? 'active' : '' }}">
-                    <a href="{{ route('profiles.view_favorite') }}" style="display: flex; align-items: center;">
-                        <i class="fas fa-bookmark" style="margin-right: 8px;"></i> Favorites
+                    <a href="{{ route('profiles.view_favorite') }}" style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-bookmark" style="color: black;"></i><span style="color: black;"> Favorites</span>
                     </a>
                 </li>
-             
-            </ul>
+           
+          </ul>
            
             @else
                 <div class="menu-section p-3">
-                    <a href="{{ route('login') }}" class="btn btn-primary d-block mb-2">Login</a>
-                    <a href="{{ route('register') }}" class="btn btn-outline-primary d-block">Register</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary d-block mb-2 text-white">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary d-block text-white">Register</a>
                 </div>
             @endauth
         </div>

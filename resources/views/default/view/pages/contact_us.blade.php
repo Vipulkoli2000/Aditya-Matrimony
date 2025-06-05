@@ -15,7 +15,7 @@
                     <div class="row g-4 align-items-center">
                         <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.3s">
                             <div class="mb-4 wow fadeInUp" data-wow-delay="0.1s" >
-                                <h2 class="display-4 fw-bold text-primary text-center text-lg-start">Contact Us</h2>
+                                <h2 class="display-4 fw-bold text-center text-lg-start" style="color: #60B5FF;">Contact Us</h2>
                             </div>
                             <div class="d-flex">
                                 <div class="my-auto">  
@@ -40,13 +40,13 @@
 								</div>
                                 <div class="mt-3">
                                     <p class="mb-2">
-                                        <a href="tel://+919320717501" class="btn-link text-decoration-none fs-5">
-                                            <em class="fas fa-phone text-secondary me-2"></em>+91 9320717501
+                                        <a href="tel://+919320717501" class="btn-link text-decoration-none fs-5" style="color: #60B5FF;">
+                                            <em class="fas fa-phone me-2" style="color: #60B5FF;"></em>+91 9320717501
                                         </a>
                                     </p>
                                     <p class="mb-0">
-                                        <a href="mailto://info@adityamatrimony.com" class="btn-link text-decoration-none fs-5">
-                                            <em class="fas fa-envelope text-secondary me-2"></em>info@adityamatrimony.com
+                                        <a href="mailto://info@adityamatrimony.com" class="btn-link text-decoration-none fs-5" style="color: #60B5FF;">
+                                            <em class="fas fa-envelope me-2" style="color: #60B5FF;"></em>info@adityamatrimony.com
                                         </a>
                                     </p>
                                 </div>

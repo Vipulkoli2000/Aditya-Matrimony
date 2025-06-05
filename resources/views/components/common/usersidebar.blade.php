@@ -3,13 +3,21 @@
 <style>
   /* Sidebar core styles - fixed width to prevent horizontal movement */
   #profile-sidebar {
-    position: relative !important; /* Display in normal flow */
+    position: -webkit-sticky; /* For Safari */
+    position: sticky !important;
+    top: 85px !important; /* Offset from the top of the viewport, below the fixed navbar */
+    align-self: flex-start; /* Aligns item to the start of the flex container (Bootstrap column) */
+    
     width: 280px !important; /* Fixed width */
     min-width: 280px !important; /* Prevent shrinking */
     max-width: 280px !important; /* Prevent expanding */
-    height: auto !important; /* Auto height */
+    
+    /* Set a max-height to ensure sidebar content scrolls if it's too long for the viewport */
+    /* 100vh (viewport height) - 85px (top offset) - 20px (bottom buffer) */
+    max-height: calc(100vh - 85px - 20px) !important; 
+    
     background-color: white;
-    overflow-y: auto; /* Enable scrolling */
+    overflow-y: auto; /* Enable internal scrolling for the sidebar if content overflows max-height */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-left: 1px solid #eee;
     border-radius: 8px;
@@ -89,7 +97,7 @@
 
   /* Header styling with reduced padding */
   .profile-sidebar-header {
-    background: linear-gradient(to right, #ff3e3e, #ff5757);
+    background: linear-gradient(to right, #60B5FF, #8FC4E0);
     color: white;
     padding: 10px 15px; /* Reduced from 15px 20px */
     display: flex;
@@ -147,18 +155,18 @@
   }
   
   .profile-sidebar-item:hover {
-    background-color: rgba(255, 0, 0, 0.05);
+    background-color: rgba(96, 181, 255, 0.1);
     transform: translateX(3px);
   }
   
   .profile-sidebar-item:hover a {
-    color: #ff3e3e;
-    border-left-color: #ff3e3e;
+    color: #4A9FE0;
+    border-left-color: #4A9FE0;
   }
   
   .profile-sidebar-item.active {
-    background-color: #ff3e3e !important;
-    box-shadow: 0 3px 8px rgba(255, 62, 62, 0.2);
+    background-color: #60B5FF !important;
+    box-shadow: 0 3px 8px rgba(74, 159, 224, 0.2);
   }
   
   .profile-sidebar-item.active a {

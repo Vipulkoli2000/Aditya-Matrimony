@@ -245,7 +245,7 @@
                        
                             <div class="col-lg-7 wow fadeInUp" data-wow-delay="0.3s">
                                 <div class="mx-auto  mb-3 wow fadeInUp" data-wow-delay="0.1s" >
-                                    <h2 class="display-1 text-primary mb-0">About Us</h2>
+                                    <h2 class="display-1 mb-0" style="color: #60B5FF;">About Us</h2>
                                 </div>
                                 <div class="d-flex">
                                     <div class="my-auto">
@@ -266,14 +266,14 @@
   justify-content: center;
   transform: translateY(0);
   transition: all 0.2s ease;
-  background: linear-gradient(to bottom, #f27272, #e63946) !important;
+  background: #60B5FF !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .know-more-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-  background: linear-gradient(to bottom, #f15b5b, #d62c39) !important;
+  background: #4da0e6 !important;
 }
 
 .know-more-btn:active {

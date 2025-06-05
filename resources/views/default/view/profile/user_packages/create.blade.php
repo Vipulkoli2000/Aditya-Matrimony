@@ -242,8 +242,8 @@
                                 <td>₹{{ number_format($purchased_package->price, 2) }}</td>
                                 <td>{{ $purchased_package->pivot->expires_at }}</td>
                                 <td>
-                                    <a href="{{ route('generate.invoice', $purchased_package->id) }}" class="btn btn-secondary btn-sm" target="_blank">
-                                    Download Invoice
+                                    <a href="{{ route('generate.invoice', $purchased_package->id) }}" class="btn btn-primary btn-sm" target="_blank">
+                                     Invoice
                                     </a>
                                 </td>
                             </tr>
@@ -287,7 +287,7 @@
             </div>
         </div>
 
-   
+        
     </div>
 
     <!-- Payment Confirmation Modal -->

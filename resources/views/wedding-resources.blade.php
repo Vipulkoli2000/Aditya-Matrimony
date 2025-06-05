@@ -86,11 +86,11 @@
       width: 20px;
       text-align: center;
       margin-right: 8px;
-      color: #f27272;
+      color: #60B5FF;
     }
     
     .btn-contact {
-      background: linear-gradient(to bottom, #f27272, #e63946);
+      background: linear-gradient(to bottom, #60B5FF, #007BFF);
       border: none;
       border-radius: 50px;
       padding: 8px 20px;
@@ -101,7 +101,7 @@
     }
     
     .btn-contact:hover {
-      background: linear-gradient(to bottom, #f15b5b, #d62c39);
+      background: linear-gradient(to bottom, #70C6FF, #005FFF);
       transform: translateY(-2px);
       box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
     }
@@ -116,7 +116,7 @@
     
     .empty-state i {
       font-size: 50px;
-      color: #e63946;
+      color: #60B5FF;
       margin-bottom: 20px;
     }
   </style>
@@ -127,7 +127,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="mx-auto mb-3 wow fadeInUp" data-wow-delay="0.1s">
-              <h2 class="display-1 text-primary" style="margin-left: 35px; margin-top: 35px;">Wedding Resources</h2>
+              <h2 class="display-1" style="margin-left: 35px; margin-top: 35px; color: #60B5FF;">Wedding Resources</h2>
             </div>
             <div class="mb-4">
               <p style="color: black; margin-left: 30px;">
@@ -149,7 +149,7 @@
                   background-color: #ffffff;
                   color: #333;
                   appearance: none;
-                  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23f27272' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+                  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2360B5FF' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
                   background-repeat: no-repeat;
                   background-position: right 10px center;
                   background-size: 12px;
@@ -157,8 +157,8 @@
                 }
                 
                 .form-select:focus, .form-control:focus {
-                  border-color: #f27272;
-                  box-shadow: 0 3px 8px rgba(242, 114, 114, 0.15);
+                  border-color: #60B5FF;
+                  box-shadow: 0 3px 8px rgba(96, 181, 255, 0.15);
                   outline: none;
                   transform: translateY(-2px);
                   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -183,7 +183,7 @@
                   width: 4px;
                   height: 4px;
                   border-radius: 50%;
-                  background-color: #f27272;
+                  background-color: #60B5FF;
                   margin-right: 8px;
                 }
                 
@@ -209,7 +209,7 @@
                   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
                 }
               </style>
-              <h5 class="mb-4" style="color: #e63946; font-weight: 600; letter-spacing: 0.5px;"><i class="fas fa-filter me-2"></i>Filter Wedding Resources</h5>
+              <h5 class="mb-4" style="color: #60B5FF; font-weight: 600; letter-spacing: 0.5px;"><i class="fas fa-filter me-2"></i>Filter Wedding Resources</h5>
               <form action="{{ route('wedding.resources') }}" method="GET" id="filter-form">
                 <div class="row g-3">
                   <div class="col-md-3 col-sm-6">
@@ -320,7 +320,7 @@
                   <div class="modal fade" id="listingModal{{ $listing->id }}" tabindex="-1" aria-labelledby="listingModalLabel{{ $listing->id }}" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                       <div class="modal-content">
-                        <div class="modal-header" style="background: linear-gradient(to right, #f27272, #e63946); color: white;">
+                        <div class="modal-header" style="background: linear-gradient(to right, #60B5FF, #007BFF); color: white;">
                           <h5 class="modal-title" id="listingModalLabel{{ $listing->id }}">{{ $listing->business_name }}</h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
