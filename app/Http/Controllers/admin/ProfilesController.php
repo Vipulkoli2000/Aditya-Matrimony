@@ -473,7 +473,7 @@ class ProfilesController extends Controller
 
    
 
-    // Create a new user with a fixed password "abcd123"
+    // Create a new user with a fixed password "Aditya123"
     $user = User::create([
         'name'       => trim($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name),
         'first_name' => $request->first_name,
@@ -481,7 +481,7 @@ class ProfilesController extends Controller
         'last_name'  => $request->last_name,
         'mobile'     => $mobile,  // now normalized
         'email'      => $request->email,
-        'password'   => Hash::make('abcd123'),
+        'password'   => Hash::make('Aditya123'),
         'active'     => 1,
     ]);
 

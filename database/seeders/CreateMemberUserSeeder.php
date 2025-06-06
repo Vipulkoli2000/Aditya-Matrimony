@@ -20,7 +20,7 @@ class CreateMemberUserSeeder extends Seeder
         //     ['email' => 'ganesh@gmail.com'], // Search for user by email
         //     [
         //         'name' => 'ganesh',
-        //         'password' => Hash::make('abcd123') // Hash the password
+        //         'password' => Hash::make('Aditya123') // Hash the password
         //     ]
         // );
 

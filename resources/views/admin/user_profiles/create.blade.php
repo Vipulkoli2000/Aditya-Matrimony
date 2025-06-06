@@ -60,7 +60,7 @@
             </div>
         </div>
             
-            <!-- Password is fixed to "abcd123" so no input field is needed -->
+            <!-- Password is fixed to "Aditya123" so no input field is needed -->
 
             <div>
                 <label for="package_id" class="block text-sm font-medium">Select Package</label>

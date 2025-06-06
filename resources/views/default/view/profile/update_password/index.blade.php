@@ -121,7 +121,7 @@
             <input id="password_confirmation" type="password" name="password_confirmation" required />
           </div>
     
-          <button type="submit" class="btn">Update Password</button>
+          <button type="submit" class="btn btn-primary"><span style="position: relative; top: -4px; color: white !important;">Update Password</span></button>
         </form>
       </div>
     

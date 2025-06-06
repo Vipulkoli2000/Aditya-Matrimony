@@ -82,7 +82,7 @@ $user = new User([
 'last_name' => $row['last_name'],
 'mobile' => $mobile,
 'email' => $row['email'],
-    'password' => Hash::make('abcd123'), // Fixed password for all imports
+    'password' => Hash::make('Aditya123'), // Fixed password for all imports
 'active' => 1,
 ]);
 $user->save();
