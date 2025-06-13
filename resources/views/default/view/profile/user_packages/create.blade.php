@@ -551,15 +551,16 @@ let selectedPackageId = null;
 let selectedPackageName = '';
 let selectedPackagePrice = 0;
 
-// Safely create userState and userCountry variables
+// Safely create userState, userCountry and purchasedPackagesCount variables
 const userState = "{{ $user->state ?? '' }}";
 const userCountry = "{{ $user->country ?? '' }}";
+const purchasedPackagesCount = {{ $purchased_packages->count() }};
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.razorpay-buy-btn').forEach(function(button) {
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            if (!userCountry) {
+            if (!userCountry && purchasedPackagesCount > 0) {
                 $('#infoModalMessage').text('Please provide your contact details to proceed.');
                 $('#infoModal').modal('show');
                 return;

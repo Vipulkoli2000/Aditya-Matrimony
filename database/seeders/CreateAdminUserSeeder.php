@@ -22,7 +22,7 @@ class CreateAdminUserSeeder extends Seeder
             [
                 'name' => 'Admin MiddleName LastName',
                 'mobile' => '4444555566',
-                'password' => Hash::make('Aditya123')  // Hash the password
+                'password' => Hash::make('abcd123')  // Hash the password
             ]
         );
 
