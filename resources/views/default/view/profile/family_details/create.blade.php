@@ -203,17 +203,38 @@
                                     @endif   
                                 </div>
                             
-                                <!-- Second Column: Father Occupation -->
+                                <!-- Second Column: Father Mobile -->
+                                <div class="form-group col-md-6">
+                                    <label for="father_mobile">Mobile Number</label>
+                                    <input type="text" class="form-input" name="father_mobile" value="{{ $user->father_mobile }}" id="father_mobile" placeholder="1234567890" title="Please enter a valid mobile number">
+                                    @if ($errors->has('father_mobile'))
+                                        <span class="text-danger small">{{ $errors->first('father_mobile') }}</span>
+                                    @endif   
+                                </div>
+                            </div>
+                            
+                            <!-- New Row: Father Occupation and Address -->
+                            <div class="form-row"> <!-- Wrapper for the row -->
+                                <!-- Father Occupation -->
                                 <div class="form-group col-md-6">
                                     <label for="father_occupation">Occupation</label>
                                     <select class="form-input" name="father_occupation" id="father_occupation">
                                         <option value="" selected>Select an option</option>
                                         @foreach (config('data.father_occupation') as $value => $name)
-                                            <option value="{{$value}}" {{ ($user->father_occupation === $value) ? 'selected' : ''}}>{{ $name }}</option>
+                                            <option value="{{$value}}" {{ ($user->father_occupation === $value) ? 'selected' : '' }}>{{ $name }}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('father_occupation'))
                                         <span class="text-danger small">{{ $errors->first('father_occupation') }}</span>
+                                    @endif   
+                                </div>
+
+                                <!-- Father Address -->
+                                <div class="form-group col-md-6">
+                                    <label for="father_address">Address</label>
+                                    <input type="text" class="form-input" name="father_address" value="{{ $user->father_address }}" id="father_address" placeholder="Enter Address">
+                                    @if ($errors->has('father_address'))
+                                        <span class="text-danger small">{{ $errors->first('father_address') }}</span>
                                     @endif   
                                 </div>
                             </div>
@@ -227,7 +248,7 @@
                                     <select class="form-input" name="father_job_type" id="father_job_type">
                                         <option value="" selected>Select an option</option>
                                         @foreach (config('data.job_type') as $value => $name)
-                                            <option value="{{$value}}" {{ ($user->father_job_type === $value) ? 'selected' : ''}} >{{ $name }}</option>
+                                            <option value="{{$value}}" {{ ($user->father_job_type === $value) ? 'selected' : '' }} >{{ $name }}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('father_job_type'))
@@ -255,7 +276,9 @@
                                 const fatherOccupationField = document.getElementById('father_occupation');
                                 const fatherJobTypeField = document.getElementById('father_job_type');
                                 const fatherOrganizationField = document.getElementById('father_organization');
-                        
+                                const fatherMobileField = document.getElementById('father_mobile');
+                                const fatherAddressField = document.getElementById('father_address');
+
                                 // Function to toggle visibility of father details and reset values if necessary
                                 function toggleFatherDetails() {
                                     if (fatherAliveSelect.value === '1') {
@@ -264,18 +287,20 @@
                                     } else {
                                         // Hide the details if father is not alive
                                         fatherDetailsSection.style.display = 'none';
-                        
+
                                         // Reset the values to null when father is not alive
                                         fatherNameField.value = '';
                                         fatherOccupationField.value = '';
                                         fatherJobTypeField.value = '';
                                         fatherOrganizationField.value = '';
+                                        fatherMobileField.value = '';
+                                        fatherAddressField.value = '';
                                     }
                                 }
-                        
+
                                 // Initial call to set visibility based on the current value
                                 toggleFatherDetails();
-                        
+
                                 // Event listener for changes in the "Father is Alive" dropdown
                                 fatherAliveSelect.addEventListener('change', toggleFatherDetails);
                             });
@@ -302,7 +327,7 @@
                         <!-- Additional fields, initially hidden -->
                         <div class="form-row" id="mother_details">
                         
-                            <!-- First Column: Full Name and Occupation -->
+                            <!-- First Column: Full Name and Mobile -->
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="mother_name">Full Name</label>
@@ -312,6 +337,20 @@
                                     @endif   
                                 </div>
                             
+                                <!-- Second Column: Mother Mobile -->
+                                <div class="form-group col-md-6">
+                                    <label for="mother_mobile">Mobile Number</label>
+                                    <input type="text" class="form-input" name="mother_mobile" value="{{ $user->mother_mobile }}" id="mother_mobile" placeholder="1234567890" title="Please enter a valid mobile number">
+                                    @if ($errors->has('mother_mobile'))
+                                        <span class="text-danger small">{{ $errors->first('mother_mobile') }}</span>
+                                    @endif   
+                                </div>
+                            </div>
+                            
+                        
+                            <!-- New Row: Mother Occupation and Address -->
+                            <div class="form-row">
+                                <!-- Mother Occupation -->
                                 <div class="form-group col-md-6">
                                     <label for="mother_occupation">Occupation</label>
                                     <select class="form-input" name="mother_occupation" id="mother_occupation">
@@ -322,6 +361,15 @@
                                     </select>
                                     @if ($errors->has('mother_occupation'))
                                         <span class="text-danger small">{{ $errors->first('mother_occupation') }}</span>
+                                    @endif   
+                                </div>
+
+                                <!-- Mother Address -->
+                                <div class="form-group col-md-6">
+                                    <label for="mother_address">Address</label>
+                                    <input type="text" name="mother_address" value="{{ $user->mother_address }}" id="mother_address" placeholder="Enter Address" class="form-input">
+                                    @if ($errors->has('mother_address'))
+                                        <span class="text-danger small">{{ $errors->first('mother_address') }}</span>
                                     @endif   
                                 </div>
                             </div>
@@ -365,7 +413,9 @@
                                 const motherOccupationField = document.getElementById('mother_occupation');
                                 const motherJobTypeField = document.getElementById('mother_job_type');
                                 const motherOrganizationField = document.getElementById('mother_organization');
-                        
+                                const motherMobileField = document.getElementById('mother_mobile');
+                                const motherAddressField = document.getElementById('mother_address');
+
                                 // Function to toggle visibility and reset values of mother-related details
                                 function toggleMotherDetails() {
                                     if (motherAliveSelect.value === '1') {
@@ -374,18 +424,20 @@
                                     } else {
                                         // Hide mother details and reset values if she is not alive
                                         motherDetailsSection.style.display = 'none';
-                        
+
                                         // Reset the values to null when mother is not alive
                                         motherNameField.value = '';
                                         motherOccupationField.value = '';
                                         motherJobTypeField.value = '';
                                         motherOrganizationField.value = '';
+                                        motherMobileField.value = '';
+                                        motherAddressField.value = '';
                                     }
                                 }
-                        
+
                                 // Initial call to set visibility and reset values based on current state
                                 toggleMotherDetails();
-                        
+
                                 // Add event listener for changes in the "Mother is Alive" dropdown
                                 motherAliveSelect.addEventListener('change', toggleMotherDetails);
                             });
@@ -586,6 +638,32 @@
         window.location.href = pendingUrl;
       }
     });
+          </script>
+          
+          <!-- Mobile input auto '+91' prefix script -->
+          <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              function attachMobilePrefix(input) {
+                if (!input) return;
+
+                input.addEventListener("keydown", function (e) {
+                  if (input.value === "" && /^[0-9]$/.test(e.key)) {
+                    e.preventDefault();
+                    input.value = "+91" + e.key;
+                  }
+                });
+
+                input.addEventListener("blur", function () {
+                  const value = input.value.trim();
+                  if (value && /^[0-9]/.test(value) && !value.startsWith("+91")) {
+                    input.value = "+91" + value;
+                  }
+                });
+              }
+
+              attachMobilePrefix(document.getElementById("father_mobile"));
+              attachMobilePrefix(document.getElementById("mother_mobile"));
+            });
           </script>
           
     </body>

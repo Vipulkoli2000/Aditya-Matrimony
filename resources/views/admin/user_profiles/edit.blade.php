@@ -346,6 +346,7 @@
                                 {{-- </template> --}}
                                 
                                 
+                                
                                 {{-- <template x-if="father_is_alive === 'yes'"> --}}
                                     <div>
                                         <label>Occupation</label>
@@ -376,6 +377,8 @@
                     
                                 {{-- <template x-if="father_is_alive === 'yes'"> --}}
                                     <x-text-input name="father_organization" value="{{ $profile->father_organization }}" :label="__('Organization Name')" :require="false" :messages="$errors->get('father_organization')"/>                       
+                                    <x-text-input name="father_mobile" value="{{ $profile->father_mobile }}" :label="__('Mobile Number')" :require="false" :messages="$errors->get('father_mobile')" type="tel"/>
+                                    <x-text-input name="father_address" value="{{ $profile->father_address }}" :label="__('Address')" :require="false" :messages="$errors->get('father_address')" type="text"/>
                                 {{-- </template> --}}
                             </div>    
                             {{-- mother details --}}
@@ -430,7 +433,10 @@
                     
                                 {{-- <template x-if="isAlive === 'yes'"> --}}
                                     <x-text-input name="mother_organization" value="{{ $profile->mother_organization }}" :label="__('Organization Name')" :require="false" :messages="$errors->get('mother_organization')"/>                       
-                                    <x-text-input name="mother_native_place" value="{{ $profile->mother_native_place }}" :label="__('Mother Native Place')" :require="false" :messages="$errors->get('mother_native_place')"/>                       
+                                    <x-text-input name="mother_mobile" value="{{ $profile->mother_mobile }}" :label="__('Mobile Number')" :require="false" :messages="$errors->get('mother_mobile')" type="tel"/>
+                                    <x-text-input name="mother_address" value="{{ $profile->mother_address }}" :label="__('Address')" :require="false" :messages="$errors->get('mother_address')" type="text"/>
+                                {{-- </template> --}}
+                                <x-text-input name="mother_native_place" value="{{ $profile->mother_native_place }}" :label="__('Mother Native Place')" :require="false" :messages="$errors->get('mother_native_place')"/>                       
                                     <x-text-input name="mother_name_before_marriage" value="{{ $profile->mother_name_before_marriage }}" :label="__('Mother Name Before Marriage')" :require="false" :messages="$errors->get('mother_name_before_marriage')"/>                       
                                 {{-- </template> --}}
                             </div>  

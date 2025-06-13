@@ -570,9 +570,7 @@ class UserProfilesController extends Controller
 
             // Open the image file
             $image = imagecreatefromjpeg($imagePath);
-
             if ($image === false) {
-                // Handle image opening failure
                 return redirect()->back()->with('error', 'Failed to open image.');
             }
 
@@ -641,9 +639,7 @@ class UserProfilesController extends Controller
 
             // Open the image file
             $image = imagecreatefromjpeg($imagePath);
-
             if ($image === false) {
-                // Handle image opening failure
                 return redirect()->back()->with('error', 'Failed to open image.');
             }
 
@@ -768,11 +764,15 @@ class UserProfilesController extends Controller
             'father_occupation' => 'nullable|string|max:100',
             'father_job_type' => 'nullable|string|max:100',
             'father_organization' => 'nullable|string|max:100',
+            'father_mobile' => 'nullable|string|max:20',
+            'father_address' => 'nullable|string',
             'mother_is_alive' => 'nullable|boolean',
             'mother_name' => 'nullable|string|max:100',
             'mother_occupation' => 'nullable|string|max:100',
             'mother_job_type' => 'nullable|string|max:100',
             'mother_organization' => 'nullable|string|max:100',
+            'mother_mobile' => 'nullable|string|max:20',
+            'mother_address' => 'nullable|string',
             'mother_native_place' => 'nullable|string|max:100',
             'mother_name_before_marriage' => 'nullable|string|max:100',
             'brother_resident_place' => 'nullable|string|max:100',

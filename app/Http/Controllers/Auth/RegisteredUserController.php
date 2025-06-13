@@ -47,6 +47,22 @@ class RegisteredUserController extends Controller
             'date_of_birth' => ['required', 'date'],    
             //  'password' => ['required', 'confirmed', Rules\Password::defaults()],
              'role'=>  ['required'],
+             'height' => ['required'],
+             'weight' => ['required'],
+             'complexion' => ['required'],
+             'address_line1' => ['required'],
+             'address_line2' => ['required'],
+             'landmark' => ['required'],
+             'pincode' => ['required'],
+             'highest_education' => ['required'],
+             'father_is_alive' => ['required','boolean'],
+             'mother_is_alive' => ['required','boolean'],
+             'father_name' => ['nullable','string','max:255'],
+             'father_address' => ['nullable','string'],
+             'father_mobile' => ['nullable','string','max:20'],
+             'mother_name' => ['nullable','string','max:255'],
+             'mother_address' => ['nullable','string'],
+             'mother_mobile' => ['nullable','string','max:20'],
         ]);
         
         $number = $request->input('country_code') .$request->input('mobile'); 
@@ -90,6 +106,25 @@ class RegisteredUserController extends Controller
             'date_of_birth' => $request->date_of_birth,
              'mobile' => $number,
              'role' => $userRole,
+            'height' => $request->height,
+            'weight' => $request->weight,
+            'complexion' => $request->complexion,
+            'address_line_1' => $request->address_line1,
+            'address_line_2' => $request->address_line2,
+            'landmark' => $request->landmark,
+            'pincode' => $request->pincode,
+            'highest_education' => $request->highest_education,
+
+            // Father details
+            'father_is_alive' => $request->father_is_alive,
+            'father_name' => $request->father_name,
+            'father_address' => $request->father_address,
+            'father_mobile' => $request->father_mobile,
+            // Mother details
+            'mother_is_alive' => $request->mother_is_alive,
+            'mother_name' => $request->mother_name,
+            'mother_address' => $request->mother_address,
+            'mother_mobile' => $request->mother_mobile,
         ]);
 
         $memberRole = Role::where('name', 'member')->first();

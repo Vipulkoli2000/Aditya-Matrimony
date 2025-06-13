@@ -54,12 +54,16 @@ return new class extends Migration {
             $table->string('father_occupation', 100)->nullable();
             $table->string('father_organization', 100)->nullable();
             $table->string('father_job_type', 100)->nullable();
+            $table->string('father_mobile', 100)->nullable();
+            $table->string('father_address')->nullable();
             $table->boolean('mother_is_alive')->nullable();
             $table->string('mother_name', 100)->nullable();
             $table->string('mother_occupation', 100)->nullable();
             $table->string('mother_organization', 100)->nullable();
             $table->string('mother_job_type', 100)->nullable();
             $table->string('mother_native_place', 100)->nullable();
+            $table->string('mother_mobile', 100)->nullable();
+            $table->string('mother_address')->nullable();
             $table->string('mother_name_before_marriage', 100)->nullable();
 
             $table->integer('number_of_brothers_married')->nullable();

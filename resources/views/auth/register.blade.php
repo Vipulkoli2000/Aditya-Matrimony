@@ -78,6 +78,14 @@
             box-shadow: 0 3px 10px rgba(0, 123, 255, 0.2), 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        /* Center button text vertically */
+        .btn-primary,
+        .btn-outline-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         /* "Remember me" checkbox styling (also applies to "I agree" checkbox) */
         .form-check {
             display: flex;
@@ -146,6 +154,12 @@
             cursor: not-allowed;
         }
 
+        /* Fix dropdown text color */
+        .form-select,
+        .form-select option {
+            color: black !important;
+        }
+
         /* Responsive Styles for Mobile View */
         @media (max-width: 576px) {
             .card {
@@ -154,63 +168,69 @@
                 margin-bottom: 2rem; /* Adds space below the card */
             }
         }
+
+        /* Stepper styles */
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .stepper .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .stepper .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: calc(50% + 14px); /* start after circle radius (14px) */
+            width: calc(100% - 28px); /* subtract diameter to avoid touching next circle */
+            height: 2px;
+            background: #d1d5db;
+            z-index: 0;
+        }
+        .stepper .step .step-count {
+            display: inline-flex;
+            width: 28px;
+            height: 28px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #d1d5db;
+            color: #000;
+            font-weight: 600;
+            z-index: 1;
+            margin-bottom: 6px;
+        }
+        .stepper .step.active .step-count,
+        .stepper .step.completed .step-count {
+            background: #007bff;
+            color: #fff;
+        }
+        .stepper .step.completed::after {
+            background: #007bff;
+        }
+        .stepper .step .step-label {
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        /* Validation error styling */
+        .form-control.is-invalid,
+        .form-select.is-invalid {
+            border-color: #dc3545 !important;
+        }
     </style>
 
     <div class="d-flex justify-content-center align-items-center min-vh-100 bg-light position-relative">
            <!-- Floating life partner box -->
-           <div style="position: absolute; left: calc(50% - 600px); top: 40%; transform: translateY(-50%); max-width: 300px; padding: 1.5rem; background-color: white; border-radius: 1rem; box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); text-align: center; border: 1px solid #fecaca; z-index: 10;" class="d-none d-lg-block">
-            <h2 style="font-size: 1.5rem; font-weight: bold; color: #b91c1c;">Want to find your life partner?</h2>
-            <p style="color: #dc2626; font-size: 0.9rem;">
-                Join our community matrimony and start your journey to finding your soulmate by following these steps
-            </p>
-
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; font-family: sans-serif;">
-  
-  <!-- Step 1 -->
-  <div style="display: flex; flex-direction: column; align-items: center;">
-    <div style="padding: 0.5rem 1rem; border: 2px solid #b91c1c; border-radius: 999px; font-size: 0.9rem; font-weight: 600; color: #b91c1c;">
-      Register
-    </div>
-    <div style="font-size: 1.5rem; color: #b91c1c; line-height: 1;">↓</div>
-  </div>
-
-  <!-- Step 2 -->
-  <div style="display: flex; flex-direction: column; align-items: center; margin-top: -17px;">
-    <div style="padding: 0.5rem 1rem; border: 2px solid #b91c1c; border-radius: 999px; font-size: 0.9rem; font-weight: 600; color: #b91c1c;">
-      Login your account
-    </div>
-    <div style="font-size: 1.5rem; color: #b91c1c; line-height: 1;">↓</div>
-  </div>
-
-  <!-- Step 3 -->
-  <div style="display: flex; flex-direction: column; align-items: center; margin-top: -17px;">
-    <div style="padding: 0.5rem 1rem; border: 2px solid #b91c1c; border-radius: 999px; font-size: 0.9rem; font-weight: 600; color: #b91c1c;">
-      Buy a package
-    </div>
-    <div style="font-size: 1.5rem; color: #b91c1c; line-height: 1;">↓</div>
-  </div>
-
-  <!-- Step 4 -->
-  <div style="display: flex; flex-direction: column; align-items: center; margin-top: -17px;">
-    <div style="padding: 0.5rem 1rem; border: 2px solid #b91c1c; border-radius: 999px; font-size: 0.9rem; font-weight: 600; color: #b91c1c;">
-      Create a Profile
-    </div>
-    <div style="font-size: 1.5rem; color: #b91c1c; line-height: 1;">↓</div>
-  </div>
-
-  <!-- Step 4 -->
-  <div style="display: flex; flex-direction: column; align-items: center; margin-top: -17px;">
-    <div style="padding: 0.5rem 1rem; border: 2px solid #b91c1c; border-radius: 999px; font-size: 0.9rem; font-weight: 600; color: #b91c1c;">
-      Start Searching
-    </div>
-   </div>
-
-</div>
-        </div>
+          
         <div class="card">
             <div class="card-body">
                 <h2 class="font-weight-bold mb-3">Register</h2>
-                <p class="mb-4">Create your account by filling out the form below.</p>
+                <p class="mb-1">Create your account by filling out the form below.</p>
+                <p class="mb-4 mt-1 text-muted">Please complete all required details to continue.</p>
                 {{-- <x-auth-session-status class="mb-4" :status="session('status')" /> --}}
                 @if(Session::has('status'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -221,81 +241,295 @@
                     @endif
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
-                        <div class="row mb-2">
-                            <div class="d-flex flex-row align-items-center justify-content-between mb-2">
-                                <label class="form-label mb-0" style="color: black;">Looking for:</label>
-                                <div class="d-flex gap-2 flex-row">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="role" id="bride" value="bride" {{ old('role') === 'bride' ? 'checked' : '' }} required>
-                                        <label class="form-check-label" for="bride" style="color: black;">
-                                            Bride
-                                        </label>
+                        <ul class="stepper list-unstyled">
+                            <li class="step active"><span class="step-count">1</span><div class="step-label">Basic</div></li>
+                            <li class="step"><span class="step-count">2</span><div class="step-label">Details</div></li>
+                            <li class="step"><span class="step-count">3</span><div class="step-label">Family Details</div></li>
+                            <li class="step"><span class="step-count">4</span><div class="step-label">Finish</div></li>
+                        </ul>
+                        <div class="step-form">
+                            <div class="row mb-2">
+                                <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+                                    <label class="form-label mb-0" style="color: black;">Looking for:</label>
+                                    <div class="d-flex gap-2 flex-row">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="role" id="bride" value="bride" {{ old('role') === 'bride' ? 'checked' : '' }} required>
+                                            <label class="form-check-label" for="bride" style="color: black;">
+                                                Bride
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="role" id="groom" value="groom" {{ old('role') === 'groom' ? 'checked' : '' }} required>
+                                            <label class="form-check-label" for="groom" style="color: black;">
+                                                Groom
+                                            </label>
+                                        </div>
+                                        <x-input-error :messages="$errors->get('role')" class="mt-2 text-danger small" />
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="role" id="groom" value="groom" {{ old('role') === 'groom' ? 'checked' : '' }} required>
-                                        <label class="form-check-label" for="groom" style="color: black;">
-                                            Groom
-                                        </label>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4">
+                                    <label for="first_name" class="form-label" style="color: black; margin: 10px 0">First Name</label>
+                                    <input id="first_name" name="first_name" type="text" class="form-control" value="{{ old('first_name') }}" placeholder="First Name" required autofocus autocomplete="" />
+                                    <x-input-error :messages="$errors->get('first_name')" class="mt-2 text-danger small" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="middle_name" class="form-label" style="color: black; margin: 10px 0;">Middle Name</label>
+                                    <input id="middle_name" name="middle_name" type="text" class="form-control" value="{{ old('middle_name') }}" placeholder="Middle Name" required autofocus autocomplete="" />
+                                    <x-input-error :messages="$errors->get('middle_name')" class="mt-2 text-danger small" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="last_name" class="form-label" style="color: black; margin: 10px 0;">Last Name</label>
+                                    <input id="last_name" name="last_name" type="text" class="form-control" value="{{ old('last_name') }}" placeholder="Last Name" required autofocus autocomplete="" />
+                                    <x-input-error :messages="$errors->get('last_name')" class="mt-2 text-danger small" />
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label for="email" class="form-label" style="color: black; margin: 10px 0;">Email</label>
+                                <input id="email" name="email" type="email" class="form-control" value="{{ old('email') }}" placeholder="Enter Email" required autofocus autocomplete="" />
+                                <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger small" />
+                            </div>
+                            <!-- Mobile -->
+                            <div class="mb-2">
+                                <label for="mobile" class="form-label" style="color: black; margin: 10px 0;">Mobile</label>
+                                <div class="input-group">
+                                    <!-- Country Code Dropdown -->
+                                    <select class="form-select" name="country_code" id="country_code" style="max-width: 87px; color: black;" required>
+                                        @foreach (config('data.countryCodes') as $value => $name)
+                                        <option value="{{$value}}">{{ $value. " ".$name }}</option>
+                                        @endforeach
+                                    </select>
+                                     <input id="mobile" name="mobile" type="tel" class="form-control @error('mobile') is-invalid @enderror"
+                                           value="{{ old('mobile') }}" placeholder="Mobile Number" required autofocus autocomplete="off"
+                                           pattern="^[0-9]{10}$" title="Please enter a valid mobile number" style="color: black;" />
+                                </div>
+                                <x-input-error :messages="$errors->get('mobile')" class="mt-2 text-danger small" />
+                            </div>
+                            <!-- Date Of Birth -->
+                            <div class="mb-2">
+                                <label for="date_of_birth" class="form-label" style="color: black; margin: 10px 0;">Date of Birth</label>
+                                <input id="date_of_birth" name="date_of_birth" type="date" class="form-control @error('date_of_birth') is-invalid @enderror"
+                                       value="{{ old('date_of_birth') }}" placeholder="Enter Date of Birth" required autofocus
+                                       max="{{ now()->subYears(18)->format('Y-m-d') }}" title="You must be at least 18 years old" />
+                                <x-input-error :messages="$errors->get('date_of_birth')" class="mt-2 text-danger small" />
+                            </div>
+                        </div> {{-- end step 1 --}}
+                        {{-- Additional Personal Details --}}
+                        <div class="step-form d-none">
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label for="height" class="form-label" style="color: black; margin: 10px 0;">Height (cm)</label>
+                                    <input id="height" name="height" type="number" min="50" max="300" class="form-control"
+                                           value="{{ old('height') }}" placeholder="Height in centimeters" required />
+                                    <x-input-error :messages="$errors->get('height')" class="mt-2 text-danger small" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="weight" class="form-label" style="color: black; margin: 10px 0;">Weight (kg)</label>
+                                    <input id="weight" name="weight" type="number" min="20" max="300" class="form-control"
+                                           value="{{ old('weight') }}" placeholder="Weight in kilograms" required />
+                                    <x-input-error :messages="$errors->get('weight')" class="mt-2 text-danger small" />
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label for="complexion" class="form-label" style="color: black; margin: 10px 0;">Complexion</label>
+                                <select id="complexion" name="complexion" class="form-select" required>
+                                    <option value="" disabled selected>Select Complexion</option>
+                                    <option value="very_fair" {{ old('complexion') == 'very_fair' ? 'selected' : '' }}>Very Fair</option>
+                                    <option value="fair" {{ old('complexion') == 'fair' ? 'selected' : '' }}>Fair</option>
+                                    <option value="wheatish" {{ old('complexion') == 'wheatish' ? 'selected' : '' }}>Wheatish</option>
+                                    <option value="dark" {{ old('complexion') == 'dark' ? 'selected' : '' }}>Dark</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('complexion')" class="mt-2 text-danger small" />
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="address_line1" class="form-label" style="color: black; margin: 10px 0;">Address Line 1</label>
+                                <input id="address_line1" name="address_line1" type="text" class="form-control"
+                                       value="{{ old('address_line1') }}" placeholder="Address Line 1" required />
+                                <x-input-error :messages="$errors->get('address_line1')" class="mt-2 text-danger small" />
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="address_line2" class="form-label" style="color: black; margin: 10px 0;">Address Line 2</label>
+                                <input id="address_line2" name="address_line2" type="text" class="form-control"
+                                       value="{{ old('address_line2') }}" placeholder="Address Line 2" />
+                                <x-input-error :messages="$errors->get('address_line2')" class="mt-2 text-danger small" />
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label for="landmark" class="form-label" style="color: black; margin: 10px 0;">Landmark</label>
+                                    <input id="landmark" name="landmark" type="text" class="form-control"
+                                           value="{{ old('landmark') }}" placeholder="Landmark" />
+                                    <x-input-error :messages="$errors->get('landmark')" class="mt-2 text-danger small" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="pincode" class="form-label" style="color: black; margin: 10px 0;">Pincode</label>
+                                    <input id="pincode" name="pincode" type="text" pattern="[0-9]{6}" class="form-control"
+                                           value="{{ old('pincode') }}" placeholder="Pincode" required />
+                                    <x-input-error :messages="$errors->get('pincode')" class="mt-2 text-danger small" />
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="highest_education" class="form-label" style="color: black; margin: 10px 0;">Highest Education</label>
+                                <select id="highest_education" name="highest_education" class="form-select" required>
+                                    <option value="" disabled selected>Select Highest Education</option>
+                                    <option value="high_school" {{ old('highest_education') == 'high_school' ? 'selected' : '' }}>High School</option>
+                                    <option value="diploma" {{ old('highest_education') == 'diploma' ? 'selected' : '' }}>Diploma</option>
+                                    <option value="bachelors" {{ old('highest_education') == 'bachelors' ? 'selected' : '' }}>Bachelors</option>
+                                    <option value="masters" {{ old('highest_education') == 'masters' ? 'selected' : '' }}>Masters</option>
+                                    <option value="phd" {{ old('highest_education') == 'phd' ? 'selected' : '' }}>PhD</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('highest_education')" class="mt-2 text-danger small" />
+                            </div>
+                        </div> {{-- end step 2 --}}
+                        <div class="step-form d-none">
+                            <!-- Father Details -->
+                            <div class="mb-3">
+                                <label for="father_is_alive" class="form-label" style="color: black; margin: 10px 0;">Is Father Alive?</label>
+                                <select id="father_is_alive" name="father_is_alive" class="form-select" required>
+                                    <option value="" disabled selected>Select Option</option>
+                                    <option value="1" {{ old('father_is_alive') == '1' ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('father_is_alive') == '0' ? 'selected' : '' }}>No</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('father_is_alive')" class="mt-2 text-danger small" />
+                            </div>
+                            <div id="father_details" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <label for="father_name" class="form-label" style="color: black; margin: 10px 0;">Father Name <span class="text-danger">*</span></label>
+                                        <input id="father_name" name="father_name" type="text" class="form-control" value="{{ old('father_name') }}" placeholder="Enter Father Name" />
+                                        <x-input-error :messages="$errors->get('father_name')" class="mt-2 text-danger small" />
                                     </div>
-                                    <x-input-error :messages="$errors->get('role')" class="mt-2 text-danger small" />
+                                    <div class="col-md-6 mb-2">
+                                        <label for="father_mobile" class="form-label" style="color: black; margin: 10px 0;">Father Mobile <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <select class="form-select" name="father_country_code" id="father_country_code" style="max-width: 72px; color: black; border-top-right-radius: 0; border-bottom-right-radius: 0; font-size: 0.85rem;">
+                                                @foreach (config('data.countryCodes') as $value => $name)
+                                                <option value="{{$value}}" {{ old('father_country_code') == $value ? 'selected' : '' }}>{{ $value." ".$name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <input id="father_mobile" name="father_mobile" type="tel" class="form-control @error('father_mobile') is-invalid @enderror" value="{{ old('father_mobile') }}" placeholder="Mobile Number" pattern="^[0-9]{10}$" title="Please enter a valid mobile number" maxlength="10" style="color: black; border-top-left-radius: 0; border-bottom-left-radius: 0; font-size: 0.85rem;" />
+                                        </div>
+                                        <x-input-error :messages="$errors->get('father_mobile')" class="mt-2 text-danger small" />
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="father_address" class="form-label" style="color: black; margin: 10px 0;">Father Address <span class="text-danger">*</span></label>
+                                    <input id="father_address" name="father_address" type="text" class="form-control" value="{{ old('father_address') }}" placeholder="Enter Father Address" />
+                                    <x-input-error :messages="$errors->get('father_address')" class="mt-2 text-danger small" />
+                                </div>
+                            </div>
+                            <!-- Mother Details -->
+                            <div class="mb-3 mt-4">
+                                <label for="mother_is_alive" class="form-label" style="color: black; margin: 10px 0;">Is Mother Alive?</label>
+                                <select id="mother_is_alive" name="mother_is_alive" class="form-select" required>
+                                    <option value="" disabled selected>Select Option</option>
+                                    <option value="1" {{ old('mother_is_alive') == '1' ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('mother_is_alive') == '0' ? 'selected' : '' }}>No</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('mother_is_alive')" class="mt-2 text-danger small" />
+                            </div>
+                            <div id="mother_details" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <label for="mother_name" class="form-label" style="color: black; margin: 10px 0;">Mother Name <span class="text-danger">*</span></label>
+                                        <input id="mother_name" name="mother_name" type="text" class="form-control" value="{{ old('mother_name') }}" placeholder="Enter Mother Name" />
+                                        <x-input-error :messages="$errors->get('mother_name')" class="mt-2 text-danger small" />
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <label for="mother_mobile" class="form-label" style="color: black; margin: 10px 0;">Mother Mobile <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <select class="form-select" name="mother_country_code" id="mother_country_code" style="max-width: 72px; color: black; border-top-right-radius: 0; border-bottom-right-radius: 0; font-size: 0.85rem;">
+                                                @foreach (config('data.countryCodes') as $value => $name)
+                                                <option value="{{$value}}" {{ old('mother_country_code') == $value ? 'selected' : '' }}>{{ $value." ".$name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <input id="mother_mobile" name="mother_mobile" type="tel" class="form-control @error('mother_mobile') is-invalid @enderror" value="{{ old('mother_mobile') }}" placeholder="Mobile Number" pattern="^[0-9]{10}$" title="Please enter a valid mobile number" maxlength="10" style="color: black; border-top-left-radius: 0; border-bottom-left-radius: 0; font-size: 0.85rem;" />
+                                        </div>
+                                        <x-input-error :messages="$errors->get('mother_mobile')" class="mt-2 text-danger small" />
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="mother_address" class="form-label" style="color: black; margin: 10px 0;">Mother Address <span class="text-danger">*</span></label>
+                                    <input id="mother_address" name="mother_address" type="text" class="form-control" value="{{ old('mother_address') }}" placeholder="Enter Mother Address" />
+                                    <x-input-error :messages="$errors->get('mother_address')" class="mt-2 text-danger small" />
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-md-4">
-                                <label for="first_name" class="form-label" style="color: black; margin: 10px 0">First Name</label>
-                                <input id="first_name" name="first_name" type="text" class="form-control" value="{{ old('first_name') }}" placeholder="First Name" required autofocus autocomplete="" />
-                                <x-input-error :messages="$errors->get('first_name')" class="mt-2 text-danger small" />
+                         {{-- end step 3 --}}
+                        <div class="step-form d-none">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms" style="color: black;">
+                                    I agree to the <a href="/terms-and-conditions" target="_blank" class="text-primary">Terms and Conditions</a>
+                                </label>
                             </div>
-                            <div class="col-md-4">
-                                <label for="middle_name" class="form-label" style="color: black; margin: 10px 0;">Middle Name</label>
-                                <input id="middle_name" name="middle_name" type="text" class="form-control" value="{{ old('middle_name') }}" placeholder="Middle Name" required autofocus autocomplete="" />
-                                <x-input-error :messages="$errors->get('middle_name')" class="mt-2 text-danger small" />
-                            </div>
-                            <div class="col-md-4">
-                                <label for="last_name" class="form-label" style="color: black; margin: 10px 0;">Last Name</label>
-                                <input id="last_name" name="last_name" type="text" class="form-control" value="{{ old('last_name') }}" placeholder="Last Name" required autofocus autocomplete="" />
-                                <x-input-error :messages="$errors->get('last_name')" class="mt-2 text-danger small" />
-                            </div>
+                        </div> {{-- end step 4 --}}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" id="prevBtn" class="btn btn-primary d-none">Previous</button>
+                            <button type="button" id="nextBtn" class="btn btn-primary">Next</button>
+                            <button id="registerBtn" type="submit" class="btn text-white btn-primary d-none" disabled>Register</button>
                         </div>
-                        <div class="mb-2">
-                            <label for="email" class="form-label" style="color: black; margin: 10px 0;">Email</label>
-                            <input id="email" name="email" type="email" class="form-control" value="{{ old('email') }}" placeholder="Enter Email" required autofocus autocomplete="" />
-                            <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger small" />
-                        </div>
-                        <!-- Mobile -->
-                        <div class="mb-2">
-                            <label for="mobile" class="form-label" style="color: black; margin: 10px 0;">Mobile</label>
-                            <div class="input-group">
-                                <!-- Country Code Dropdown -->
-                                <select class="form-select" name="country_code" id="country_code" style="max-width: 87px; color: black;" required>
-                                    @foreach (config('data.countryCodes') as $value => $name)
-                                    <option value="{{$value}}">{{ $value. " ".$name }}</option>
-                                    @endforeach
-                                </select>
-                                 <input id="mobile" name="mobile" type="tel" class="form-control @error('mobile') is-invalid @enderror"
-                                       value="{{ old('mobile') }}" placeholder="Mobile Number" required autofocus autocomplete="off"
-                                       pattern="^[0-9]{10}$" title="Please enter a valid mobile number" style="color: black;" />
-                            </div>
-                            <x-input-error :messages="$errors->get('mobile')" class="mt-2 text-danger small" />
-                        </div>
-                        <!-- Date Of Birth -->
-                        <div class="mb-2">
-                            <label for="date_of_birth" class="form-label" style="color: black; margin: 10px 0;">Date of Birth</label>
-                            <input id="date_of_birth" name="date_of_birth" type="date" class="form-control @error('date_of_birth') is-invalid @enderror"
-                                   value="{{ old('date_of_birth') }}" placeholder="Enter Date of Birth" required autofocus
-                                   max="{{ now()->subYears(18)->format('Y-m-d') }}" title="You must be at least 18 years old" />
-                            <x-input-error :messages="$errors->get('date_of_birth')" class="mt-2 text-danger small" />
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="terms" required>
-                            <label class="form-check-label" for="terms" style="color: black;">
-                                I agree to the <a href="/terms-and-conditions" target="_blank" class="text-primary">Terms and Conditions</a>
-                            </label>
-                        </div>
-                        <button id="registerBtn" type="submit" class="btn text-white btn-primary w-100 d-flex justify-content-center align-items-center">Register</button>
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {
+                                // Toggle required attribute based on is_alive selection
+                                function toggleRequiredFields(selectId, detailsId) {
+                                    const select = document.getElementById(selectId);
+                                    const details = document.getElementById(detailsId);
+                                    const inputs = details.querySelectorAll('input, select');
+                                    
+                                    if (select.value === '1') {
+                                        inputs.forEach(input => {
+                                            input.required = true;
+                                        });
+                                    } else {
+                                        inputs.forEach(input => {
+                                            input.required = false;
+                                        });
+                                    }
+                                }
+
+                                // Initial setup for father and mother details
+                                const fatherAlive = document.getElementById('father_is_alive');
+                                const motherAlive = document.getElementById('mother_is_alive');
+
+                                if (fatherAlive) {
+                                    fatherAlive.addEventListener('change', function() {
+                                        const fatherDetails = document.getElementById('father_details');
+                                        if (this.value === '1') {
+                                            fatherDetails.style.display = 'block';
+                                            toggleRequiredFields('father_is_alive', 'father_details');
+                                        } else {
+                                            fatherDetails.style.display = 'none';
+                                            toggleRequiredFields('father_is_alive', 'father_details');
+                                        }
+                                    });
+                                    // Trigger change on load if value is already set
+                                    if (fatherAlive.value === '1') {
+                                        fatherAlive.dispatchEvent(new Event('change'));
+                                    }
+                                }
+
+                                if (motherAlive) {
+                                    motherAlive.addEventListener('change', function() {
+                                        const motherDetails = document.getElementById('mother_details');
+                                        if (this.value === '1') {
+                                            motherDetails.style.display = 'block';
+                                            toggleRequiredFields('mother_is_alive', 'mother_details');
+                                        } else {
+                                            motherDetails.style.display = 'none';
+                                            toggleRequiredFields('mother_is_alive', 'mother_details');
+                                        }
+                                    });
+                                    // Trigger change on load if value is already set
+                                    if (motherAlive.value === '1') {
+                                        motherAlive.dispatchEvent(new Event('change'));
+                                    }
+                                }
                                 // Existing code for updating date of birth...
                                 const brideRadio = document.getElementById('bride');
                                 const groomRadio = document.getElementById('groom');
@@ -354,6 +588,83 @@
                                 // Optional: When dropdown loses focus, re-apply the short display if needed
                                 // This can be a bit aggressive, so test if it's desired.
                                 // countryCodeSelect.addEventListener('blur', updateCountryCodeDisplay);
+                                // Father/Mother alive dropdown logic
+                                const fatherAliveSelect = document.getElementById('father_is_alive');
+                                const fatherDetailsSection = document.getElementById('father_details');
+                                const motherAliveSelect = document.getElementById('mother_is_alive');
+                                const motherDetailsSection = document.getElementById('mother_details');
+                        
+                                function toggleFatherDetails() {
+                                    if (!fatherAliveSelect || !fatherDetailsSection) return;
+                                    fatherDetailsSection.style.display = fatherAliveSelect.value === '1' ? 'block' : 'none';
+                                }
+                        
+                                function toggleMotherDetails() {
+                                    if (!motherAliveSelect || !motherDetailsSection) return;
+                                    motherDetailsSection.style.display = motherAliveSelect.value === '1' ? 'block' : 'none';
+                                }
+                        
+                                if (fatherAliveSelect) {
+                                    fatherAliveSelect.addEventListener('change', toggleFatherDetails);
+                                    toggleFatherDetails();
+                                }
+                                if (motherAliveSelect) {
+                                    motherAliveSelect.addEventListener('change', toggleMotherDetails);
+                                    toggleMotherDetails();
+                                }
+                                /* Stepper logic */
+                                const stepForms = Array.from(document.querySelectorAll('.step-form'));
+                                const stepIndicators = Array.from(document.querySelectorAll('.stepper .step'));
+                                let currentStep = 0;
+                                const prevBtn = document.getElementById('prevBtn');
+                                const nextBtn = document.getElementById('nextBtn');
+
+                                function stepIsValid(idx) {
+                                    const fields = stepForms[idx].querySelectorAll('input, select, textarea');
+                                    let valid = true;
+                                    fields.forEach(f => {
+                                        if (!f.checkValidity()) {
+                                            valid = false;
+                                            f.classList.add('is-invalid');
+                                        } else {
+                                            f.classList.remove('is-invalid');
+                                        }
+                                    });
+                                    return valid;
+                                }
+
+                                function showStep(idx) {
+                                    stepForms.forEach((sf, i) => sf.classList.toggle('d-none', i !== idx));
+                                    stepIndicators.forEach((indicator, i) => {
+                                        indicator.classList.toggle('active', i === idx);
+                                        indicator.classList.toggle('completed', i < idx);
+                                    });
+                                    prevBtn.classList.toggle('d-none', idx === 0);
+                                    nextBtn.classList.toggle('d-none', idx === stepForms.length - 1);
+                                    registerButton.classList.toggle('d-none', idx !== stepForms.length - 1);
+                                }
+
+                                prevBtn.addEventListener('click', () => {
+                                    if (currentStep > 0) {
+                                        currentStep--;
+                                        showStep(currentStep);
+                                    }
+                                });
+
+                                nextBtn.addEventListener('click', () => {
+                                    if (!stepIsValid(currentStep)) {
+                                        // focus first invalid field
+                                        const firstInvalid = stepForms[currentStep].querySelector('.is-invalid');
+                                        if (firstInvalid) firstInvalid.focus();
+                                        return;
+                                    }
+                                    if (currentStep < stepForms.length - 1) {
+                                        currentStep++;
+                                        showStep(currentStep);
+                                    }
+                                });
+
+                                showStep(currentStep);
                             });
                         </script>
                     </form>
@@ -369,4 +680,5 @@
             </div>
         </div>
     </div>
+
 </x-layout.user_banner>
