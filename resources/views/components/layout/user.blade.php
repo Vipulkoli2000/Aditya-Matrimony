@@ -114,8 +114,34 @@
     body {
       padding-top: 80px;
     }
-  </style>
-  <style>
+
+    /* Carousel Professional Enhancements */
+    .carousel-header .carousel,
+    .carousel-header .carousel-item {
+      min-height: 70vh; /* Taller, responsive height */
+    }
+    .carousel-header .carousel-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensure image covers area without distortion */
+    }
+    .carousel-header .carousel-caption {
+      background: rgba(0, 0, 0, 0.35); /* Subtle dark overlay */
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .carousel-header .carousel-indicators [data-bs-target] {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      opacity: 0.8;
+    }
+    .carousel-header .carousel-indicators .active {
+      background-color: #C95B63; /* Theme accent */
+      opacity: 1;
+    }
+
     /* Mobile Sidebar Styles - New Design */
     .mobile-sidebar {
         height: 100%;
@@ -353,6 +379,45 @@
     .swal2-popup.swal2-sm .swal2-actions {
         font-size: 0.8rem;
     }
+    
+    /* Advertisement Container Styles */
+    .advertisement-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .advertisement-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .advertisement-container img {
+        transition: transform 0.3s ease;
+    }
+    
+    .advertisement-container:hover img {
+        transform: scale(1.05);
+    }
+    
+    .advertisement-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 123, 255, 0.1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+    
+    .advertisement-container:hover::before {
+        opacity: 1;
+    }
   </style>
 </head>
 
@@ -422,53 +487,73 @@
 
   <!-- Carousel Start -->
   <div class="container-fluid carousel-header px-0 myslider">
-    <div id="carouselId" class="carousel slide myslider" data-bs-ride="carousel">
-      <div class="carousel-inner myslider" role="listbox">
-        <div class="carousel-item active">
-          <img src="{{ asset('assets/images/banner01.jpeg') }}" class="img-fluid w-100" alt="Image">
-          <div class="carousel-caption myslider">
-            <div class="p-3 mx-auto animated zoomIn" style="max-width: 900px;">
-              <div class="d-inline-block p-2 mb-3" 
-              style="border-top: 3px double rgb(212, 100, 100); border-bottom: 3px double rgb(212, 100, 100); border-left: none; border-right: none;">
-           <p class="myp h4 text-white fw-bold mb-0" style="letter-spacing: 3px;">Welcome To</p>
-         </div>
-         
-              <h1 class="display-1 text-capitalize text-white mb-3">Aditya <em class="fa fa-heart text-primary">&nbsp;</em>Matrimonial</h1>
-              
-         
+    <div class="row g-0">
+      <!-- Left: Carousel (2/3 width on lg+) -->
+      <div class="col-lg-8 col-12">
+        <div id="carouselId" class="carousel slide carousel-fade myslider shadow rounded" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselId" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          </div>
+          <div class="carousel-inner myslider" role="listbox">
+            <div class="carousel-item myslider active">
+              <img src="{{ asset('assets/images/banner01.jpeg') }}" class="img-fluid w-100" alt="Image">
+              <div class="carousel-caption myslider">
+                <div class="p-3 mx-auto animated zoomIn" style="max-width: 900px;">
+                  <div class="d-inline-block p-2 mb-3" style="border-top: 3px double rgb(212, 100, 100); border-bottom: 3px double rgb(212, 100, 100); border-left: none; border-right: none;">
+                    <p class="myp h4 text-white fw-bold mb-0" style="letter-spacing: 3px;">Welcome To</p>
+                  </div>
+                  <h1 class="display-1 text-capitalize text-white mb-3">Aditya <em class="fa fa-heart text-primary">&nbsp;</em>Matrimonial</h1>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item myslider">
+              <img src="{{ asset('assets/images/banner02.jpeg') }}" class="img-fluid w-100" alt="Image">
+              <div class="carousel-caption myslider">
+                <div class="p-3 mx-auto animated zoomIn" style="max-width: 900px;">
+                  <div class="d-inline-block p-2 mb-3" style="border-top: 3px double rgb(212, 100, 100); border-bottom: 3px double rgb(212, 100, 100); border-left: none; border-right: none;">
+                    <p class="myp h4 text-white fw-bold mb-0" style="letter-spacing: 3px;">Welcome To</p>
+                  </div>
+                  <h2 class="display-1 text-capitalize text-white mb-3">Aditya Matrimony</h2>
+                  <div class="d-inline-block p-2 mb-3" style="border-top: 3px double rgb(212, 100, 100); border-bottom: 3px double rgb(212, 100, 100); border-left: none; border-right: none;">
+                    <p class="myp h4 text-white fw-bold mb-0" style="letter-spacing: 1px; font-size: 19px;">Dear Members, please take a moment to update your profile.<br>If you need any assistance, feel free to contact the office.</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="carousel-item myslider">
-          <img src="{{ asset('assets/images/banner02.jpeg') }}" class="img-fluid w-100" alt="Image">
-          <div class="carousel-caption myslider">
-            <div class="p-3 mx-auto animated zoomIn" style="max-width: 900px;">
-              <div class="d-inline-block p-2 mb-3" 
-              style="border-top: 3px double rgb(212, 100, 100); border-bottom: 3px double rgb(212, 100, 100); border-left: none; border-right: none;">
-           <p class="myp h4 text-white fw-bold mb-0" style="letter-spacing: 3px;">Welcome To</p>
-         </div>
-              <h2 class="display-1 text-capitalize text-white mb-3">Aditya Matrimony</h2>
-             <div class="d-inline-block p-2 mb-3" 
-     style="border-top: 3px double rgb(212, 100, 100); border-bottom: 3px double rgb(212, 100, 100); border-left: none; border-right: none;">
-  <p class="myp h4 text-white fw-bold mb-0" style="letter-spacing: 1px; font-size: 19px;">
-    Dear Members, please take a moment to update your profile.<br>
-    If you need any assistance, feel free to contact the office.
-  </p>
-</div>
-
-            </div>
-          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
+
+      <!-- Right: Advertisement carousel (hidden on small screens) -->
+      <div class="col-lg-4 d-none d-lg-flex flex-column gap-3">
+        <!-- Advertisement 1 -->
+        <div class="advertisement-container">
+          <img src="{{ $advertisement->advertisement_1_url }}" 
+               onerror="this.onerror=null;this.src='{{ asset('assets/images/ad-1.jpeg') }}';" 
+               alt="Advertisement 1" 
+               class="img-fluid w-100 h-100 border border-2 rounded" 
+               style="object-fit: cover; cursor: pointer;">
+        </div>
+        
+        <!-- Advertisement 2 -->
+        <div class="advertisement-container">
+          <img src="{{ $advertisement->advertisement_2_url }}" 
+               onerror="this.onerror=null;this.src='{{ asset('assets/images/ad-2.jpeg') }}';" 
+               alt="Advertisement 2" 
+               class="img-fluid w-100 h-100 border border-2 rounded" 
+               style="object-fit: cover; cursor: pointer;">
+        </div>
+      </div>
+    
   </div>
   <!-- Carousel End -->
 

@@ -25,7 +25,7 @@ use App\Http\Controllers\admin\PagesController As AdminPagesController;
 use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-
+use App\Http\Controllers\admin\AdvertisementController;
 
 /*
  * |--------------------------------------------------------------------------
@@ -204,6 +204,8 @@ Route::get('/user/packages/all', [UserProfilesController::class, 'allPurchasedPa
     ->name('all.purchased.packages')
     ->middleware(['auth']);
               
+        Route::get('/admin/advertisement/create', [App\Http\Controllers\admin\AdvertisementController::class, 'create'])->name('admin.advertisement.create');
+        Route::post('/admin/advertisement', [App\Http\Controllers\admin\AdvertisementController::class, 'store'])->name('admin.advertisement.store');
           
         //     return view('admin.dashboard');
         // })->name('admin.dashboard');
