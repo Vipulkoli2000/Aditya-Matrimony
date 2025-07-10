@@ -453,7 +453,7 @@
     <div class="container">
     <nav class="navbar navbar-light navbar-expand-xl py-1 px-3 rounded-pill shadow-sm d-flex justify-content-between align-items-center" id="navBar" style="background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); max-height: 65px;">
     <a href="#" class="navbar-brand">
-          <img src="{{ asset('assets/user/img/logo.png') }}" class="img-fluid logo-img"> <!-- Adjust height as needed -->
+          <img src="{{ asset('assets/user/img/logo1.png') }}" class="img-fluid logo-img"> <!-- Adjust height as needed -->
         </a>
         <!-- Hamburger for mobile sidebar -->
         <button class="navbar-toggler d-lg-none" type="button" onclick="toggleMobileSidebar()" aria-label="Toggle mobile sidebar">
@@ -670,7 +670,7 @@
         /* Create a fixed-size placeholder for the logo to stabilize the layout */
         .navbar-brand {
             position: relative;
-            width: 90px;
+            width: 110px;
             height: 65px; /* Match navbar height to prevent layout shifts */
         }
 
@@ -680,8 +680,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            height: 90px !important;
-            width: 90px !important;
+            max-height: 100%;
+            max-width: 100%;
+            height: auto;
+            width: auto;
+            object-fit: contain;
         }
 
         /* Adjust placeholder and logo for larger screens */
@@ -690,8 +693,8 @@
                  width: 100px;
             }
             .logo-img {
-                height: 100px !important;
-                width: 100px !important;
+                height: 60px !important;
+                width: 99px !important;
             }
         }
     </style>
