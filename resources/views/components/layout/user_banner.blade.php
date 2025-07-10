@@ -328,7 +328,7 @@
             <div class="container">
                 <nav class="navbar navbar-light navbar-expand-xl py-1 px-3 rounded-pill shadow-sm d-flex justify-content-between align-items-center" id="navBar" style="background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); max-height: 65px;">
                     <a href="#" class="navbar-brand">
-                        <img src="{{asset('assets/user/img/logo.png')}}" class="img-fluid" style="height: 40px;"> 
+                    <img src="{{ asset('assets/user/img/logo.png') }}" class="img-fluid logo-img"> <!-- Adjust height as needed -->
                     </a>
                     <button class="navbar-toggler py-1 px-2" type="button" onclick="toggleMobileSidebar()">
                         <span class="fa fa-bars text-primary"></span>
@@ -678,6 +678,35 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <!-- Mobile Sidebar - New Design -->
 <div id="mobileSidebar" class="mobile-sidebar">
+<style>
+        /* Create a fixed-size placeholder for the logo to stabilize the layout */
+        .navbar-brand {
+            position: relative;
+            width: 90px;
+            height: 65px; /* Match navbar height to prevent layout shifts */
+        }
+
+        /* Position the logo absolutely and center it within the placeholder */
+        .logo-img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 90px !important;
+            width: 90px !important;
+        }
+
+        /* Adjust placeholder and logo for larger screens */
+        @media (min-width: 992px) {
+            .navbar-brand {
+                 width: 100px;
+            }
+            .logo-img {
+                height: 100px !important;
+                width: 100px !important;
+            }
+        }
+    </style>
     <!-- Sidebar Header -->
     <div class="mobile-sidebar-header">
         <a href="javascript:void(0)" class="back-btn" onclick="toggleMobileSidebar()" aria-label="Close sidebar">
