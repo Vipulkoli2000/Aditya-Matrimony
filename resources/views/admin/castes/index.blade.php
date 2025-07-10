@@ -9,9 +9,12 @@
             <div class="flex items-center justify-between mb-5">
                 <h5 class="font-semibold text-lg dark:text-white-light">Castes</h5>
                 <div class="flex items-center">
-                    <form action="" method="get" class="flex items-center">
-                        <input type="text" name="search" placeholder="search castes" class="mr-2 px-2 py-1 border border-gray-300 rounded-md">
-                        <button class="btn btn-primary px-4 py-2" type="submit">Submit</button>
+                    <form action="{{ route('castes.index') }}" method="get" class="flex items-center">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search castes by name" class="mr-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button class="btn btn-primary px-4 py-2" type="submit">Search</button>
+                        @if(request('search'))
+                            <a href="{{ route('castes.index') }}" class="btn btn-secondary ml-2 px-4 py-2">Clear</a>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -20,16 +23,15 @@
                     <table class="table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                
                                 <th>Caste Name</th>
                                 <th>No. of Sub-Castes</th>
                                 <th style="text-align:right;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($castes as $caste)
+                            @forelse ($castes as $caste)
                             <tr>                    
-                                <td>{{ $caste->id }}</td>
                                 <td>{{ $caste->name }}</td>
                                 <td>
                                     <span class="badge bg-primary">{{ $caste->sub_castes_count ?? 0 }}</span>
@@ -45,7 +47,18 @@
                                     </ul>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="3" class="text-center py-4">
+                                    @if(request('search'))
+                                        <p class="text-gray-500">No castes found matching "{{ request('search') }}"</p>
+                                        <a href="{{ route('castes.index') }}" class="text-blue-500 hover:underline">Show all castes</a>
+                                    @else
+                                        <p class="text-gray-500">No castes found</p>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                     {{ $castes->links() }}

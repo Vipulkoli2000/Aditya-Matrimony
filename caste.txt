@@ -1,0 +1,48 @@
+ 
+Arya:{
+    Arya Kshatriya
+},
+Brahmin:{
+    Arya Vaishya,
+    Brahmin,
+    Bramhastriya,
+    Chitpavana Brahmin,
+    Daivajna Brahmin,
+    Deshasth Samvedi,
+    Deshastha Rugvedi,
+    Deshastha Yajurvedi,
+    Devrukhe,
+    Dhima Brahmins,
+    Gouda Saraswat Brahmin,
+    Gujurathi,
+    Havyaka Brahmin,
+    Hoysala Karnataka Brahmin,
+    Kandi,
+    Karahade,
+    Konkanasth Brahmin,
+    Punjabi,
+    Saraswat Brahmin,
+    Vaishnav Brahmin,
+},
+Gujrathi:{
+   Gujrathi,
+   Mistri
+},
+Halba:{
+    Halba,
+    Koshti
+},
+Kshatriya:{
+    Kshatriya,
+    Khumawat
+},
+Maratha:{
+    96 Kuli Maratha,
+    Kunabi,
+    Maratha Teli,
+    Prajapati
+},
+Vaishya:{
+    Yadanyaseni
+},
+

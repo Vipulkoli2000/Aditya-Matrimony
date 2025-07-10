@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\CasteSeeder;
 use Database\Seeders\CreateAdminUserSeeder;
 use Database\Seeders\CreateMemberUserSeeder;
 use Database\Seeders\PackageSeeder;
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CreateAdminUserSeeder::class);
         $this->call(CreateMemberUserSeeder::class);
         $this->call(PackageSeeder::class);
+        $this->call(CasteSeeder::class);
         $profilesToGenerate = (int) env('PROFILES_PER_USER', 0);
         // generate users and attach one profile each
         \App\Models\User::factory($profilesToGenerate)->create()->each(function($user) {

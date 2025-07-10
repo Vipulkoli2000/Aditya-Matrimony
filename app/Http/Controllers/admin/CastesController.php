@@ -10,9 +10,22 @@ use Illuminate\Support\Facades\DB;
 
 class CastesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $castes = Caste::withCount('subCastes')->orderBy('id', 'desc')->paginate(12);
+        $query = Caste::withCount('subCastes');
+        
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('name', 'like', "%$search%");
+        }
+        
+        $castes = $query->orderBy('id', 'desc')->paginate(12);
+        
+        // Append search parameter to pagination links
+        if ($request->has('search')) {
+            $castes->appends(['search' => $request->search]);
+        }
+        
         return view('admin.castes.index', ['castes' => $castes]);
     }
 
