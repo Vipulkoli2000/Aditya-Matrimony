@@ -74,23 +74,36 @@
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Current Image</label>
                             <div class="border rounded p-3 text-center bg-light">
-                                @if($advertisement->hasAdvertisement1() || file_exists(public_path('assets/images/ad-1.jpeg')))
-                                    <img src="{{ $advertisement->advertisement_1_url }}" 
+                                @if($advertisement->advertisement_1)
+                                    <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->advertisement_1 }}')">
+                                        <template x-if="imageUrl">
+                                            <img :src="imageUrl" 
+                                                 alt="Advertisement 1" 
+                                                 class="img-fluid rounded" 
+                                                 style="max-height: 150px; object-fit: contain;">
+                                        </template>
+                                        <template x-if="!imageUrl">
+                                            <div class="py-4">
+                                                <i class="fas fa-spinner fa-spin fa-2x text-muted mb-3"></i>
+                                                <p class="text-muted mb-0">Loading image...</p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="mt-2">
+                                        <span class="badge bg-success">Custom Image</span>
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeAdvertisement('advertisement_1')">
+                                                <i class="fas fa-trash-alt me-1"></i>Remove Ad
+                                            </button>
+                                        </div>
+                                    </div>
+                                @elseif(file_exists(public_path('assets/images/ad-1.jpeg')))
+                                    <img src="{{ asset('assets/images/ad-1.jpeg') }}" 
                                          alt="Advertisement 1" 
                                          class="img-fluid rounded" 
-                                         style="max-height: 150px; object-fit: contain;"
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/ad-1.jpeg') }}';"/>
+                                         style="max-height: 150px; object-fit: contain;">
                                     <div class="mt-2">
-                                        @if($advertisement->hasAdvertisement1())
-                                            <span class="badge bg-success">Custom Image</span>
-                                            <div class="mt-2">
-                                                <button type="button" class="btn btn-sm btn-danger" onclick="removeAdvertisement('advertisement_1')">
-                                                    <i class="fas fa-trash-alt me-1"></i>Remove Ad
-                                                </button>
-                                            </div>
-                                        @else
-                                            <span class="badge bg-secondary">Default Image</span>
-                                        @endif
+                                        <span class="badge bg-secondary">Default Image</span>
                                     </div>
                                 @else
                                     <div class="py-4">
@@ -123,23 +136,36 @@
                                         <small class="text-muted d-block mt-1">Recommended: 800x400px, Max 2MB (JPEG, PNG, WEBP)</small>
                                     </div>
                                     <div class="text-center bg-light rounded p-3">
-                                        @if($advertisement->{'hasCarousel' . $i}() || file_exists(public_path('assets/images/carousel-' . $i . '.jpeg')))
-                                            <img src="{{ $advertisement->{'carousel_' . $i . '_url'} }}" 
+                                        @if($advertisement->{'carousel_' . $i})
+                                            <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->{'carousel_' . $i} }}')">
+                                                <template x-if="imageUrl">
+                                                    <img :src="imageUrl" 
+                                                         alt="Carousel {{ $i }}" 
+                                                         class="img-fluid rounded" 
+                                                         style="max-height: 120px; object-fit: contain;">
+                                                </template>
+                                                <template x-if="!imageUrl">
+                                                    <div class="py-3">
+                                                        <i class="fas fa-spinner fa-spin fa-2x text-muted mb-2"></i>
+                                                        <p class="text-muted mb-0 small">Loading image...</p>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <div class="mt-2">
+                                                <span class="badge bg-success">Custom</span>
+                                                <div class="mt-2">
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick="removeAdvertisement('carousel_{{ $i }}')">
+                                                        <i class="fas fa-trash-alt me-1"></i>Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @elseif(file_exists(public_path('assets/images/carousel-' . $i . '.jpeg')))
+                                            <img src="{{ asset('assets/images/carousel-' . $i . '.jpeg') }}" 
                                                  alt="Carousel {{ $i }}" 
                                                  class="img-fluid rounded" 
-                                                 style="max-height: 120px; object-fit: contain;"
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/carousel-' . $i . '.jpeg') }}';"/>
+                                                 style="max-height: 120px; object-fit: contain;">
                                             <div class="mt-2">
-                                                @if($advertisement->{'hasCarousel' . $i}())
-                                                    <span class="badge bg-success">Custom</span>
-                                                    <div class="mt-2">
-                                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeAdvertisement('carousel_{{ $i }}')">
-                                                            <i class="fas fa-trash-alt me-1"></i>Remove
-                                                        </button>
-                                                    </div>
-                                                @else
-                                                    <span class="badge bg-secondary">Default</span>
-                                                @endif
+                                                <span class="badge bg-secondary">Default</span>
                                             </div>
                                         @else
                                             <div class="py-3">
@@ -194,6 +220,37 @@
             box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
         }
     </style>
+    
+    <!-- Alpine.js Scripts -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Alpine.js Image Loader Function -->
+    <script>
+        function imageLoader() {
+            return {
+                imageUrl: null,
+                async fetchImage(filename) {
+                    console.log('Admin: Fetching image:', filename);
+                    try {
+                        const url = `/api/images/${filename}`;
+                        console.log('Admin: Request URL:', url);
+                        const response = await fetch(url);
+                        console.log('Admin: Response status:', response.status);
+                        if (!response.ok) {
+                            console.error('Admin: Response not ok:', response.status, response.statusText);
+                            throw new Error(`Image not found: ${response.status}`);
+                        }
+                        const blob = await response.blob();
+                        this.imageUrl = URL.createObjectURL(blob);
+                        console.log('Admin: Image loaded successfully');
+                    } catch (error) {
+                        console.error('Admin: Error fetching image:', error);
+                        this.imageUrl = null;
+                    }
+                }
+            };
+        }
+    </script>
     
     <!-- JavaScript for remove functionality -->
     <script>

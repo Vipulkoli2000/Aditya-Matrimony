@@ -1514,13 +1514,27 @@ class UserProfilesController extends Controller
 
     public function showImages(string $filename)
     {
-        // $img_1_name = auth()->user()->profile->img_1;
-        //  Log::info("this is image name ", $filename);
-        Log::info('Requested image filename', ['filename' => $filename]);  // Correct usage
+        Log::info('Requested image filename', ['filename' => $filename]);
 
-        $path = 'images/' . $filename;
+        // Try different possible paths for images
+        $possiblePaths = [
+            'images/' . $filename,           // For profile images
+            'advertisements/' . $filename,   // For advertisement images
+        ];
 
-        if (!Storage::disk('public')->exists($path)) {
+        $path = null;
+        foreach ($possiblePaths as $possiblePath) {
+            if (Storage::disk('public')->exists($possiblePath)) {
+                $path = $possiblePath;
+                break;
+            }
+        }
+
+        if (!$path) {
+            Log::warning('Image not found in any path', [
+                'filename' => $filename,
+                'searched_paths' => $possiblePaths
+            ]);
             return response()->json(['error' => 'Image not found.'], 404);
         }
 
@@ -1528,7 +1542,8 @@ class UserProfilesController extends Controller
         $type = Storage::disk('public')->mimeType($path);
 
         return response($file, 200)
-            ->header('Content-Type', $type);
+            ->header('Content-Type', $type)
+            ->header('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
     }
 
     public function allPurchasedPackages()

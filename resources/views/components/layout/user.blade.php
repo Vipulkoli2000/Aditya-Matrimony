@@ -563,11 +563,18 @@
       <div class="col-lg-4 d-none d-lg-flex flex-column gap-3">
         <!-- Advertisement 1 -->
         <div class="advertisement-container">
-          <img src="{{ $advertisement->advertisement_1_url }}" 
-               onerror="this.onerror=null;this.src='{{ asset('assets/images/ad-1.jpeg') }}';" 
-               alt="Advertisement 1" 
-               class="img-fluid w-100 h-100 border border-2 rounded" 
-               style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;">
+          @if($advertisement->advertisement_1)
+            <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->advertisement_1 }}')">
+              <template x-if="imageUrl">
+                <img :src="imageUrl" alt="Advertisement 1" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;">
+              </template>
+              <template x-if="!imageUrl">
+                <img src="{{ asset('assets/images/ad-1.jpeg') }}" alt="Advertisement 1" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;">
+              </template>
+            </div>
+          @else
+            <img src="{{ asset('assets/images/ad-1.jpeg') }}" alt="Advertisement 1" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;">
+          @endif
         </div>
         
 <!-- Advertisement Carousel -->
@@ -580,16 +587,60 @@
           </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="{{ $advertisement->carousel_1_url }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 1">
+              @if($advertisement->carousel_1)
+                <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_1 }}')"> 
+                  <template x-if="imageUrl">
+                    <img :src="imageUrl" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 1">
+                  </template>
+                  <template x-if="!imageUrl">
+                    <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 1">
+                  </template>
+                </div>
+              @else
+                <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 1">
+              @endif
             </div>
             <div class="carousel-item">
-              <img src="{{ $advertisement->carousel_2_url }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 2">
+              @if($advertisement->carousel_2)
+                <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_2 }}')"> 
+                  <template x-if="imageUrl">
+                    <img :src="imageUrl" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 2">
+                  </template>
+                  <template x-if="!imageUrl">
+                    <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 2">
+                  </template>
+                </div>
+              @else
+                <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 2">
+              @endif
             </div>
             <div class="carousel-item">
-              <img src="{{ $advertisement->carousel_3_url }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 3">
+              @if($advertisement->carousel_3)
+                <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_3 }}')"> 
+                  <template x-if="imageUrl">
+                    <img :src="imageUrl" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 3">
+                  </template>
+                  <template x-if="!imageUrl">
+                    <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 3">
+                  </template>
+                </div>
+              @else
+                <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 3">
+              @endif
             </div>
             <div class="carousel-item">
-              <img src="{{ $advertisement->carousel_4_url }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 4">
+              @if($advertisement->carousel_4)
+                <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_4 }}')"> 
+                  <template x-if="imageUrl">
+                    <img :src="imageUrl" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 4">
+                  </template>
+                  <template x-if="!imageUrl">
+                    <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 4">
+                  </template>
+                </div>
+              @else
+                <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 4">
+              @endif
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#advertisementCarouselId" data-bs-slide="prev">
@@ -850,6 +901,34 @@
   <script defer src="/assets/js/alpine-focus.min.js"></script>
   <script defer src="/assets/js/alpine.min.js"></script>
   <script src="/assets/js/custom.js"></script>
+
+  <!-- Alpine.js Image Loader Function -->
+  <script>
+    function imageLoader() {
+        return {
+            imageUrl: null,
+            async fetchImage(filename) {
+                console.log('Fetching image:', filename);
+                try {
+                    const url = `/api/images/${filename}`;
+                    console.log('Request URL:', url);
+                    const response = await fetch(url);
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        console.error('Response not ok:', response.status, response.statusText);
+                        throw new Error(`Image not found: ${response.status}`);
+                    }
+                    const blob = await response.blob();
+                    this.imageUrl = URL.createObjectURL(blob);
+                    console.log('Image loaded successfully');
+                } catch (error) {
+                    console.error('Error fetching image:', error);
+                    this.imageUrl = null;
+                }
+            }
+        };
+    }
+  </script>
 
   <style>
     /* Custom style for the SweetAlert2 popup */
