@@ -70,7 +70,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     })->name('contact_us');
     Route::get('/wedding-resources', [App\Http\Controllers\ListingController::class, 'weddingResources'])->name('wedding.resources');
     
-    
+    // Public route for getting subcastes (needed for registration form)
+    Route::get('castes/{caste}/subcastes', [App\Http\Controllers\admin\CastesController::class, 'getSubcastes'])->name('castes.subcastes');
 
     Route::group(['middleware' => ['auth', 'permission']], function () {
         Route::group(['prefix' => 'users', 'namespace' => 'admin'], function () {
@@ -206,7 +207,7 @@ Route::get('/user/packages/all', [UserProfilesController::class, 'allPurchasedPa
               
         Route::get('/admin/advertisement/create', [App\Http\Controllers\admin\AdvertisementController::class, 'create'])->name('admin.advertisement.create');
         Route::post('/admin/advertisement', [App\Http\Controllers\admin\AdvertisementController::class, 'store'])->name('admin.advertisement.store');
-          
+        Route::delete('/admin/advertisement/remove', [AdvertisementController::class, 'remove'])->name('admin.advertisement.remove');
         //     return view('admin.dashboard');
         // })->name('admin.dashboard');
     });

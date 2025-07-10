@@ -10,5 +10,11 @@ class SubCaste extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'caste_id',
     ];
+
+    public function caste()
+    {
+        return $this->belongsTo(Caste::class);
+    }
 }

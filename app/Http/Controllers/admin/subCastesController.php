@@ -5,22 +5,31 @@ use Excel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SubCaste;
+use App\Models\Caste;
 use App\Http\Requests\subCasteRequest;
-use App\Http\Requests\ProductRequest;
-
-
 
 class subCastesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sub_castes = SubCaste::orderBy('id', 'desc')->paginate(12);
+        $query = SubCaste::with('caste');
+        
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('name', 'like', "%$search%")
+                ->orWhereHas('caste', function($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                });
+        }
+        
+        $sub_castes = $query->orderBy('id', 'desc')->paginate(12);
         return view('admin.sub_castes.index', ['sub_castes' => $sub_castes]);
     }
 
     public function create()
     {
-        return view('admin.sub_castes.create');
+        $castes = Caste::orderBy('name', 'asc')->get();
+        return view('admin.sub_castes.create', ['castes' => $castes]);
     }
 
     public function store(subCasteRequest $request) 
@@ -31,14 +40,15 @@ class subCastesController extends Controller
         return redirect()->route('sub_castes.index'); 
     }
   
-    public function show(Product $sub_cast)
+    public function show(SubCaste $sub_caste)
     {
-        return $sub_cast->name;
+        return $sub_caste->name;
     }
 
     public function edit(SubCaste $sub_caste)
     {
-        return view('admin.sub_castes.edit', ['sub_caste' => $sub_caste]);
+        $castes = Caste::orderBy('name', 'asc')->get();
+        return view('admin.sub_castes.edit', ['sub_caste' => $sub_caste, 'castes' => $castes]);
     }
 
     public function update(SubCaste $sub_caste, subCasteRequest $request) 
@@ -57,7 +67,12 @@ class subCastesController extends Controller
 
     public function search(Request $request){
         $data = $request->input('search');
-        $products = Product::where('name', 'like', "%$data%")->paginate(12);
+        $sub_castes = SubCaste::with('caste')
+            ->where('name', 'like', "%$data%")
+            ->orWhereHas('caste', function($query) use ($data) {
+                $query->where('name', 'like', "%$data%");
+            })
+            ->paginate(12);
  
-        return view('products.index', ['products'=>$products]);
+        return view('admin.sub_castes.index', ['sub_castes' => $sub_castes]);
     }}

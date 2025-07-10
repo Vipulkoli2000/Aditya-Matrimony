@@ -22,15 +22,17 @@ class subCasteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:sub_castes,name,'. ($this->sub_cast ? $this->sub_cast->id : ''),
-
+            'name' => 'required|unique:sub_castes,name,'. ($this->sub_caste ? $this->sub_caste->id : ''),
+            'caste_id' => 'required|exists:castes,id',
         ];
     }
     public function messages(): array
     {
         return [
-            'name.required' => 'SubCast name is required',
-            'name.unique' => 'SubCast already exist',
+            'name.required' => 'SubCaste name is required',
+            'name.unique' => 'SubCaste already exist',
+            'caste_id.required' => 'Please select a caste',
+            'caste_id.exists' => 'Selected caste is invalid',
         ];
     }
 }

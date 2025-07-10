@@ -16,6 +16,20 @@
                     <h5 class="font-semibold text-lg dark:text-white-light">Add Sub-Caste</h5>
                 </div>               
                 <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-3">     
+                    <div>
+                        <label for="caste_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Caste <span class="text-red-500">*</span></label>
+                        <select name="caste_id" id="caste_id" class="form-select" required>
+                            <option value="">Select Caste</option>
+                            @foreach($castes as $caste)
+                                <option value="{{ $caste->id }}" {{ old('caste_id') == $caste->id ? 'selected' : '' }}>
+                                    {{ $caste->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('caste_id')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <x-text-input name="name" value="{{ old('name') }}" :label="__('Sub-Caste Name')" :require="true" :messages="$errors->get('name')"/>                       
                 </div>
                 <div class="flex justify-end mt-4">

@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('sub_castes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('caste_id');
+            $table->foreign('caste_id')->references('id')->on('castes')->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });

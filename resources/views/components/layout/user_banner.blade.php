@@ -621,7 +621,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                             <h4 class="my-4 text-white">Contact Us</h4>
                             <a href="/contact-us" class="booking-link">
-                                <em>&nbsp;</em>Admin & Hall Booking Office
+                                <em>&nbsp;</em>
                                 Aditya Matrimony, Dombivli
                               </a>
                             <a href="tel:+919320717501" class="btn-link"><em class="fas fa-phone text-secondary me-2">&nbsp;</em>+91 9320717501</a>

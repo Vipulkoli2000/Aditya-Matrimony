@@ -65,6 +65,30 @@
       .navbar {
         border-radius: 10px !important;
       }
+      
+      /* Adjust carousel and advertisement heights on mobile */
+      .carousel-header .carousel,
+      .carousel-header .carousel-item {
+        min-height: 33vh; /* Increased by 10% from 30vh */
+      }
+      
+      .advertisement-container {
+        height: 25.05vh; /* Increased by 15% from 21.78vh */
+        width: 100%; /* Full width on mobile */
+      }
+    }
+    
+    /* Tablet specific adjustments */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .carousel-header .carousel,
+      .carousel-header .carousel-item {
+        min-height: 39.6vh; /* Increased by 10% from 36vh */
+      }
+      
+      .advertisement-container {
+        height: 30.06vh; /* Increased by 15% from 26.14vh */
+        width: 100%; /* Full width on tablet */
+      }
     }
 
     /* Adjust booking link hover for touch devices if needed */
@@ -118,7 +142,7 @@
     /* Carousel Professional Enhancements */
     .carousel-header .carousel,
     .carousel-header .carousel-item {
-      min-height: 70vh; /* Taller, responsive height */
+      min-height: 46.2vh; /* Increased by 10% from 42vh */
     }
     .carousel-header .carousel-item img {
       width: 100%;
@@ -387,6 +411,8 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 35.06vh; /* Increased by 15% from 30.49vh */
+        width: 100%; /* Full width */
     }
     
     .advertisement-container:hover {
@@ -541,16 +567,39 @@
                onerror="this.onerror=null;this.src='{{ asset('assets/images/ad-1.jpeg') }}';" 
                alt="Advertisement 1" 
                class="img-fluid w-100 h-100 border border-2 rounded" 
-               style="object-fit: cover; cursor: pointer;">
+               style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;">
         </div>
         
-        <!-- Advertisement 2 -->
-        <div class="advertisement-container">
-          <img src="{{ $advertisement->advertisement_2_url }}" 
-               onerror="this.onerror=null;this.src='{{ asset('assets/images/ad-2.jpeg') }}';" 
-               alt="Advertisement 2" 
-               class="img-fluid w-100 h-100 border border-2 rounded" 
-               style="object-fit: cover; cursor: pointer;">
+<!-- Advertisement Carousel -->
+        <div id="advertisementCarouselId" class="carousel slide advertisement-container" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="{{ $advertisement->carousel_1_url }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 1">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ $advertisement->carousel_2_url }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 2">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ $advertisement->carousel_3_url }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 3">
+            </div>
+            <div class="carousel-item">
+              <img src="{{ $advertisement->carousel_4_url }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 4">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#advertisementCarouselId" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#advertisementCarouselId" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
       </div>
     
@@ -727,7 +776,7 @@
             <div class="footer-item d-flex flex-column align-items-center">
               <h4 class="my-4 text-white">Contact Us</h4>
               <a href="/contact-us" class="booking-link">
-                Admin & Hall Booking Office<br>
+                <br>
                 Aditya Matrimony, Dombivli
               </a>
               <a href="tel:+919320717501" class="btn-link mb-3">

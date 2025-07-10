@@ -63,6 +63,8 @@ class RegisteredUserController extends Controller
              'mother_name' => ['nullable','string','max:255'],
              'mother_address' => ['nullable','string'],
              'mother_mobile' => ['nullable','string','max:20'],
+             'caste' => ['required','exists:castes,id'],
+             'sub_caste' => ['required','exists:sub_castes,id'],
         ]);
         
         $number = $request->input('country_code') .$request->input('mobile'); 
@@ -125,6 +127,9 @@ class RegisteredUserController extends Controller
             'mother_name' => $request->mother_name,
             'mother_address' => $request->mother_address,
             'mother_mobile' => $request->mother_mobile,
+            // Caste details
+            'caste' => $request->caste,
+            'sub_caste' => $request->sub_caste,
         ]);
 
         $memberRole = Role::where('name', 'member')->first();

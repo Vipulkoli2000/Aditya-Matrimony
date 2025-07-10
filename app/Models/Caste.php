@@ -10,4 +10,9 @@ class Caste extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function subCastes()
+    {
+        return $this->hasMany(SubCaste::class);
+    }
 }

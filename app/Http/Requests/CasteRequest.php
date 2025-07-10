@@ -21,10 +21,12 @@ class CasteRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|unique:castes,name,'. ($this->cast ? $this->cast->id : ''),
-        ];
+        // Get the caste ID from the route if updating
+        $casteId = $this->route('caste') ? $this->route('caste')->id : null;
         
+        return [
+            'name' => 'required|unique:castes,name,' . $casteId,
+        ];
     }
 
     public function messages(): array

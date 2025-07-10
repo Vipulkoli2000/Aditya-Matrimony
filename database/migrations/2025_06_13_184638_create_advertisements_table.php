@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('advertisements', function (Blueprint $table) {
             $table->id();
             $table->string('advertisement_1')->nullable();
-            $table->string('advertisement_2')->nullable();
+            $table->string('carousel_1')->nullable();
+            $table->string('carousel_2')->nullable();
+            $table->string('carousel_3')->nullable();
+            $table->string('carousel_4')->nullable();
             $table->timestamps();
         });
     }

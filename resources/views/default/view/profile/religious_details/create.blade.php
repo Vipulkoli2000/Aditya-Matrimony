@@ -154,6 +154,7 @@
                             <div class="form-group">
                                 <label for="caste">Caste</label>
                                 <select class="form-input" name="caste" id="caste">
+                                    <option value="">Select Caste</option>
                                     @foreach($castes as $caste)
                                         <option value="{{ $caste->id }}" {{ $user->caste == $caste->id ? 'selected' : '' }}>
                                             {{ $caste->name }}
@@ -164,10 +165,20 @@
                                     <span class="text-danger small">{{ $errors->first('caste') }}</span>
                                 @endif   
                             </div>
+                            
+                            <div class="form-group">
+                                <label for="sub_caste">Sub-Caste</label>
+                                <select class="form-input" name="sub_caste" id="sub_caste">
+                                    <option value="">Select Sub-Caste</option>
+                                </select>
+                                @if ($errors->has('sub_caste'))
+                                    <span class="text-danger small">{{ $errors->first('sub_caste') }}</span>
+                                @endif   
+                            </div>
                               
                             <div class="form-group">
                                 <label for="gotra">Gotra</label>
-                                <input type="text" name="gotra" value="{{ $user->gotra }}" id="gotra" placeholder="Enter first name">
+                                <input type="text" name="gotra" value="{{ $user->gotra }}" id="gotra" placeholder="Enter Gotra">
                                 @if ($errors->has('gotra'))
                                     <span class="text-danger small">{{ $errors->first('gotra') }}</span>
                                 @endif   
@@ -186,6 +197,9 @@
             document.addEventListener('DOMContentLoaded', function() {
                 const religionSelect = document.getElementById('religion');
                 const habitsRow = document.getElementById('habitsRow');
+                const casteSelect = document.getElementById('caste');
+                const subcasteSelect = document.getElementById('sub_caste');
+                const userSubcaste = {{ $user->sub_caste ?? 'null' }};
         
                 // Check the initial value of the religion dropdown
                 if (religionSelect.value === 'hindu') {
@@ -202,6 +216,44 @@
                         habitsRow.classList.add('hidden');
                     }
                 });
+                
+                // Function to load subcastes based on selected caste
+                function loadSubcastes(casteId, selectedSubcaste = null) {
+                    // Clear existing options
+                    subcasteSelect.innerHTML = '<option value="">Select Sub-Caste</option>';
+                    
+                    if (!casteId) {
+                        return;
+                    }
+                    
+                    // Fetch subcastes for the selected caste
+                    fetch(`/castes/${casteId}/subcastes`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(subcaste => {
+                                const option = document.createElement('option');
+                                option.value = subcaste.id;
+                                option.textContent = subcaste.name;
+                                if (selectedSubcaste && selectedSubcaste == subcaste.id) {
+                                    option.selected = true;
+                                }
+                                subcasteSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error loading subcastes:', error);
+                        });
+                }
+                
+                // Load subcastes on caste change
+                casteSelect.addEventListener('change', function() {
+                    loadSubcastes(this.value);
+                });
+                
+                // Load subcastes on page load if caste is already selected
+                if (casteSelect.value) {
+                    loadSubcastes(casteSelect.value, userSubcaste);
+                }
             });
         </script>
 

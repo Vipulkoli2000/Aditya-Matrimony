@@ -20,8 +20,9 @@
                     <table class="table-hover">
                         <thead>
                             <tr>
-                                <th>id</th>
-                                <th style="text-align:right;">Name</th>
+                                <th>ID</th>
+                                <th>Caste Name</th>
+                                <th>No. of Sub-Castes</th>
                                 <th style="text-align:right;">Action</th>
                             </tr>
                         </thead>
@@ -29,7 +30,10 @@
                             @foreach ($castes as $caste)
                             <tr>                    
                                 <td>{{ $caste->id }}</td>
-                                <td style="text-align:right;"> {{ $caste->name }}</td>
+                                <td>{{ $caste->name }}</td>
+                                <td>
+                                    <span class="badge bg-primary">{{ $caste->sub_castes_count ?? 0 }}</span>
+                                </td>
                                 <td class="float-right">
                                     <ul class="flex items-center gap-2" >
                                         <li style="display: inline-block;vertical-align:top;">

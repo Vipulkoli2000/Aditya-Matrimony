@@ -458,6 +458,30 @@
                                     <x-input-error :messages="$errors->get('mother_address')" class="mt-2 text-danger small" />
                                 </div>
                             </div>
+                            
+            <!-- Caste and Subcaste Details -->
+            <div class="mb-3 mt-4">
+                <h6 class="mb-3" style="color: black; font-weight: 600;">Caste & Subcaste Details</h6>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label for="caste" class="form-label" style="color: black; margin: 10px 0;">Caste <span class="text-danger">*</span></label>
+                        <select id="caste" name="caste" class="form-select" required>
+                            <option value="" disabled selected>Select Caste</option>
+                            @foreach(\App\Models\Caste::orderBy('name')->get() as $caste)
+                                <option value="{{ $caste->id }}" {{ old('caste') == $caste->id ? 'selected' : '' }}>{{ $caste->name }}</option>
+                            @endforeach
+                        </select>
+                        <x-input-error :messages="$errors->get('caste')" class="mt-2 text-danger small" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label for="sub_caste" class="form-label" style="color: black; margin: 10px 0;">Subcaste <span class="text-danger">*</span></label>
+                        <select id="sub_caste" name="sub_caste" class="form-select" required>
+                            <option value="" disabled selected>Select Subcaste</option>
+                        </select>
+                        <x-input-error :messages="$errors->get('sub_caste')" class="mt-2 text-danger small" />
+                    </div>
+                </div>
+            </div>
                         </div>
                          {{-- end step 3 --}}
                         <div class="step-form d-none">
@@ -665,6 +689,70 @@
                                 });
 
                                 showStep(currentStep);
+
+                                // Caste and Subcaste dynamic loading
+                                const casteSelect = document.getElementById('caste');
+                                const subCasteSelect = document.getElementById('sub_caste');
+                                const oldSubCaste = {{ old('sub_caste') ?? 'null' }};
+
+                                // Function to load subcastes based on selected caste
+                                function loadSubcastes(casteId, selectedSubcaste = null) {
+                                    if (!subCasteSelect) {
+                                        console.error('SubCaste select element not found');
+                                        return;
+                                    }
+                                    
+                                    // Clear existing options
+                                    subCasteSelect.innerHTML = '<option value="" disabled selected>Select Subcaste</option>';
+                                    
+                                    if (!casteId) {
+                                        return;
+                                    }
+                                    
+                                    // Fetch subcastes for the selected caste
+                                    fetch(`/castes/${casteId}/subcastes`, {
+                                        method: 'GET',
+                                        headers: {
+                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                            'Accept': 'application/json',
+                                            'Content-Type': 'application/json'
+                                        }
+                                    })
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Network response was not ok');
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            data.forEach(subcaste => {
+                                                const option = document.createElement('option');
+                                                option.value = subcaste.id;
+                                                option.textContent = subcaste.name;
+                                                if (selectedSubcaste && selectedSubcaste == subcaste.id) {
+                                                    option.selected = true;
+                                                }
+                                                subCasteSelect.appendChild(option);
+                                            });
+                                        })
+                                        .catch(error => {
+                                            console.error('Error loading subcastes:', error);
+                                        });
+                                }
+                                
+                                // Load subcastes on caste change
+                                if (casteSelect) {
+                                    casteSelect.addEventListener('change', function() {
+                                        loadSubcastes(this.value);
+                                    });
+                                    
+                                    // Load subcastes on page load if caste is already selected
+                                    if (casteSelect.value) {
+                                        loadSubcastes(casteSelect.value, oldSubCaste);
+                                    }
+                                } else {
+                                    console.error('Caste select element not found');
+                                }
                             });
                         </script>
                     </form>
