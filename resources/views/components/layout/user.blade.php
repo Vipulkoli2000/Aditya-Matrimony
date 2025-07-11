@@ -67,9 +67,8 @@
       }
       
       /* Adjust carousel and advertisement heights on mobile */
-      .carousel-header .carousel,
-      .carousel-header .carousel-item {
-        min-height: 33vh; /* Increased by 10% from 30vh */
+      .carousel-header .carousel {
+        height: 300px; /* Fixed height for mobile */
       }
       
       .advertisement-container {
@@ -140,19 +139,52 @@
     }
 
     /* Carousel Professional Enhancements */
-    .carousel-header .carousel,
+    .carousel-header .carousel {
+      height: 700px !important; /* Adjusted to match total advertisement height (295+400+gap) */
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    /* Target specific carousel with higher specificity */
+    #carouselId.myslider {
+      height: 700px !important;
+      max-height: 700px !important;
+    }
+    .carousel-header .myslider,
+    #carouselId .carousel-inner.myslider {
+      height: 700px !important;
+    }
     .carousel-header .carousel-item {
-      min-height: 46.2vh; /* Increased by 10% from 42vh */
+      height: 100%;
+      position: relative;
     }
     .carousel-header .carousel-item img {
       width: 100%;
       height: 100%;
       object-fit: cover; /* Ensure image covers area without distortion */
+      object-position: center; /* Center the image */
     }
     .carousel-header .carousel-caption {
       background: rgba(0, 0, 0, 0.35); /* Subtle dark overlay */
-      padding: 20px;
+      padding: 10px;
       border-radius: 10px;
+    }
+    /* Adjust text sizes for 700px height carousel */
+    .carousel-header .carousel-caption h1,
+    .carousel-header .carousel-caption h2 {
+      font-size: 4rem !important;
+    }
+    .carousel-header .carousel-caption .display-1 {
+      font-size: 4.5rem !important;
+    }
+    .carousel-header .carousel-caption .h4 {
+      font-size: 1.5rem !important;
+    }
+    .carousel-header .carousel-caption p {
+      font-size: 1.25rem !important;
+      margin-bottom: 0.75rem !important;
+    }
+    .carousel-header .carousel-caption {
+      padding: 25px;
     }
     .carousel-header .carousel-indicators [data-bs-target] {
       width: 12px;
@@ -411,10 +443,17 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        height: 35.06vh; /* Increased by 15% from 30.49vh */
-        width: 100%; /* Full width */
+        height: 295px; /* Default height for advertisements */
+        width: 100%; /* Responsive width */
+        max-width: 100%; /* Full width of container */
+        background-color: #f8f9fa; /* Light background */
     }
-    
+    /* Specific size for advertisement carousel (second ad) */
+    #advertisementCarouselId.advertisement-container {
+        height: 400px !important; /* Fixed height 400px */
+        width: 100% !important; /* Full width instead of fixed 800px */
+        max-width: 100%; /* Responsive on smaller screens */
+    }
     .advertisement-container:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -422,6 +461,9 @@
     
     .advertisement-container img {
         transition: transform 0.3s ease;
+        width: 100%;
+        height: 100%;
+        object-fit: contain !important; /* Ensure full content is visible */
     }
     
     .advertisement-container:hover img {
@@ -443,6 +485,243 @@
     
     .advertisement-container:hover::before {
         opacity: 1;
+    }
+    
+    /* Mobile Advertisement Popup Styles */
+    .mobile-ad-popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2000;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    .mobile-ad-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+    }
+    
+    .mobile-ad-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 400px;
+        max-height: 80vh;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        animation: popupScale 0.3s ease-out;
+    }
+    
+    .mobile-ad-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        border: none;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-ad-close:hover {
+        background: rgba(255, 0, 0, 0.8);
+        transform: scale(1.1);
+    }
+    
+    .mobile-ad-carousel {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+    }
+    
+    .mobile-ad-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .mobile-ad-slide.active {
+        opacity: 1;
+    }
+    
+    .mobile-ad-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background-color: #f8f9fa;
+    }
+    
+    .mobile-ad-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        z-index: 5;
+    }
+    
+    .mobile-ad-nav:hover {
+        background: rgba(0, 0, 0, 0.8);
+        transform: translateY(-50%) scale(1.1);
+    }
+    
+    .mobile-ad-prev {
+        left: 10px;
+    }
+    
+    .mobile-ad-next {
+        right: 10px;
+    }
+    
+    .mobile-ad-indicators {
+        position: absolute;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 5;
+    }
+    
+    .mobile-ad-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-ad-indicator.active {
+        background: #007bff;
+        transform: scale(1.2);
+    }
+    
+    .mobile-ad-indicator:hover {
+        background: rgba(255, 255, 255, 0.8);
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes popupScale {
+        from { 
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+        }
+        to { 
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    }
+    
+    /* Advertisement carousel specific styles */
+    #advertisementCarouselId {
+        position: relative;
+    }
+    #advertisementCarouselId .carousel-inner {
+        height: 100%;
+    }
+    #advertisementCarouselId .carousel-item {
+        height: 100%;
+        background-color: #f8f9fa;
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 10px;
+    }
+    #advertisementCarouselId .carousel-item > div {
+        width: 100%;
+        height: auto;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+    #advertisementCarouselId .carousel-item img {
+        max-width: 100% !important;
+        max-height: 390px !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        display: block !important;
+    }
+    /* Advertisement carousel controls positioning */
+    #advertisementCarouselId .carousel-control-prev,
+    #advertisementCarouselId .carousel-control-next {
+        width: 15%;
+        opacity: 0.8;
+    }
+    #advertisementCarouselId .carousel-indicators {
+        bottom: 10px;
+        margin-bottom: 0;
+    }
+    #advertisementCarouselId .carousel-indicators [data-bs-target] {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        opacity: 0.5;
+        border: 1px solid #007bff;
+    }
+    #advertisementCarouselId .carousel-indicators .active {
+        background-color: #007bff;
+        opacity: 1;
+    }
+    
+    /* Hide mobile popup on desktop */
+    @media (min-width: 992px) {
+        .mobile-ad-popup {
+            display: none !important;
+        }
+    }
+    
+    /* Force carousel height - highest priority */
+    #carouselId {
+        height: 700px !important;
+        max-height: 700px !important;
+    }
+    div#carouselId.carousel.slide.carousel-fade.myslider {
+        height: 700px !important;
     }
   </style>
 </head>
@@ -560,7 +839,7 @@
       </div>
 
       <!-- Right: Advertisement carousel (hidden on small screens) -->
-      <div class="col-lg-4 d-none d-lg-flex flex-column gap-3">
+      <div class="col-lg-4 d-none d-lg-flex flex-column justify-content-start" style="gap: 0;">
         <!-- Advertisement 1 -->
         <div class="advertisement-container">
           @if($advertisement->advertisement_1)
@@ -578,7 +857,7 @@
         </div>
         
 <!-- Advertisement Carousel -->
-        <div id="advertisementCarouselId" class="carousel slide advertisement-container" data-bs-ride="carousel">
+        <div id="advertisementCarouselId" class="carousel slide advertisement-container" data-bs-ride="carousel" style="margin-top: -5px;">
           <div class="carousel-indicators">
             <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -590,56 +869,56 @@
               @if($advertisement->carousel_1)
                 <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_1 }}')"> 
                   <template x-if="imageUrl">
-                    <img :src="imageUrl" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 1">
+                    <img :src="imageUrl" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 1">
                   </template>
                   <template x-if="!imageUrl">
-                    <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 1">
+                    <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 1">
                   </template>
                 </div>
               @else
-                <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 1">
+                <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 1">
               @endif
             </div>
             <div class="carousel-item">
               @if($advertisement->carousel_2)
                 <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_2 }}')"> 
                   <template x-if="imageUrl">
-                    <img :src="imageUrl" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 2">
+                    <img :src="imageUrl" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 2">
                   </template>
                   <template x-if="!imageUrl">
-                    <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 2">
+                    <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 2">
                   </template>
                 </div>
               @else
-                <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 2">
+                <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 2">
               @endif
             </div>
             <div class="carousel-item">
               @if($advertisement->carousel_3)
                 <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_3 }}')"> 
                   <template x-if="imageUrl">
-                    <img :src="imageUrl" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 3">
+                    <img :src="imageUrl" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 3">
                   </template>
                   <template x-if="!imageUrl">
-                    <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 3">
+                    <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 3">
                   </template>
                 </div>
               @else
-                <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 3">
+                <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 3">
               @endif
             </div>
             <div class="carousel-item">
               @if($advertisement->carousel_4)
                 <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_4 }}')"> 
                   <template x-if="imageUrl">
-                    <img :src="imageUrl" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 4">
+                    <img :src="imageUrl" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 4">
                   </template>
                   <template x-if="!imageUrl">
-                    <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 4">
+                    <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 4">
                   </template>
                 </div>
               @else
-                <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid w-100 h-100 border border-2 rounded" style="object-fit: contain; cursor: pointer; background-color: #f8f9fa;" alt="Carousel Image 4">
+                <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 4">
               @endif
             </div>
           </div>
@@ -657,9 +936,113 @@
   </div>
   <!-- Carousel End -->
 
-  
-
-  
+  <!-- Mobile Advertisement Popup (only visible on mobile) -->
+  <div id="mobileAdPopup" class="mobile-ad-popup d-lg-none" style="display: none;">
+    <div class="mobile-ad-overlay" onclick="closeMobileAdPopup()"></div>
+    <div class="mobile-ad-content">
+      <button class="mobile-ad-close" onclick="closeMobileAdPopup()" aria-label="Close Advertisement">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="mobile-ad-carousel" id="mobileAdCarousel">
+        <!-- Advertisement 1 -->
+        <div class="mobile-ad-slide active">
+          @if($advertisement->advertisement_1)
+            <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->advertisement_1 }}')">
+              <template x-if="imageUrl">
+                <img :src="imageUrl" alt="Advertisement 1" class="mobile-ad-image">
+              </template>
+              <template x-if="!imageUrl">
+                <img src="{{ asset('assets/images/ad-1.jpeg') }}" alt="Advertisement 1" class="mobile-ad-image">
+              </template>
+            </div>
+          @else
+            <img src="{{ asset('assets/images/ad-1.jpeg') }}" alt="Advertisement 1" class="mobile-ad-image">
+          @endif
+        </div>
+        
+        <!-- Carousel Image 1 -->
+        <div class="mobile-ad-slide">
+          @if($advertisement->carousel_1)
+            <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_1 }}')">
+              <template x-if="imageUrl">
+                <img :src="imageUrl" alt="Carousel Image 1" class="mobile-ad-image">
+              </template>
+              <template x-if="!imageUrl">
+                <img src="{{ asset('assets/images/carousel-1.jpeg') }}" alt="Carousel Image 1" class="mobile-ad-image">
+              </template>
+            </div>
+          @else
+            <img src="{{ asset('assets/images/carousel-1.jpeg') }}" alt="Carousel Image 1" class="mobile-ad-image">
+          @endif
+        </div>
+        
+        <!-- Carousel Image 2 -->
+        <div class="mobile-ad-slide">
+          @if($advertisement->carousel_2)
+            <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_2 }}')">
+              <template x-if="imageUrl">
+                <img :src="imageUrl" alt="Carousel Image 2" class="mobile-ad-image">
+              </template>
+              <template x-if="!imageUrl">
+                <img src="{{ asset('assets/images/carousel-2.jpeg') }}" alt="Carousel Image 2" class="mobile-ad-image">
+              </template>
+            </div>
+          @else
+            <img src="{{ asset('assets/images/carousel-2.jpeg') }}" alt="Carousel Image 2" class="mobile-ad-image">
+          @endif
+        </div>
+        
+        <!-- Carousel Image 3 -->
+        <div class="mobile-ad-slide">
+          @if($advertisement->carousel_3)
+            <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_3 }}')">
+              <template x-if="imageUrl">
+                <img :src="imageUrl" alt="Carousel Image 3" class="mobile-ad-image">
+              </template>
+              <template x-if="!imageUrl">
+                <img src="{{ asset('assets/images/carousel-3.jpeg') }}" alt="Carousel Image 3" class="mobile-ad-image">
+              </template>
+            </div>
+          @else
+            <img src="{{ asset('assets/images/carousel-3.jpeg') }}" alt="Carousel Image 3" class="mobile-ad-image">
+          @endif
+        </div>
+        
+        <!-- Carousel Image 4 -->
+        <div class="mobile-ad-slide">
+          @if($advertisement->carousel_4)
+            <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_4 }}')">
+              <template x-if="imageUrl">
+                <img :src="imageUrl" alt="Carousel Image 4" class="mobile-ad-image">
+              </template>
+              <template x-if="!imageUrl">
+                <img src="{{ asset('assets/images/carousel-4.jpeg') }}" alt="Carousel Image 4" class="mobile-ad-image">
+              </template>
+            </div>
+          @else
+            <img src="{{ asset('assets/images/carousel-4.jpeg') }}" alt="Carousel Image 4" class="mobile-ad-image">
+          @endif
+        </div>
+      </div>
+      
+      <!-- Navigation arrows -->
+      <button class="mobile-ad-nav mobile-ad-prev" onclick="changeMobileAdSlide(-1)" aria-label="Previous Ad">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="mobile-ad-nav mobile-ad-next" onclick="changeMobileAdSlide(1)" aria-label="Next Ad">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      
+      <!-- Indicators -->
+      <div class="mobile-ad-indicators">
+        <span class="mobile-ad-indicator active" onclick="currentMobileAdSlide(1)"></span>
+        <span class="mobile-ad-indicator" onclick="currentMobileAdSlide(2)"></span>
+        <span class="mobile-ad-indicator" onclick="currentMobileAdSlide(3)"></span>
+        <span class="mobile-ad-indicator" onclick="currentMobileAdSlide(4)"></span>
+        <span class="mobile-ad-indicator" onclick="currentMobileAdSlide(5)"></span>
+      </div>
+    </div>
+  </div>
 
   <div class="container my-4">
   
@@ -989,6 +1372,88 @@
     }
     @endauth
 
+    // Mobile Advertisement Popup Functions
+    let currentMobileAdIndex = 0;
+    
+    function showMobileAdPopup() {
+        const popup = document.getElementById('mobileAdPopup');
+        if (popup && window.innerWidth < 992) { // Only show on mobile devices
+            popup.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            
+            // Auto-advance slides every 5 seconds
+            if (window.mobileAdInterval) {
+                clearInterval(window.mobileAdInterval);
+            }
+            window.mobileAdInterval = setInterval(() => {
+                changeMobileAdSlide(1);
+            }, 5000);
+        }
+    }
+    
+    function closeMobileAdPopup() {
+        const popup = document.getElementById('mobileAdPopup');
+        if (popup) {
+            popup.style.display = 'none';
+            document.body.style.overflow = ''; // Restore scrolling
+            
+            // Clear auto-advance interval
+            if (window.mobileAdInterval) {
+                clearInterval(window.mobileAdInterval);
+            }
+        }
+    }
+    
+    function changeMobileAdSlide(direction) {
+        const mobileAdSlides = document.querySelectorAll('.mobile-ad-slide');
+        const mobileAdIndicators = document.querySelectorAll('.mobile-ad-indicator');
+        
+        if (mobileAdSlides.length === 0) return;
+        
+        // Remove active class from current slide and indicator
+        mobileAdSlides[currentMobileAdIndex].classList.remove('active');
+        mobileAdIndicators[currentMobileAdIndex].classList.remove('active');
+        
+        // Calculate new index
+        currentMobileAdIndex += direction;
+        
+        // Wrap around if necessary
+        if (currentMobileAdIndex >= mobileAdSlides.length) {
+            currentMobileAdIndex = 0;
+        } else if (currentMobileAdIndex < 0) {
+            currentMobileAdIndex = mobileAdSlides.length - 1;
+        }
+        
+        // Add active class to new slide and indicator
+        mobileAdSlides[currentMobileAdIndex].classList.add('active');
+        mobileAdIndicators[currentMobileAdIndex].classList.add('active');
+    }
+    
+    function currentMobileAdSlide(index) {
+        const mobileAdSlides = document.querySelectorAll('.mobile-ad-slide');
+        const mobileAdIndicators = document.querySelectorAll('.mobile-ad-indicator');
+        
+        if (mobileAdSlides.length === 0) return;
+        
+        // Remove active class from current slide and indicator
+        mobileAdSlides[currentMobileAdIndex].classList.remove('active');
+        mobileAdIndicators[currentMobileAdIndex].classList.remove('active');
+        
+        // Set new index (convert to 0-based)
+        currentMobileAdIndex = index - 1;
+        
+        // Add active class to new slide and indicator
+        mobileAdSlides[currentMobileAdIndex].classList.add('active');
+        mobileAdIndicators[currentMobileAdIndex].classList.add('active');
+    }
+    
+    // Close popup when escape key is pressed
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeMobileAdPopup();
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
       // Check if the welcome popup has been shown in this tab
       if (!sessionStorage.getItem('welcomePopupShown')) {
@@ -1006,6 +1471,13 @@
         // Mark the popup as shown for this tab
         sessionStorage.setItem('welcomePopupShown', 'true');
       }
+      
+      // Show mobile advertisement popup after welcome popup (only on mobile)
+      setTimeout(() => {
+        if (window.innerWidth < 992) {
+          showMobileAdPopup();
+        }
+      }, 3000); // Show after 3 seconds
     });
 
     // URL overlay script (if the element is used)
