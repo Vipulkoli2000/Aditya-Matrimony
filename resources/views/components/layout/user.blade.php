@@ -857,7 +857,7 @@
         </div>
         
 <!-- Advertisement Carousel -->
-        <div id="advertisementCarouselId" class="carousel slide advertisement-container" data-bs-ride="carousel" style="margin-top: -5px;">
+        <div id="advertisementCarouselId" class="carousel slide carousel-fade shadow rounded advertisement-container" data-bs-ride="carousel" style="margin-top: -5px;">
           <div class="carousel-indicators">
             <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -867,58 +867,30 @@
           <div class="carousel-inner">
             <div class="carousel-item active">
               @if($advertisement->carousel_1)
-                <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_1 }}')"> 
-                  <template x-if="imageUrl">
-                    <img :src="imageUrl" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 1">
-                  </template>
-                  <template x-if="!imageUrl">
-                    <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 1">
-                  </template>
-                </div>
+                <img src="/api/images/{{ $advertisement->carousel_1 }}" class="img-fluid w-100" alt="Carousel Image 1">
               @else
-                <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 1">
+                <img src="{{ asset('assets/images/carousel-1.jpeg') }}" class="img-fluid w-100" alt="Carousel Image 1">
               @endif
             </div>
             <div class="carousel-item">
               @if($advertisement->carousel_2)
-                <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_2 }}')"> 
-                  <template x-if="imageUrl">
-                    <img :src="imageUrl" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 2">
-                  </template>
-                  <template x-if="!imageUrl">
-                    <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 2">
-                  </template>
-                </div>
+                <img src="/api/images/{{ $advertisement->carousel_2 }}" class="img-fluid w-100" alt="Carousel Image 2">
               @else
-                <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 2">
+                <img src="{{ asset('assets/images/carousel-2.jpeg') }}" class="img-fluid w-100" alt="Carousel Image 2">
               @endif
             </div>
             <div class="carousel-item">
               @if($advertisement->carousel_3)
-                <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_3 }}')"> 
-                  <template x-if="imageUrl">
-                    <img :src="imageUrl" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 3">
-                  </template>
-                  <template x-if="!imageUrl">
-                    <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 3">
-                  </template>
-                </div>
+                <img src="/api/images/{{ $advertisement->carousel_3 }}" class="img-fluid w-100" alt="Carousel Image 3">
               @else
-                <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 3">
+                <img src="{{ asset('assets/images/carousel-3.jpeg') }}" class="img-fluid w-100" alt="Carousel Image 3">
               @endif
             </div>
             <div class="carousel-item">
               @if($advertisement->carousel_4)
-                <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->carousel_4 }}')"> 
-                  <template x-if="imageUrl">
-                    <img :src="imageUrl" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 4">
-                  </template>
-                  <template x-if="!imageUrl">
-                    <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 4">
-                  </template>
-                </div>
+                <img src="/api/images/{{ $advertisement->carousel_4 }}" class="img-fluid w-100" alt="Carousel Image 4">
               @else
-                <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid border border-2 rounded" style="cursor: pointer;" alt="Carousel Image 4">
+                <img src="{{ asset('assets/images/carousel-4.jpeg') }}" class="img-fluid w-100" alt="Carousel Image 4">
               @endif
             </div>
           </div>
