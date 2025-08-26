@@ -133,7 +133,7 @@
                                         @error('carousel_' . $i)
                                             <small class="text-danger d-block mt-1"><i class="fas fa-exclamation-circle"></i> {{ $message }}</small>
                                         @enderror
-                                        <small class="text-muted d-block mt-1">Recommended: 800x400px, Max 2MB (JPEG, PNG, WEBP)</small>
+                                        <small class="text-muted d-block mt-1">Recommended: 4480x2987px, Max 2MB (JPEG, PNG, WEBP)</small>
                                     </div>
                                     <div class="text-center bg-light rounded p-3">
                                         @if($advertisement->{'carousel_' . $i})

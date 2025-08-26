@@ -145,18 +145,18 @@
       align-items: flex-start;
     }
     .carousel-header .carousel {
-      height: 585px !important; /* Match total right ads height (295 + 295 - 5) */
+      height: 600px !important; /* Match total right ads height (295 + 10 + 295) */
       overflow: hidden;
       border-radius: 10px;
     }
     /* Target specific carousel with higher specificity */
     #carouselId.myslider {
-      height: 585px !important;
-      max-height: 585px !important;
+      height: 600px !important;
+      max-height: 600px !important;
     }
     .carousel-header .myslider,
     #carouselId .carousel-inner.myslider {
-      height: 585px !important;
+      height: 600px !important;
     }
     .carousel-header .carousel-item {
       height: 100%;
@@ -722,11 +722,11 @@
     
     /* Force carousel height - highest priority */
     #carouselId {
-        height: 585px !important;
-        max-height: 585px !important;
+        height: 600px !important;
+        max-height: 600px !important;
     }
     div#carouselId.carousel.slide.carousel-fade.myslider {
-        height: 585px !important;
+        height: 600px !important;
     }
    /* News Ticker */
    .ticker-wrap {
@@ -821,24 +821,7 @@
     </div>
   </div>
   <!-- Navbar End -->
-  @if (Request::is('/'))
-  <div class="container-fluid px-0">
-    <div class="ticker-wrap" role="region" aria-label="Latest updates">
-      <div class="container">
-        <div class="ticker">
-          @if(isset($tickerMessages) && count($tickerMessages))
-            @foreach($tickerMessages as $msg)
-              <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> {{ $msg }}</span>
-            @endforeach
-          @else
-            <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> Dear Members, please update your profiles. If you need any assistance, please contact the office.</span>
-            <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> Welcome to Aditya Matrimony.</span>
-          @endif
-        </div>
-      </div>
-    </div>
-  </div>
-  @endif
+  <!-- Ticker moved below carousel -->
 
   <!-- Carousel Start -->
   <div class="container-fluid carousel-header px-0 myslider">
@@ -907,7 +890,7 @@
         </div>
         
 <!-- Advertisement Carousel -->
-        <div id="advertisementCarouselId" class="carousel slide carousel-fade shadow rounded advertisement-container" data-bs-ride="carousel" style="margin-top: -5px;">
+        <div id="advertisementCarouselId" class="carousel slide carousel-fade shadow rounded advertisement-container" data-bs-ride="carousel" style="margin-top: 10px;">
           <div class="carousel-indicators">
             <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -957,6 +940,24 @@
     
   </div>
   <!-- Carousel End -->
+  @if (Request::is('/'))
+  <div class="container-fluid px-0">
+    <div class="ticker-wrap" role="region" aria-label="Latest updates">
+      <div class="container">
+        <div class="ticker">
+          @if(isset($tickerMessages) && count($tickerMessages))
+            @foreach($tickerMessages as $msg)
+              <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> {{ $msg }}</span>
+            @endforeach
+          @else
+            <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> Dear Members, please update your profiles. If you need any assistance, please contact the office.</span>
+            <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> Welcome to Aditya Matrimony.</span>
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+  @endif
 
   <!-- Mobile Advertisement Popup (only visible on mobile) -->
   <div id="mobileAdPopup" class="mobile-ad-popup d-lg-none" style="display: none;">
