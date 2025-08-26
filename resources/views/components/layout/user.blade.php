@@ -1,3 +1,4 @@
+@props(['tickerMessages' => []])
 <!DOCTYPE html>
 <html lang="en">
 
@@ -139,19 +140,23 @@
     }
 
     /* Carousel Professional Enhancements */
+    /* Prevent equal-height stretching so left column doesn't grow taller than its content */
+    .carousel-header .row {
+      align-items: flex-start;
+    }
     .carousel-header .carousel {
-      height: 700px !important; /* Adjusted to match total advertisement height (295+400+gap) */
+      height: 585px !important; /* Match total right ads height (295 + 295 - 5) */
       overflow: hidden;
       border-radius: 10px;
     }
     /* Target specific carousel with higher specificity */
     #carouselId.myslider {
-      height: 700px !important;
-      max-height: 700px !important;
+      height: 585px !important;
+      max-height: 585px !important;
     }
     .carousel-header .myslider,
     #carouselId .carousel-inner.myslider {
-      height: 700px !important;
+      height: 585px !important;
     }
     .carousel-header .carousel-item {
       height: 100%;
@@ -450,9 +455,9 @@
     }
     /* Specific size for advertisement carousel (second ad) */
     #advertisementCarouselId.advertisement-container {
-        height: 400px !important; /* Fixed height 400px */
-        width: 100% !important; /* Full width instead of fixed 800px */
-        max-width: 100%; /* Responsive on smaller screens */
+        height: 295px !important; /* Match Advertisement 1 */
+        width: 100% !important; /* Full width */
+        max-width: 100%; /* Match Advertisement 1 */
     }
     .advertisement-container:hover {
         transform: translateY(-5px);
@@ -717,12 +722,39 @@
     
     /* Force carousel height - highest priority */
     #carouselId {
-        height: 700px !important;
-        max-height: 700px !important;
+        height: 585px !important;
+        max-height: 585px !important;
     }
     div#carouselId.carousel.slide.carousel-fade.myslider {
-        height: 700px !important;
+        height: 585px !important;
     }
+   /* News Ticker */
+   .ticker-wrap {
+     position: relative;
+     overflow: hidden;
+     background: linear-gradient(90deg, #e8f3ff, #f5fbff);
+     border-top: 1px solid #d9e7ff;
+     border-bottom: 1px solid #d9e7ff;
+   }
+   .ticker {
+     display: inline-block;
+     white-space: nowrap;
+     padding: 8px 0;
+     animation: ticker 30s linear infinite;
+   }
+   .ticker:hover { /* pause on hover */
+     animation-play-state: paused;
+   }
+   .ticker__item {
+     display: inline-block;
+     padding-right: 50px;
+     color: #0d6efd;
+     font-weight: 500;
+   }
+   @keyframes ticker {
+     0% { transform: translate3d(100%, 0, 0); }
+     100% { transform: translate3d(-100%, 0, 0); }
+   }
   </style>
 </head>
 
@@ -789,6 +821,24 @@
     </div>
   </div>
   <!-- Navbar End -->
+  @if (Request::is('/'))
+  <div class="container-fluid px-0">
+    <div class="ticker-wrap" role="region" aria-label="Latest updates">
+      <div class="container">
+        <div class="ticker">
+          @if(isset($tickerMessages) && count($tickerMessages))
+            @foreach($tickerMessages as $msg)
+              <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> {{ $msg }}</span>
+            @endforeach
+          @else
+            <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> Dear Members, please update your profiles. If you need any assistance, please contact the office.</span>
+            <span class="ticker__item"><i class="fas fa-bullhorn me-2"></i> Welcome to Aditya Matrimony.</span>
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+  @endif
 
   <!-- Carousel Start -->
   <div class="container-fluid carousel-header px-0 myslider">
@@ -1215,7 +1265,7 @@
               <h4 class="my-4 text-white">Contact Us</h4>
               <a href="/contact-us" class="booking-link">
                 <br>
-                Aditya Matrimony, Dombivli
+                Aditya Matrimony
               </a>
               <a href="tel:+919320717501" class="btn-link mb-3">
                 <em class="fas fa-phone text-secondary me-2"></em>+91 9320717501

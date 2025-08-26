@@ -622,7 +622,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             <h4 class="my-4 text-white">Contact Us</h4>
                             <a href="/contact-us" class="booking-link">
                                 <em>&nbsp;</em>
-                                Aditya Matrimony, Dombivli
+                                Aditya Matrimony
                               </a>
                             <a href="tel:+919320717501" class="btn-link"><em class="fas fa-phone text-secondary me-2">&nbsp;</em>+91 9320717501</a>
                             <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.3576948151513!2d73.08635869999999!3d19.223236699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7be1e49e1cd0b%3A0x4665e488ad316e80!2sMaratha%20Mandir%20Hall!5e0!3m2!1sen!2sin!4v1739423879005!5m2!1sen!2sin" width="270" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
