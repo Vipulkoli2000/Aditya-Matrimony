@@ -208,6 +208,10 @@ Route::get('/user/packages/all', [UserProfilesController::class, 'allPurchasedPa
         Route::get('/admin/advertisement/create', [App\Http\Controllers\admin\AdvertisementController::class, 'create'])->name('admin.advertisement.create');
         Route::post('/admin/advertisement', [App\Http\Controllers\admin\AdvertisementController::class, 'store'])->name('admin.advertisement.store');
         Route::delete('/admin/advertisement/remove', [AdvertisementController::class, 'remove'])->name('admin.advertisement.remove');
+        
+        // Admin: Global Ticker Message (single field)
+        Route::get('/admin/ticker', [App\Http\Controllers\admin\TickerMessageController::class, 'edit'])->name('admin.ticker.edit');
+        Route::put('/admin/ticker', [App\Http\Controllers\admin\TickerMessageController::class, 'update'])->name('admin.ticker.update');
         //     return view('admin.dashboard');
         // })->name('admin.dashboard');
     });

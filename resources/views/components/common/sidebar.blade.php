@@ -178,8 +178,31 @@
 
                     </ul>
                 </li>
-                @endrole --}}
+                @endrole
                 {{-- block end --}}
+
+                @role(['admin'])
+                <li class="menu nav-item">
+                    <a href="{{ route('admin.ticker.edit') }}" class="nav-link group">
+                        <div class="flex items-center">
+                            <svg class="group-hover:!text-primary shrink-0" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5"
+                                    d="M2 5C2 4.44772 2.44772 4 3 4H21C21.5523 4 22 4.44772 22 5V7C22 7.55228 21.5523 8 21 8H3C2.44772 8 2 7.55228 2 7V5Z"
+                                    fill="currentColor" />
+                                <path
+                                    d="M3 10C2.44772 10 2 10.4477 2 11C2 11.5523 2.44772 12 3 12H21C21.5523 12 22 11.5523 22 11C22 10.4477 21.5523 10 21 10H3Z"
+                                    fill="currentColor" />
+                                <path opacity="0.5"
+                                    d="M2 15C2 14.4477 2.44772 14 3 14H21C21.5523 14 22 14.4477 22 15V17C22 17.5523 21.5523 18 21 18H3C2.44772 18 2 17.5523 2 17V15Z"
+                                    fill="currentColor" />
+                            </svg>
+                            <span
+                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Ticker Message</span>
+                        </div>
+                    </a>
+                </li>
+                @endrole
 
                 @role(['admin','member'])
                 <li class="menu nav-item">
