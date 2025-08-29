@@ -38,34 +38,50 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        // Get Other caste and subcaste IDs for validation
+        $otherCasteId = \App\Models\Caste::where('name', 'Other')->first()?->id;
+        $otherSubCasteIds = \App\Models\SubCaste::where('name', 'Other')->pluck('id')->toArray();
+        
+        $validationRules = [
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'regex:/^[\w\.\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,6}$/', 'max:255', 'unique:users'],
             'mobile' => ['required', 'digits:10'],
             'date_of_birth' => ['required', 'date'],    
-            //  'password' => ['required', 'confirmed', Rules\Password::defaults()],
-             'role'=>  ['required'],
-             'height' => ['required'],
-             'weight' => ['required'],
-             'complexion' => ['required'],
-             'address_line1' => ['required'],
-             'address_line2' => ['required'],
-             'landmark' => ['required'],
-             'pincode' => ['required'],
-             'highest_education' => ['required'],
-             'father_is_alive' => ['required','boolean'],
-             'mother_is_alive' => ['required','boolean'],
-             'father_name' => ['nullable','string','max:255'],
-             'father_address' => ['nullable','string'],
-             'father_mobile' => ['nullable','string','max:20'],
-             'mother_name' => ['nullable','string','max:255'],
-             'mother_address' => ['nullable','string'],
-             'mother_mobile' => ['nullable','string','max:20'],
-             'caste' => ['required','exists:castes,id'],
-             'sub_caste' => ['required','exists:sub_castes,id'],
-        ]);
+            'role' =>  ['required'],
+            'height' => ['required'],
+            'weight' => ['required'],
+            'complexion' => ['required'],
+            'address_line1' => ['required'],
+            'address_line2' => ['required'],
+            'landmark' => ['required'],
+            'pincode' => ['required'],
+            'highest_education' => ['required'],
+            'father_is_alive' => ['required','boolean'],
+            'mother_is_alive' => ['required','boolean'],
+            'father_name' => ['nullable','string','max:255'],
+            'father_address' => ['nullable','string'],
+            'father_mobile' => ['nullable','string','max:20'],
+            'mother_name' => ['nullable','string','max:255'],
+            'mother_address' => ['nullable','string'],
+            'mother_mobile' => ['nullable','string','max:20'],
+            'caste' => ['required','exists:castes,id'],
+            'sub_caste' => ['required','exists:sub_castes,id'],
+            'custom_caste' => ['nullable','string','max:100'],
+            'custom_sub_caste' => ['nullable','string','max:100'],
+        ];
+        
+        // Add conditional validation for custom fields
+        if ($otherCasteId && $request->caste == $otherCasteId) {
+            $validationRules['custom_caste'][] = 'required';
+        }
+        
+        if (!empty($otherSubCasteIds) && in_array($request->sub_caste, $otherSubCasteIds)) {
+            $validationRules['custom_sub_caste'][] = 'required';
+        }
+        
+        $request->validate($validationRules);
         
         $number = $request->input('country_code') .$request->input('mobile'); 
         $exists = \DB::table('users')->where('mobile', $number)->exists();
@@ -130,6 +146,8 @@ class RegisteredUserController extends Controller
             // Caste details
             'caste' => $request->caste,
             'sub_caste' => $request->sub_caste,
+            'custom_caste' => $request->custom_caste,
+            'custom_sub_caste' => $request->custom_sub_caste,
         ]);
 
         $memberRole = Role::where('name', 'member')->first();

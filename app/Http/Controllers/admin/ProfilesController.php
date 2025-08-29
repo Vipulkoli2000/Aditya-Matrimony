@@ -79,6 +79,28 @@ class ProfilesController extends Controller
         // dd($id);
         // dd($request->all());
         $profile = Profile::find($id);
+        
+        // Check for "Other" caste/subcaste IDs and add validation rules accordingly
+        $otherCasteId = Caste::where('name', 'Other')->value('id');
+        $otherSubcasteId = SubCaste::where('name', 'Other')->value('id');
+        
+        $validationRules = [];
+        
+        // If "Other" caste is selected, require custom_caste
+        if ($request->caste == $otherCasteId) {
+            $validationRules['custom_caste'] = 'required|string|max:255';
+        }
+        
+        // If "Other" subcaste is selected, require custom_sub_caste
+        if ($request->sub_caste == $otherSubcasteId) {
+            $validationRules['custom_sub_caste'] = 'required|string|max:255';
+        }
+        
+        // Validate if there are any custom fields to validate
+        if (!empty($validationRules)) {
+            $request->validate($validationRules);
+        }
+        
         $data = $request->all();
         if ($request->hasFile('img_1')) {
             if (!empty($profile->img_1) && Storage::exists('public/images/'.$profile->img_1)) {

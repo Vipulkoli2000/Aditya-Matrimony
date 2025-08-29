@@ -47,6 +47,9 @@ return new class extends Migration {
             $table->string('religion', 100)->nullable();
             $table->integer('caste')->nullable();
             $table->integer('sub_caste')->nullable();
+            // Custom caste fields for "Other" selections
+            $table->string('custom_caste', 100)->nullable();
+            $table->string('custom_sub_caste', 100)->nullable();
             $table->string('gotra', 100)->nullable();
             // family details
             $table->boolean('father_is_alive')->nullable();

@@ -115,6 +115,33 @@ class CasteSeeder extends Seeder
         }
         DB::table('sub_castes')->insert($subCasteData);
 
+        // Ensure a global "Other" caste exists
+        $otherCasteId = DB::table('castes')->where('name', 'Other')->value('id');
+        if (!$otherCasteId) {
+            $otherCasteId = DB::table('castes')->insertGetId([
+                'name' => 'Other',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Ensure an "Other" sub-caste exists for every caste (including the global Other caste)
+        $allCasteIds = DB::table('castes')->pluck('id');
+        foreach ($allCasteIds as $cid) {
+            $exists = DB::table('sub_castes')
+                ->where('caste_id', $cid)
+                ->where('name', 'Other')
+                ->exists();
+            if (!$exists) {
+                DB::table('sub_castes')->insert([
+                    'caste_id'   => $cid,
+                    'name'       => 'Other',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
         Schema::enableForeignKeyConstraints();
     }
 }

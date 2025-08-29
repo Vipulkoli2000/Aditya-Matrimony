@@ -40,7 +40,9 @@ class Profile extends Model
         'img_3',
         'religion',
         'caste',
+        'custom_caste',
         'sub_caste',
+        'custom_sub_caste',
         'gotra',
         'father_is_alive',
         'father_name',
@@ -162,5 +164,50 @@ class Profile extends Model
     public function subCaste()
     {
         return $this->belongsTo(SubCaste::class, 'sub_caste');
+    }
+    
+    public function caste_relation()
+    {
+        return $this->belongsTo(Caste::class, 'caste');
+    }
+    
+    /**
+     * Get the display value for caste (either from relation or custom field)
+     */
+    public function getCasteDisplayAttribute()
+    {
+        if ($this->custom_caste) {
+            return $this->custom_caste;
+        }
+        
+        return $this->caste_relation ? $this->caste_relation->name : null;
+    }
+    
+    /**
+     * Get the display value for subcaste (either from relation or custom field)
+     */
+    public function getSubCasteDisplayAttribute()
+    {
+        if ($this->custom_sub_caste) {
+            return $this->custom_sub_caste;
+        }
+        
+        return $this->subCaste ? $this->subCaste->name : null;
+    }
+    
+    /**
+     * Check if caste is 'Other' option
+     */
+    public function getIsOtherCasteAttribute()
+    {
+        return $this->caste_relation && $this->caste_relation->name === 'Other';
+    }
+    
+    /**
+     * Check if subcaste is 'Other' option
+     */
+    public function getIsOtherSubCasteAttribute()
+    {
+        return $this->subCaste && $this->subCaste->name === 'Other';
     }
 }

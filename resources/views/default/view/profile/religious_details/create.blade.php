@@ -163,7 +163,15 @@
                                 </select> 
                                 @if ($errors->has('caste'))
                                     <span class="text-danger small">{{ $errors->first('caste') }}</span>
-                                @endif   
+                                @endif
+                                
+                                <!-- Custom Caste Input (hidden by default) -->
+                                <div id="custom_caste_container" style="display: none; margin-top: 10px;">
+                                    <input type="text" name="custom_caste" value="{{ old('custom_caste', $user->custom_caste) }}" id="custom_caste" placeholder="Please specify your caste">
+                                    @if ($errors->has('custom_caste'))
+                                        <span class="text-danger small">{{ $errors->first('custom_caste') }}</span>
+                                    @endif
+                                </div>
                             </div>
                             
                             <div class="form-group">
@@ -173,7 +181,15 @@
                                 </select>
                                 @if ($errors->has('sub_caste'))
                                     <span class="text-danger small">{{ $errors->first('sub_caste') }}</span>
-                                @endif   
+                                @endif
+                                
+                                <!-- Custom SubCaste Input (hidden by default) -->
+                                <div id="custom_sub_caste_container" style="display: none; margin-top: 10px;">
+                                    <input type="text" name="custom_sub_caste" value="{{ old('custom_sub_caste', $user->custom_sub_caste) }}" id="custom_sub_caste" placeholder="Please specify your subcaste">
+                                    @if ($errors->has('custom_sub_caste'))
+                                        <span class="text-danger small">{{ $errors->first('custom_sub_caste') }}</span>
+                                    @endif
+                                </div>
                             </div>
                               
                             <div class="form-group">
@@ -193,13 +209,21 @@
          
         </div>
     
+        @php $otherCasteId = $castes->firstWhere('name', 'Other')->id ?? null; @endphp
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const religionSelect = document.getElementById('religion');
                 const habitsRow = document.getElementById('habitsRow');
                 const casteSelect = document.getElementById('caste');
                 const subcasteSelect = document.getElementById('sub_caste');
-                const userSubcaste = {{ $user->sub_caste ?? 'null' }};
+                const customCasteContainer = document.getElementById('custom_caste_container');
+                const customCasteInput = document.getElementById('custom_caste');
+                const customSubCasteContainer = document.getElementById('custom_sub_caste_container');
+                const customSubCasteInput = document.getElementById('custom_sub_caste');
+                const otherCasteId = @json($otherCasteId);
+                const userSubcaste = @json($user->sub_caste ?? null);
+                const userCustomCaste = @json(old('custom_caste', $user->custom_caste ?? ''));
+                const userCustomSubCaste = @json(old('custom_sub_caste', $user->custom_sub_caste ?? ''));
         
                 // Check the initial value of the religion dropdown
                 if (religionSelect.value === 'hindu') {
@@ -216,6 +240,59 @@
                         habitsRow.classList.add('hidden');
                     }
                 });
+                
+                // Function to handle caste selection
+                function handleCasteChange() {
+                    if (!casteSelect) return;
+                    
+                    const selectedOption = casteSelect.options[casteSelect.selectedIndex];
+                    const selectedCasteName = selectedOption ? (selectedOption.text || selectedOption.textContent || '').trim().toLowerCase() : '';
+                    const selectedCasteId = casteSelect.value;
+                    
+                    // Show/hide custom caste input (match by lowercase text OR DB id)
+                    if (selectedCasteName === 'other' || (otherCasteId && selectedCasteId == otherCasteId)) {
+                        customCasteContainer.style.display = 'block';
+                        if (customCasteInput) customCasteInput.required = true;
+                    } else {
+                        customCasteContainer.style.display = 'none';
+                        if (customCasteInput) {
+                            customCasteInput.required = false;
+                            customCasteInput.value = '';
+                        }
+                    }
+
+                    // Load subcastes and reset subcaste selection
+                    if (selectedCasteId) {
+                        loadSubcastes(selectedCasteId);
+                    } else {
+                        subcasteSelect.innerHTML = '<option value="">Select Sub-Caste</option>';
+                    }
+                    
+                    // Hide custom subcaste input when caste changes
+                    customSubCasteContainer.style.display = 'none';
+                    if (customSubCasteInput) {
+                        customSubCasteInput.required = false;
+                        customSubCasteInput.value = '';
+                    }
+                }
+                
+                // Function to handle subcaste selection
+                function handleSubCasteChange() {
+                    if (!subcasteSelect) return;
+                    
+                    const selectedOption = subcasteSelect.options[subcasteSelect.selectedIndex];
+                    const selectedSubCasteName = selectedOption ? (selectedOption.text || selectedOption.textContent || '').trim().toLowerCase() : '';
+                    
+                    // Show/hide custom subcaste input
+                    if (selectedSubCasteName === 'other') {
+                        customSubCasteContainer.style.display = 'block';
+                        customSubCasteInput.required = true;
+                    } else {
+                        customSubCasteContainer.style.display = 'none';
+                        customSubCasteInput.required = false;
+                        customSubCasteInput.value = '';
+                    }
+                }
                 
                 // Function to load subcastes based on selected caste
                 function loadSubcastes(casteId, selectedSubcaste = null) {
@@ -239,19 +316,52 @@
                                 }
                                 subcasteSelect.appendChild(option);
                             });
+                            
+                            // Check if selected subcaste is "Other" after loading
+                            if (selectedSubcaste) {
+                                setTimeout(() => {
+                                    handleSubCasteChange();
+                                }, 100);
+                            }
                         })
                         .catch(error => {
                             console.error('Error loading subcastes:', error);
                         });
                 }
                 
-                // Load subcastes on caste change
-                casteSelect.addEventListener('change', function() {
-                    loadSubcastes(this.value);
-                });
+                // Bind events
+                casteSelect.addEventListener('change', handleCasteChange);
+                subcasteSelect.addEventListener('change', handleSubCasteChange);
+
+                // Ensure initial state is correct on load
+                handleCasteChange();
                 
-                // Load subcastes on page load if caste is already selected
-                if (casteSelect.value) {
+                // Initialize on page load
+                if (casteSelect && casteSelect.value) {
+                    // Set custom caste value if exists
+                    if (userCustomCaste && customCasteInput) {
+                        customCasteInput.value = userCustomCaste;
+                        customCasteContainer.style.display = 'block';
+                        customCasteInput.required = true;
+                    }
+                    
+                    handleCasteChange();
+                    
+                    // Load subcastes with user selection
+                    if (userSubcaste) {
+                        loadSubcastes(casteSelect.value, userSubcaste);
+                        
+                        // Set custom subcaste value if exists
+                        if (userCustomSubCaste && customSubCasteInput) {
+                            setTimeout(() => {
+                                // Ensure custom subcaste input is shown when value exists
+                                customSubCasteContainer.style.display = 'block';
+                                customSubCasteInput.required = true;
+                                customSubCasteInput.value = userCustomSubCaste;
+                            }, 200);
+                        }
+                    }
+                } else if (casteSelect.value) {
                     loadSubcastes(casteSelect.value, userSubcaste);
                 }
             });

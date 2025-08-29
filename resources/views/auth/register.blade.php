@@ -472,6 +472,13 @@
                             @endforeach
                         </select>
                         <x-input-error :messages="$errors->get('caste')" class="mt-2 text-danger small" />
+                        
+                        <!-- Custom Caste Input (hidden by default) -->
+                        <div id="custom_caste_container" style="display: none; margin-top: 10px;">
+                            <label for="custom_caste" class="form-label" style="color: black; margin: 10px 0;">Please specify your caste <span class="text-danger">*</span></label>
+                            <input id="custom_caste" name="custom_caste" type="text" class="form-control" value="{{ old('custom_caste') }}" placeholder="Enter your caste" />
+                            <x-input-error :messages="$errors->get('custom_caste')" class="mt-2 text-danger small" />
+                        </div>
                     </div>
                     <div class="col-md-6 mb-2">
                         <label for="sub_caste" class="form-label" style="color: black; margin: 10px 0;">Subcaste <span class="text-danger">*</span></label>
@@ -479,6 +486,13 @@
                             <option value="" disabled selected>Select Subcaste</option>
                         </select>
                         <x-input-error :messages="$errors->get('sub_caste')" class="mt-2 text-danger small" />
+                        
+                        <!-- Custom SubCaste Input (hidden by default) -->
+                        <div id="custom_sub_caste_container" style="display: none; margin-top: 10px;">
+                            <label for="custom_sub_caste" class="form-label" style="color: black; margin: 10px 0;">Please specify your subcaste <span class="text-danger">*</span></label>
+                            <input id="custom_sub_caste" name="custom_sub_caste" type="text" class="form-control" value="{{ old('custom_sub_caste') }}" placeholder="Enter your subcaste" />
+                            <x-input-error :messages="$errors->get('custom_sub_caste')" class="mt-2 text-danger small" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -690,10 +704,65 @@
 
                                 showStep(currentStep);
 
-                                // Caste and Subcaste dynamic loading
+                                // Caste and Subcaste "Other" option functionality
                                 const casteSelect = document.getElementById('caste');
                                 const subCasteSelect = document.getElementById('sub_caste');
+                                const customCasteContainer = document.getElementById('custom_caste_container');
+                                const customCasteInput = document.getElementById('custom_caste');
+                                const customSubCasteContainer = document.getElementById('custom_sub_caste_container');
+                                const customSubCasteInput = document.getElementById('custom_sub_caste');
                                 const oldSubCaste = {{ old('sub_caste') ?? 'null' }};
+                                const oldCustomCaste = '{{ old('custom_caste', '') }}';
+                                const oldCustomSubCaste = '{{ old('custom_sub_caste', '') }}';
+
+                                // Function to handle caste selection
+                                function handleCasteChange() {
+                                    if (!casteSelect) return;
+                                    
+                                    const selectedOption = casteSelect.options[casteSelect.selectedIndex];
+                                    const selectedCasteName = selectedOption ? selectedOption.text : '';
+                                    const selectedCasteId = casteSelect.value;
+                                    
+                                    // Show/hide custom caste input
+                                    if (selectedCasteName === 'Other') {
+                                        customCasteContainer.style.display = 'block';
+                                        customCasteInput.required = true;
+                                    } else {
+                                        customCasteContainer.style.display = 'none';
+                                        customCasteInput.required = false;
+                                        customCasteInput.value = '';
+                                    }
+                                    
+                                    // Load subcastes and reset subcaste selection
+                                    if (selectedCasteId) {
+                                        loadSubcastes(selectedCasteId);
+                                    } else {
+                                        subCasteSelect.innerHTML = '<option value="" disabled selected>Select Subcaste</option>';
+                                    }
+                                    
+                                    // Hide custom subcaste input when caste changes
+                                    customSubCasteContainer.style.display = 'none';
+                                    customSubCasteInput.required = false;
+                                    customSubCasteInput.value = '';
+                                }
+                                
+                                // Function to handle subcaste selection
+                                function handleSubCasteChange() {
+                                    if (!subCasteSelect) return;
+                                    
+                                    const selectedOption = subCasteSelect.options[subCasteSelect.selectedIndex];
+                                    const selectedSubCasteName = selectedOption ? selectedOption.text : '';
+                                    
+                                    // Show/hide custom subcaste input
+                                    if (selectedSubCasteName === 'Other') {
+                                        customSubCasteContainer.style.display = 'block';
+                                        customSubCasteInput.required = true;
+                                    } else {
+                                        customSubCasteContainer.style.display = 'none';
+                                        customSubCasteInput.required = false;
+                                        customSubCasteInput.value = '';
+                                    }
+                                }
 
                                 // Function to load subcastes based on selected caste
                                 function loadSubcastes(casteId, selectedSubcaste = null) {
@@ -734,24 +803,48 @@
                                                 }
                                                 subCasteSelect.appendChild(option);
                                             });
+                                            
+                                            // Check if selected subcaste is "Other" after loading
+                                            if (selectedSubcaste) {
+                                                setTimeout(() => {
+                                                    handleSubCasteChange();
+                                                }, 100);
+                                            }
                                         })
                                         .catch(error => {
                                             console.error('Error loading subcastes:', error);
                                         });
                                 }
                                 
-                                // Load subcastes on caste change
+                                // Bind events
                                 if (casteSelect) {
-                                    casteSelect.addEventListener('change', function() {
-                                        loadSubcastes(this.value);
-                                    });
-                                    
-                                    // Load subcastes on page load if caste is already selected
-                                    if (casteSelect.value) {
-                                        loadSubcastes(casteSelect.value, oldSubCaste);
+                                    casteSelect.addEventListener('change', handleCasteChange);
+                                }
+                                
+                                if (subCasteSelect) {
+                                    subCasteSelect.addEventListener('change', handleSubCasteChange);
+                                }
+                                
+                                // Initialize on page load
+                                if (casteSelect && casteSelect.value) {
+                                    // Set custom caste value if exists
+                                    if (oldCustomCaste && customCasteInput) {
+                                        customCasteInput.value = oldCustomCaste;
                                     }
-                                } else {
-                                    console.error('Caste select element not found');
+                                    
+                                    handleCasteChange();
+                                    
+                                    // Load subcastes with old selection
+                                    if (oldSubCaste) {
+                                        loadSubcastes(casteSelect.value, oldSubCaste);
+                                        
+                                        // Set custom subcaste value if exists
+                                        if (oldCustomSubCaste && customSubCasteInput) {
+                                            setTimeout(() => {
+                                                customSubCasteInput.value = oldCustomSubCaste;
+                                            }, 200);
+                                        }
+                                    }
                                 }
                             });
                         </script>

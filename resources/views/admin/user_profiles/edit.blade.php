@@ -290,27 +290,48 @@
                                 </div>
                                 
                                 
-                                {{-- <template x-if="religion === 'hindu'"> --}}
-                                     
-                                    <div>
-                                        <label>Religion</label>
-                                        <select class="form-input" name="castes" id="castes" disabled>
-                                            <option value="Maratha" selected>Maratha</option>
-                                        </select> 
-                                        <x-input-error :messages="$errors->get('castes')" class="mt-2" /> 
-                                    </div>
-                                {{-- </template> --}}
+                {{-- <template x-if="religion === 'hindu'"> --}}
+                     
+                    <div>
+                        <label>Caste</label>
+                        <select class="form-input" name="caste" id="caste">
+                            <option value="" selected>select an option</option>
+                            @foreach($castes as $caste)
+                            <option value="{{$caste->id}}" {{ ($profile->caste === $caste->id ) ? 'selected' : ''}}>{{$caste->name}}</option>
+                            @endforeach
+                        </select> 
+                        <x-input-error :messages="$errors->get('caste')" class="mt-2" /> 
+                    </div>
+                    
+                    <!-- Custom Caste Input (hidden by default) -->
+                    <div id="custom-caste-input" style="display: none;">
+                        <label>Custom Caste</label>
+                        <input type="text" name="custom_caste" id="custom_caste" class="form-input" 
+                               value="{{ old('custom_caste', $profile->custom_caste) }}" 
+                               placeholder="Enter custom caste">
+                        <x-input-error :messages="$errors->get('custom_caste')" class="mt-2" />
+                    </div>
+                {{-- </template> --}}
                     
                                 {{-- <template x-if="religion === 'hindu'"> --}}
                                     <div>
                                         <label>Subcastes</label>
-                                        <select name="sub_caste" class="form-input" name="subcastes" id="subcastes">
+                                        <select name="sub_caste" class="form-input" id="sub_caste">
                                             <option value="" selected>select an option</option>
                                             @foreach($subCastes as $subCaste)
                                             <option value="{{$subCaste->id}}" {{ ($profile->sub_caste === $subCaste->id ) ? 'selected' : ''}}>{{$subCaste->name}}</option>
                                             @endforeach
                                         </select> 
-                                        <x-input-error :messages="$errors->get('subcastes')" class="mt-2" /> 
+                                        <x-input-error :messages="$errors->get('sub_caste')" class="mt-2" /> 
+                                    </div>
+                                    
+                                    <!-- Custom Subcaste Input (hidden by default) -->
+                                    <div id="custom-subcaste-input" style="display: none;">
+                                        <label>Custom Subcaste</label>
+                                        <input type="text" name="custom_sub_caste" id="custom_sub_caste" class="form-input" 
+                                               value="{{ old('custom_sub_caste', $profile->custom_sub_caste) }}" 
+                                               placeholder="Enter custom subcaste">
+                                        <x-input-error :messages="$errors->get('custom_sub_caste')" class="mt-2" />
                                     </div>
                                     
                                 {{-- </template> --}}
@@ -1213,16 +1234,130 @@
         }
     </script>
     <script>
-        document.getElementById('toggleDropdowns').addEventListener('change', function() {
-        const dropdowns = document.getElementById('dropdowns');
-    
-        if (this.checked) {
-            dropdowns.style.display = 'none'; // Hide dropdowns
-        } else {
-            dropdowns.style.display = 'block'; // Show dropdowns
+        // Guard optional demo toggle if elements do not exist
+        const toggleDropdownsEl = document.getElementById('toggleDropdowns');
+        const dropdownsEl = document.getElementById('dropdowns');
+        if (toggleDropdownsEl && dropdownsEl) {
+            toggleDropdownsEl.addEventListener('change', function() {
+                if (this.checked) {
+                    dropdownsEl.style.display = 'none';
+                } else {
+                    dropdownsEl.style.display = 'block';
+                }
+            });
         }
-    });
-    
-     </script> 
+    </script>
+     
+    <!-- Caste/Subcaste Other Options JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const casteSelect = document.getElementById('caste');
+            const subcasteSelect = document.getElementById('sub_caste');
+            const customCasteContainer = document.getElementById('custom-caste-input');
+            const customSubcasteContainer = document.getElementById('custom-subcaste-input');
+            const customCasteField = document.getElementById('custom_caste');
+            const customSubcasteField = document.getElementById('custom_sub_caste');
+            const otherCasteId = @json($castes->firstWhere('name', 'Other')->id ?? null);
+            
+            // Function to check if "Other" is selected and show/hide custom inputs
+            function toggleCustomInputs() {
+                if (!casteSelect || !subcasteSelect) return;
+
+                const selectedCasteId = casteSelect.value;
+                const casteOtherOption = Array.from(casteSelect.options).find(option =>
+                    (option.textContent || option.text || '').trim().toLowerCase() === 'other'
+                );
+                const subcasteOtherOption = Array.from(subcasteSelect.options).find(option =>
+                    (option.textContent || option.text || '').trim().toLowerCase() === 'other'
+                );
+
+                // Caste: show/hide + required
+                const isCasteOther = (
+                    (casteOtherOption && selectedCasteId === casteOtherOption.value) ||
+                    (otherCasteId && selectedCasteId == otherCasteId)
+                );
+                if (isCasteOther) {
+                    customCasteContainer.style.display = 'block';
+                    if (customCasteField) customCasteField.required = true;
+                } else {
+                    customCasteContainer.style.display = 'none';
+                    if (customCasteField) {
+                        customCasteField.required = false;
+                        // do not clear existing value automatically when editing
+                    }
+                }
+
+                // Subcaste: show/hide + required
+                const isSubcasteOther = (subcasteOtherOption && subcasteSelect.value === subcasteOtherOption.value);
+                if (isSubcasteOther) {
+                    customSubcasteContainer.style.display = 'block';
+                    if (customSubcasteField) customSubcasteField.required = true;
+                } else {
+                    customSubcasteContainer.style.display = 'none';
+                    if (customSubcasteField) {
+                        customSubcasteField.required = false;
+                        // do not clear existing value automatically when editing
+                    }
+                }
+            }
+            
+            // Function to load subcastes based on selected caste
+            function loadSubcastes(casteId) {
+                if (!casteId) {
+                    subcasteSelect.innerHTML = '<option value="">Select an option</option>';
+                    return;
+                }
+                
+                fetch(`/castes/${casteId}/subcastes`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        subcasteSelect.innerHTML = '<option value="">Select an option</option>';
+                        data.forEach(subcaste => {
+                            const option = document.createElement('option');
+                            option.value = subcaste.id;
+                            option.textContent = subcaste.name;
+                            
+                            // Check if this subcaste should be selected
+                            if (parseInt(subcaste.id) === {{ $profile->sub_caste ?? 'null' }}) {
+                                option.selected = true;
+                            }
+                            
+                            subcasteSelect.appendChild(option);
+                        });
+                        
+                        // Check if we need to show custom subcaste input after loading
+                        toggleCustomInputs();
+                    })
+                    .catch(error => {
+                        console.error('Error loading subcastes:', error);
+                    });
+            }
+            
+            // Event listeners
+            if (casteSelect) {
+                casteSelect.addEventListener('change', function() {
+                    loadSubcastes(this.value);
+                    toggleCustomInputs();
+                });
+            }
+            
+            if (subcasteSelect) {
+                subcasteSelect.addEventListener('change', function() {
+                    toggleCustomInputs();
+                });
+            }
+            
+            // Initialize on page load
+            toggleCustomInputs();
+            if (casteSelect && casteSelect.value) {
+                loadSubcastes(casteSelect.value);
+            }
+        });
+    </script>
     </x-layout.admin>
     

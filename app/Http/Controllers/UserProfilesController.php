@@ -727,12 +727,29 @@ class UserProfilesController extends Controller
 
     public function religious_details_store(Request $request)
     {
-        $validated = $request->validate([
+        // Get Other caste and subcaste IDs for validation
+        $otherCasteId = Caste::where('name', 'Other')->first()?->id;
+        $otherSubCasteIds = SubCaste::where('name', 'Other')->pluck('id')->toArray();
+        
+        $validationRules = [
             'religion' => 'nullable|string|max:100',
             'caste' => 'nullable|integer',
             'sub_caste' => 'nullable|integer',
             'gotra' => 'nullable|string|max:100',
-        ]);
+            'custom_caste' => ['nullable', 'string', 'max:100'],
+            'custom_sub_caste' => ['nullable', 'string', 'max:100'],
+        ];
+        
+        // Add conditional validation for custom fields
+        if ($otherCasteId && $request->caste == $otherCasteId) {
+            $validationRules['custom_caste'][] = 'required';
+        }
+        
+        if (!empty($otherSubCasteIds) && in_array($request->sub_caste, $otherSubCasteIds)) {
+            $validationRules['custom_sub_caste'][] = 'required';
+        }
+        
+        $validated = $request->validate($validationRules);
         $data = $validated;
 
         $profile = Profile::where('user_id', auth()->user()->id)->first();
