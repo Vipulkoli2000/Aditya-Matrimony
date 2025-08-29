@@ -72,7 +72,7 @@
         height: 300px; /* Fixed height for mobile */
       }
       
-      .advertisement-container {
+      .promo-container {
         height: 25.05vh; /* Increased by 15% from 21.78vh */
         width: 100%; /* Full width on mobile */
       }
@@ -85,7 +85,7 @@
         min-height: 39.6vh; /* Increased by 10% from 36vh */
       }
       
-      .advertisement-container {
+      .promo-container {
         height: 30.06vh; /* Increased by 15% from 26.14vh */
         width: 100%; /* Full width on tablet */
       }
@@ -441,8 +441,8 @@
         font-size: 0.8rem;
     }
     
-    /* Advertisement Container Styles */
-    .advertisement-container {
+    /* Advertisement Container Styles (renamed to avoid ad-blockers) */
+    .promo-container {
         position: relative;
         overflow: hidden;
         border-radius: 10px;
@@ -454,28 +454,28 @@
         background-color: #f8f9fa; /* Light background */
     }
     /* Specific size for advertisement carousel (second ad) */
-    #advertisementCarouselId.advertisement-container {
+    #promoCarouselId.promo-container {
         height: 295px !important; /* Match Advertisement 1 */
         width: 100% !important; /* Full width */
         max-width: 100%; /* Match Advertisement 1 */
     }
-    .advertisement-container:hover {
+    .promo-container:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
     
-    .advertisement-container img {
+    .promo-container img {
         transition: transform 0.3s ease;
         width: 100%;
         height: 100%;
         object-fit: contain !important; /* Ensure full content is visible */
     }
     
-    .advertisement-container:hover img {
+    .promo-container:hover img {
         transform: scale(1.05);
     }
     
-    .advertisement-container::before {
+    .promo-container::before {
         content: '';
         position: absolute;
         top: 0;
@@ -488,7 +488,7 @@
         z-index: 1;
     }
     
-    .advertisement-container:hover::before {
+    .promo-container:hover::before {
         opacity: 1;
     }
     
@@ -659,14 +659,14 @@
         }
     }
     
-    /* Advertisement carousel specific styles */
-    #advertisementCarouselId {
+    /* Advertisement carousel specific styles (renamed) */
+    #promoCarouselId {
         position: relative;
     }
-    #advertisementCarouselId .carousel-inner {
+    #promoCarouselId .carousel-inner {
         height: 100%;
     }
-    #advertisementCarouselId .carousel-item {
+    #promoCarouselId .carousel-item {
         height: 100%;
         background-color: #f8f9fa;
         position: relative;
@@ -675,14 +675,14 @@
         justify-content: center;
         padding-top: 10px;
     }
-    #advertisementCarouselId .carousel-item > div {
+    #promoCarouselId .carousel-item > div {
         width: 100%;
         height: auto;
         display: flex;
         align-items: flex-start;
         justify-content: center;
     }
-    #advertisementCarouselId .carousel-item img {
+    #promoCarouselId .carousel-item img {
         max-width: 100% !important;
         max-height: 390px !important;
         width: auto !important;
@@ -691,16 +691,16 @@
         display: block !important;
     }
     /* Advertisement carousel controls positioning */
-    #advertisementCarouselId .carousel-control-prev,
-    #advertisementCarouselId .carousel-control-next {
+    #promoCarouselId .carousel-control-prev,
+    #promoCarouselId .carousel-control-next {
         width: 15%;
         opacity: 0.8;
     }
-    #advertisementCarouselId .carousel-indicators {
+    #promoCarouselId .carousel-indicators {
         bottom: 10px;
         margin-bottom: 0;
     }
-    #advertisementCarouselId .carousel-indicators [data-bs-target] {
+    #promoCarouselId .carousel-indicators [data-bs-target] {
         width: 10px;
         height: 10px;
         border-radius: 50%;
@@ -708,7 +708,7 @@
         opacity: 0.5;
         border: 1px solid #007bff;
     }
-    #advertisementCarouselId .carousel-indicators .active {
+    #promoCarouselId .carousel-indicators .active {
         background-color: #007bff;
         opacity: 1;
     }
@@ -874,7 +874,7 @@
       <!-- Right: Advertisement carousel (hidden on small screens) -->
       <div class="col-lg-4 d-none d-lg-flex flex-column justify-content-start" style="gap: 0;">
         <!-- Advertisement 1 -->
-        <div class="advertisement-container">
+        <div class="promo-container">
           @if($advertisement->advertisement_1)
             <div x-data="imageLoader()" x-init="fetchImage('{{ $advertisement->advertisement_1 }}')">
               <template x-if="imageUrl">
@@ -890,12 +890,12 @@
         </div>
         
 <!-- Advertisement Carousel -->
-        <div id="advertisementCarouselId" class="carousel slide carousel-fade shadow rounded advertisement-container" data-bs-ride="carousel" style="margin-top: 10px;">
+        <div id="promoCarouselId" class="carousel slide carousel-fade shadow rounded promo-container" data-bs-ride="carousel" style="margin-top: 10px;">
           <div class="carousel-indicators">
-            <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            <button type="button" data-bs-target="#advertisementCarouselId" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#promoCarouselId" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#promoCarouselId" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#promoCarouselId" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#promoCarouselId" data-bs-slide-to="3" aria-label="Slide 4"></button>
           </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
@@ -927,11 +927,11 @@
               @endif
             </div>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#advertisementCarouselId" data-bs-slide="prev">
+          <button class="carousel-control-prev" type="button" data-bs-target="#promoCarouselId" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
           </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#advertisementCarouselId" data-bs-slide="next">
+          <button class="carousel-control-next" type="button" data-bs-target="#promoCarouselId" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>
