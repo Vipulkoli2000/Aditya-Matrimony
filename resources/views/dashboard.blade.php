@@ -301,116 +301,89 @@
             <strong>Error</strong> {{ session('error') }}
         </div>
         @endif
-        <div>
-        <h2 class="text-center">Bride Profiles</h2>
-        <div class="profile-wrapper">
-            <!-- Left Arrow -->
-            <button class="scroll-arrow scroll-left" onclick="scrollContainer('bride-profiles', -1)">❮</button>
-            <div class="profile-scroll-container" id="bride-profiles">
-                @foreach($users as $user)
-                    @if ($user->role == 'bride')
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                @if ($user->img_1)
-                                    <div x-data="imageLoader()" x-init="fetchImage('{{ $user->img_1 }}')">
-                                        <template x-if="imageUrl">
-                                            <img class="profile-image" :src="imageUrl" alt="Bride Profile Image" />
-                                        </template>
-                                        <template x-if="!imageUrl">
-                                            <div class="no-profile-photo">Loading Image...</div>
-                                        </template>
-                                    </div>
-                                @elseif ($user->img_2)
-                                    <div x-data="imageLoader()" x-init="fetchImage('{{ $user->img_2 }}')">
-                                        <template x-if="imageUrl">
-                                            <img class="profile-image" :src="imageUrl" alt="Bride Profile Image" />
-                                        </template>
-                                        <template x-if="!imageUrl">
-                                            <div class="no-profile-photo">Loading Image...</div>
-                                        </template>
-                                    </div>
-                                @elseif ($user->img_3)
-                                    <div x-data="imageLoader()" x-init="fetchImage('{{ $user->img_3 }}')">
-                                        <template x-if="imageUrl">
-                                            <img class="profile-image" :src="imageUrl" alt="Bride Profile Image" />
-                                        </template>
-                                        <template x-if="!imageUrl">
-                                            <div class="no-profile-photo">Loading Image...</div>
-                                        </template>
-                                    </div>
-                                @else
-                                    <div class="no-profile-photo">No Profile Photo Displayed</div>
-                                @endif
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">{{ $user->first_name }} </h5>
-                                    <p class="card-text">{{ \Carbon\Carbon::parse($user->date_of_birth)->age }} years</p>
-                                     <p class="card-text">{{ $user->bio }}</p>
-                                    <span class="view-profile" onclick="location.href='{{ route('user.show_profile', $user->id) }}'">View Profile</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-            </div>
-            <!-- Right Arrow -->
-            <button class="scroll-arrow scroll-right" onclick="scrollContainer('bride-profiles', 1)">❯</button>
-        </div>
+        <!-- Start: Life Partner Steps Callout -->
+        <div class="container my-4">
+            <div class="steps-callout p-4 p-md-5">
+                <h3 class="steps-title text-center mb-2">Want To Find Your Life Partner?</h3>
+                <p class="text-center text-muted mb-4">Join our community matrimony and start your journey to finding your soulmate by following these steps</p>
 
-        <h2 class="text-center">Groom Profiles</h2>
-        <div class="profile-wrapper">
-            <!-- Left Arrow -->
-            <button class="scroll-arrow scroll-left" onclick="scrollContainer('groom-profiles', -1)">❮</button>
-            <div class="profile-scroll-container" id="groom-profiles">
-                @foreach($users as $user)
-                    @if ($user->role == 'groom')
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                @if ($user->img_1)
-                                    <div x-data="imageLoader()" x-init="fetchImage('{{ $user->img_1 }}')">
-                                        <template x-if="imageUrl">
-                                            <img class="profile-image" :src="imageUrl" alt="Groom Profile Image" />
-                                        </template>
-                                        <template x-if="!imageUrl">
-                                            <div class="no-profile-photo">Loading Image...</div>
-                                        </template>
-                                    </div>
-                                @elseif ($user->img_2)
-                                    <div x-data="imageLoader()" x-init="fetchImage('{{ $user->img_2 }}')">
-                                        <template x-if="imageUrl">
-                                            <img class="profile-image" :src="imageUrl" alt="Groom Profile Image" />
-                                        </template>
-                                        <template x-if="!imageUrl">
-                                            <div class="no-profile-photo">Loading Image...</div>
-                                        </template>
-                                    </div>
-                                @elseif ($user->img_3)
-                                    <div x-data="imageLoader()" x-init="fetchImage('{{ $user->img_3 }}')">
-                                        <template x-if="imageUrl">
-                                            <img class="profile-image" :src="imageUrl" alt="Groom Profile Image" />
-                                        </template>
-                                        <template x-if="!imageUrl">
-                                            <div class="no-profile-photo">Loading Image...</div>
-                                        </template>
-                                    </div>
-                                @else
-                                    <div class="no-profile-photo">No Profile Photo Displayed</div>
-                                @endif
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">{{ $user->first_name }} </h5>
-                                    <p class="card-text">{{ \Carbon\Carbon::parse($user->date_of_birth)->age }} years</p>
-                                     <p class="card-text">{{ $user->bio }}</p>
-                                    <span class="view-profile" onclick="location.href='{{ route('user.show_profile', $user->id) }}'">View Profile</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
+                <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 gap-md-4 steps-row">
+                    <div class="d-inline-flex align-items-center step-item">
+                        <span class="step-badge me-2">1</span>
+                        <span class="step-text">Register</span>
+                    </div>
+                    <span class="step-arrow">→</span>
+
+                    <div class="d-inline-flex align-items-center step-item">
+                        <span class="step-badge me-2">2</span>
+                        <span class="step-text">Login your account</span>
+                    </div>
+                    <span class="step-arrow">→</span>
+
+                    <div class="d-inline-flex align-items-center step-item">
+                        <span class="step-badge me-2">3</span>
+                        <span class="step-text">Buy a package</span>
+                    </div>
+                    <span class="step-arrow">→</span>
+
+                    <div class="d-inline-flex align-items-center step-item">
+                        <span class="step-badge me-2">4</span>
+                        <span class="step-text">Create a profile</span>
+                    </div>
+                    <span class="step-arrow">→</span>
+
+                    <div class="d-inline-flex align-items-center step-item">
+                        <span class="step-badge me-2">5</span>
+                        <span class="step-text">Start Searching</span>
+                    </div>
+                </div>
             </div>
-            <!-- Right Arrow -->
-            <button class="scroll-arrow scroll-right" onclick="scrollContainer('groom-profiles', 1)">❯</button>
         </div>
-    </div>
-    </div>
+        <!-- End: Life Partner Steps Callout -->
+
+        <style>
+            .steps-callout {
+                background: #fff;
+                border: 2px solid rgba(96, 181, 255, 0.45); /* theme blue tint */
+                border-radius: 16px;
+                box-shadow: 0 4px 16px rgba(96, 181, 255, 0.12);
+            }
+            .steps-title {
+                color: #2574c4; /* theme-friendly blue */
+                font-weight: 700;
+                letter-spacing: 0.3px;
+            }
+            .step-badge {
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                background: #60B5FF; /* fallback */
+                background: linear-gradient(135deg, #60B5FF, #4da0e6);
+                color: #fff;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                box-shadow: 0 2px 6px rgba(96, 181, 255, 0.35);
+            }
+            .step-text {
+                color: #2574c4;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+            .step-arrow {
+                color: #60B5FF;
+                font-size: 1.25rem;
+                margin: 0 4px;
+            }
+            .steps-row .step-item { font-size: 1rem; }
+            @media (max-width: 576px) {
+                .steps-row .step-item { font-size: 0.95rem; }
+                .step-badge { width: 30px; height: 30px; }
+                .step-arrow { font-size: 1.1rem; }
+            }
+        </style>
+        </div>
 
     <script>
         // Function to handle the scrolling behavior
@@ -432,8 +405,11 @@
         // Function to check if arrows should be visible
         function checkArrowVisibility(containerId) {
             const container = document.getElementById(containerId);
-            const leftArrow = container.parentNode.querySelector('.scroll-arrow.scroll-left');
-            const rightArrow = container.parentNode.querySelector('.scroll-arrow.scroll-right');
+            if (!container) { return; }
+            const wrapper = container.parentNode;
+            if (!wrapper) { return; }
+            const leftArrow = wrapper.querySelector('.scroll-arrow.scroll-left');
+            const rightArrow = wrapper.querySelector('.scroll-arrow.scroll-right');
             
             // Hide left arrow if at the beginning
             if (container.scrollLeft <= 10) {
@@ -452,20 +428,21 @@
 
         // Check arrow visibility on page load for all containers
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize arrows for bride profiles
-            checkArrowVisibility('bride-profiles');
-            
-            // Initialize arrows for groom profiles
-            checkArrowVisibility('groom-profiles');
-            
-            // Add scroll event listeners to update arrows during manual scrolling
-            document.getElementById('bride-profiles').addEventListener('scroll', function() {
+            const bride = document.getElementById('bride-profiles');
+            if (bride) {
                 checkArrowVisibility('bride-profiles');
-            });
-            
-            document.getElementById('groom-profiles').addEventListener('scroll', function() {
+                bride.addEventListener('scroll', function() {
+                    checkArrowVisibility('bride-profiles');
+                });
+            }
+
+            const groom = document.getElementById('groom-profiles');
+            if (groom) {
                 checkArrowVisibility('groom-profiles');
-            });
+                groom.addEventListener('scroll', function() {
+                    checkArrowVisibility('groom-profiles');
+                });
+            }
         });
 
         // Image Loader (Your original code)
