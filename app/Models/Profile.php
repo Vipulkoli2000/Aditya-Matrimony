@@ -130,7 +130,8 @@ class Profile extends Model
         'celestial_bodies_11',
         'celestial_bodies_12',
         'img_patrika',
-        'profile_package_id'
+        'profile_package_id',
+        'franchise_code'
     ];
 
     public function user()

@@ -26,6 +26,7 @@ use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\admin\AdvertisementController;
+use App\Http\Controllers\admin\FranchiseController;
 
 /*
  * |--------------------------------------------------------------------------
@@ -212,6 +213,19 @@ Route::get('/user/packages/all', [UserProfilesController::class, 'allPurchasedPa
         // Admin: Global Ticker Message (single field)
         Route::get('/admin/ticker', [App\Http\Controllers\admin\TickerMessageController::class, 'edit'])->name('admin.ticker.edit');
         Route::put('/admin/ticker', [App\Http\Controllers\admin\TickerMessageController::class, 'update'])->name('admin.ticker.update');
+        
+        // Franchise Management Routes
+        Route::prefix('admin/franchises')->name('admin.franchises.')->group(function () {
+            Route::get('/', [FranchiseController::class, 'index'])->name('index');
+            Route::get('/create', [FranchiseController::class, 'create'])->name('create');
+            Route::post('/', [FranchiseController::class, 'store'])->name('store');
+            Route::get('/{franchise}', [FranchiseController::class, 'show'])->name('show');
+            Route::get('/{franchise}/edit', [FranchiseController::class, 'edit'])->name('edit');
+            Route::put('/{franchise}', [FranchiseController::class, 'update'])->name('update');
+            Route::delete('/{franchise}', [FranchiseController::class, 'destroy'])->name('destroy');
+            Route::get('/{franchise}/toggle-status', [FranchiseController::class, 'toggleStatus'])->name('toggle-status');
+        });
+        
         //     return view('admin.dashboard');
         // })->name('admin.dashboard');
     });

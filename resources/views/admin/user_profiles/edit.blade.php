@@ -930,11 +930,11 @@
                     <div>
                         <label for="mobile">Mobile</label>
                         <div class="flex items-center">
-                             <input type="text" id="mobile" name="mobile" class="form-input" value="{{ $profile->mobile }}"
-                                   placeholder="Enter mobile number" pattern="^\[0-9]{10}$" 
-                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
-                                   required>
+                             <input type="tel" id="mobile" name="mobile" class="form-input" value="{{ $profile->mobile }}"
+                                   placeholder="Enter mobile number (10 digits or +91XXXXXXXXXX)" maxlength="13" inputmode="numeric"
+                                   oninput="this.value = this.value.replace(/(?!^)[^0-9]/g, '')">
                         </div>
+                        <small class="text-gray-500">Provide either Mobile or Email (at least one is required).</small>
                         <x-input-error :messages="$errors->get('mobile')" class="mt-2" />
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
@@ -970,7 +970,8 @@
                     </div>  
                     <div>
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" class="form-input" value="{{ $profile->email }}" required>
+                        <input type="email" id="email" name="email" class="form-input" value="{{ $profile->email }}">
+                        <small class="text-gray-500">Provide either Email or Mobile (at least one is required).</small>
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
                     

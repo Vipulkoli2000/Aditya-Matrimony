@@ -84,7 +84,11 @@ class ProfilesController extends Controller
         $otherCasteId = Caste::where('name', 'Other')->value('id');
         $otherSubcasteId = SubCaste::where('name', 'Other')->value('id');
         
-        $validationRules = [];
+        $validationRules = [
+            // Require at least one of email or mobile; allow both
+            'email'  => 'nullable|required_without:mobile|email|max:100',
+            'mobile' => 'nullable|required_without:email|string|max:20',
+        ];
         
         // If "Other" caste is selected, require custom_caste
         if ($request->caste == $otherCasteId) {
@@ -102,6 +106,15 @@ class ProfilesController extends Controller
         }
         
         $data = $request->all();
+
+        // Normalize mobile: keep last 10 digits and prefix +91
+        if ($request->filled('mobile')) {
+            $digits = preg_replace('/\D+/', '', $request->input('mobile'));
+            if (strlen($digits) >= 10) {
+                $last10 = substr($digits, -10);
+                $data['mobile'] = '+91' . $last10;
+            }
+        }
         if ($request->hasFile('img_1')) {
             if (!empty($profile->img_1) && Storage::exists('public/images/'.$profile->img_1)) {
                 Storage::delete('public/images/'.$profile->img_1);

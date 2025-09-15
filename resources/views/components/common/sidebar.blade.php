@@ -278,6 +278,42 @@
                 </li>
 
                 <li class="menu nav-item">
+                    <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'franchises' }"
+                        @click="activeDropdown === 'franchises' ? activeDropdown = null : activeDropdown = 'franchises'">
+                        <div class="flex items-center">
+                            <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5"
+                                    d="M22 7.81C22 6.8 21.36 6 20.55 6H16.45C15.64 6 15 6.8 15 7.81V16.19C15 17.2 15.64 18 16.45 18H20.55C21.36 18 22 17.2 22 16.19V7.81Z"
+                                    fill="currentColor" />
+                                <path
+                                    d="M9 7.81C9 6.8 8.36 6 7.55 6H3.45C2.64 6 2 6.8 2 7.81V16.19C2 17.2 2.64 18 3.45 18H7.55C8.36 18 9 17.2 9 16.19V7.81Z"
+                                    fill="currentColor" />
+                                <path opacity="0.5"
+                                    d="M13 4C13.55 4 14 3.55 14 3C14 2.45 13.55 2 13 2H11C10.45 2 10 2.45 10 3C10 3.55 10.45 4 11 4H13Z"
+                                    fill="currentColor" />
+                                <path
+                                    d="M13 22C13.55 22 14 21.55 14 21C14 20.45 13.55 20 13 20H11C10.45 20 10 20.45 10 21C10 21.55 10.45 22 11 22H13Z"
+                                    fill="currentColor" />
+                            </svg>
+                            <span
+                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Franchise Management</span>
+                        </div>
+                        <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'franchises' }">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                    </button>
+                    <ul x-cloak x-show="activeDropdown === 'franchises'" x-collapse class="sub-menu text-gray-500">
+                        <li><a href="{{ route('admin.franchises.index') }}">Franchises</a></li>
+                        <li><a href="{{ route('admin.franchises.create') }}">Add Franchise</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu nav-item">
                     <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'users' }"
                         @click="activeDropdown === 'users' ? activeDropdown = null : activeDropdown = 'users'">
                         <div class="flex items-center">
