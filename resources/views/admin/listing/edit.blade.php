@@ -20,7 +20,7 @@
             </div>
         @endif
 
-        <form action="{{ route('listing.update', $listing->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <form id="listingEditForm" action="{{ route('listing.update', $listing->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
             @csrf
             @method('PUT')
 
@@ -88,14 +88,15 @@
 
                 <!-- Email -->
                 <div>
-                    <label for="email">Email<span class="text-danger">*</span></label>
-                    <input id="email" type="email" name="email" class="form-input" value="{{ old('email', $listing->email) }}" required>
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email" class="form-input" value="{{ old('email', $listing->email) }}">
+                    <p class="text-xs text-gray-500 mt-1">At least one of Email or Mobile is required.</p>
                 </div>
 
                 <!-- Mobile -->
                 <div>
-                    <label for="mobile">Mobile<span class="text-danger">*</span></label>
-                    <input id="mobile" type="text" name="mobile" class="form-input" value="{{ old('mobile', $listing->mobile) }}" required>
+                    <label for="mobile">Mobile</label>
+                    <input id="mobile" type="text" name="mobile" class="form-input" value="{{ old('mobile', $listing->mobile) }}">
                 </div>
             </div>
 
@@ -165,6 +166,46 @@
             </div>
 
             <button type="submit" class="btn btn-primary !mt-6">Update Listing</button>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.getElementById('listingEditForm');
+                    if (!form) return;
+                    const email = document.getElementById('email');
+                    const mobile = document.getElementById('mobile');
+
+                    function ensureEitherEmailOrMobile(e) {
+                        const hasEmail = email && email.value.trim().length > 0;
+                        const hasMobile = mobile && mobile.value.trim().length > 0;
+                        const existing = document.getElementById('emailMobileError');
+                        if (!hasEmail && !hasMobile) {
+                            e.preventDefault();
+                            if (!existing) {
+                                const err = document.createElement('div');
+                                err.id = 'emailMobileError';
+                                err.className = 'text-danger text-sm mt-1';
+                                err.textContent = 'Please provide at least one of Email or Mobile.';
+                                mobile.parentElement.appendChild(err);
+                            } else {
+                                existing.classList.remove('hidden');
+                            }
+                            (email || mobile).focus();
+                        } else if (existing) {
+                            existing.classList.add('hidden');
+                        }
+                    }
+
+                    form.addEventListener('submit', ensureEitherEmailOrMobile);
+                    [email, mobile].forEach(function (el) {
+                        if (!el) return;
+                        el.addEventListener('input', function () {
+                            const existing = document.getElementById('emailMobileError');
+                            if (existing && (email.value.trim() || mobile.value.trim())) {
+                                existing.classList.add('hidden');
+                            }
+                        });
+                    });
+                });
+            </script>
         </form>
     </div>
 </x-layout.admin>

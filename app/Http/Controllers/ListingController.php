@@ -85,14 +85,20 @@ class ListingController extends Controller
      */
     public function store(Request $request)
     {
+        // Normalize empty strings to null so validation with 'nullable' + 'required_without' works as intended
+        $request->merge([
+            'email' => trim((string) $request->input('email')) === '' ? null : trim((string) $request->input('email')),
+            'mobile' => trim((string) $request->input('mobile')) === '' ? null : trim((string) $request->input('mobile')),
+        ]);
+
         $validator = Validator::make($request->all(), [
             'listing_category_id' => 'required|exists:listing_categories,id',
             'business_name' => 'required|string|max:255',
             'description' => 'required|string',
             'contact_person' => 'required|string|max:255',
             'address' => 'required|string',
-            'email' => 'required|email|max:255',
-            'mobile' => 'required|string|max:20',
+            'email' => 'nullable|email|max:255|required_without:mobile',
+            'mobile' => 'nullable|string|max:20|required_without:email',
             'country' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -106,6 +112,9 @@ class ListingController extends Controller
         }
         
         $data = $request->except('photo');
+        // Ensure NOT NULL DB columns receive empty strings instead of nulls
+        $data['email'] = $data['email'] ?? '';
+        $data['mobile'] = $data['mobile'] ?? '';
         
         // Handle file upload if provided
         if ($request->hasFile('photo')) {
@@ -150,14 +159,20 @@ class ListingController extends Controller
     {
         $listing = Listing::findOrFail($id);
         
+        // Normalize empty strings to null so validation with 'nullable' + 'required_without' works as intended
+        $request->merge([
+            'email' => trim((string) $request->input('email')) === '' ? null : trim((string) $request->input('email')),
+            'mobile' => trim((string) $request->input('mobile')) === '' ? null : trim((string) $request->input('mobile')),
+        ]);
+
         $validator = Validator::make($request->all(), [
             'listing_category_id' => 'required|exists:listing_categories,id',
             'business_name' => 'required|string|max:255',
             'description' => 'required|string',
             'contact_person' => 'required|string|max:255',
             'address' => 'required|string',
-            'email' => 'required|email|max:255',
-            'mobile' => 'required|string|max:20',
+            'email' => 'nullable|email|max:255|required_without:mobile',
+            'mobile' => 'nullable|string|max:20|required_without:email',
             'country' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -171,6 +186,9 @@ class ListingController extends Controller
         }
         
         $data = $request->except(['photo', '_token', '_method', 'remove_photo']);
+        // Ensure NOT NULL DB columns receive empty strings instead of nulls
+        $data['email'] = $data['email'] ?? '';
+        $data['mobile'] = $data['mobile'] ?? '';
         
         // Handle photo removal if requested
         if ($request->filled('remove_photo') && $request->remove_photo == '1') {
