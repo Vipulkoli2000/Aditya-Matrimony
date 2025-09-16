@@ -7,6 +7,7 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Models\ProfilePackage;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AdminDashboardController extends Controller
 {
@@ -56,6 +57,30 @@ class AdminDashboardController extends Controller
         ));
     }
     
+
+    /**
+     * Franchise/Admin summary dashboard: shows profile counts.
+     * - If franchise is logged in, restrict to that franchise_code
+     * - If admin is logged in, show global counts
+     */
+    public function summary()
+    {
+        $baseQuery = Profile::query();
+
+        // If franchise, filter by their franchise_code
+        if (Auth::guard('franchise')->check()) {
+            $franchise = Auth::guard('franchise')->user();
+            $baseQuery->where('franchise_code', $franchise->franchise_code);
+        }
+
+        // Clone the query to avoid side-effects
+        $totalProfiles = (clone $baseQuery)->count();
+        $monthlyProfiles = (clone $baseQuery)
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->count();
+
+        return view('admin.franchise-dashboard', compact('totalProfiles', 'monthlyProfiles'));
+    }
 
     public function showExpiringPackages()
     {

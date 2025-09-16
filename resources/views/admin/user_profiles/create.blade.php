@@ -49,14 +49,16 @@
             
             <div>
                 <label for="mobile" class="block text-sm font-medium">Mobile</label>
-                <input type="text" name="mobile" id="mobile" value="{{ old('mobile') }}"
-                       class="mt-1 block w-full border-gray-300 rounded-md" placeholder="e.g., 9876543210" required>
+                <input type="tel" name="mobile" id="mobile" value="{{ old('mobile') }}"
+                       class="mt-1 block w-full border-gray-300 rounded-md" placeholder="e.g., +919876543210 or 9876543210">
+                <small class="text-gray-500">Provide either Mobile or Email (at least one is required).</small>
             </div>
             
             <div>
                 <label for="email" class="block text-sm font-medium">Email</label>
                 <input type="email" name="email" id="email" value="{{ old('email') }}"
-                       class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Enter Email..." required>
+                       class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Enter Email...">
+                <small class="text-gray-500">Provide either Email or Mobile (at least one is required).</small>
             </div>
         </div>
             

@@ -9,7 +9,15 @@
                     Add Profile 
                 </a>
             </div>
-        @endrole   
+        @endrole  
+        @if(Auth::guard('franchise')->check())
+            <x-excel-button :link="route('user_profiles.import')" />
+            <div class="w-[120px]">
+                <a href="{{ route('user_profiles.create') }}" class="btn btn-success px-4 py-2">
+                    Add Profile 
+                </a>
+            </div>
+        @endif  
     </div> 
     <br><br>
     <div x-data="form"> 
@@ -106,9 +114,11 @@
                                         <li style="display: inline-block; vertical-align: top;">
                                             <x-edit-button :link=" route('user_profiles.edit', $profile->id)" />                               
                                         </li>
+                                        @role(['admin'])
                                         <li style="display: inline-block; vertical-align: top;">
                                             <x-delete-button :link=" route('user_profiles.destroy', $profile->id)" />  
-                                        </li>   
+                                        </li>
+                                        @endrole   
                                     </ul>
                                 </td>
                             </tr>

@@ -97,6 +97,7 @@ $profileData = [
 'role' => $row['type'],
 'email' => $row['email'],
 'mobile' => $mobile,
+'franchise_code' => auth('franchise')->check() ? auth('franchise')->user()->franchise_code : ($row['franchise_code'] ?? null),
 ];
 $profile = Profile::create($profileData);
 

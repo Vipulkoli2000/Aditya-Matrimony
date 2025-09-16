@@ -74,6 +74,35 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     // Public route for getting subcastes (needed for registration form)
     Route::get('castes/{caste}/subcastes', [App\Http\Controllers\admin\CastesController::class, 'getSubcastes'])->name('castes.subcastes');
 
+    // Franchise welcome route - outside of auth,permission middleware
+    Route::get('/franchise/welcome', [App\Http\Controllers\FranchiseController::class, 'welcome'])
+        ->name('franchise.welcome')
+        ->middleware('auth.admin_or_franchise');
+    
+    // User Profiles routes - accessible by both admin and franchise
+    Route::group(['namespace' => 'admin', 'middleware' => 'auth.admin_or_franchise'], function () {
+        // Franchise/Admin shared dashboard summary
+        Route::get('/franchise/dashboard', [App\Http\Controllers\admin\AdminDashboardController::class, 'summary'])
+            ->name('franchise.dashboard');
+
+        Route::get('/user_profiles', 'ProfilesController@index')->name('user_profiles.index');
+        Route::get('/user_profiles/{id}/edit', 'ProfilesController@edit')->name('user_profiles.edit');
+        Route::delete('/user_profiles/{id}', 'ProfilesController@destroy')->name('user_profiles.destroy');
+        Route::put('/user_profiles/{id}', 'ProfilesController@update')->name('user_profiles.update');
+        Route::get('/import/user_profiles/', 'ProfilesController@import')->name('user_profiles.import');
+        Route::post('import_user_profiles','ProfilesController@importUserProfilesExcel')->name('user_profiles.importUserProfilesExcel');
+  
+        Route::get('user_profiles/{id}/download', [App\Http\Controllers\admin\ProfilesController::class, 'download'])
+            ->name('user_profiles.download');
+        // Link to download invoice PDF
+        Route::get('user_profiles/{id}/invoice', [App\Http\Controllers\admin\ProfilesController::class, 'downloadInvoice'])
+            ->name('user_profiles.download_invoice');
+
+        // New routes for adding a profile/user/member
+        Route::get('/user_profiles/create', 'ProfilesController@create')->name('user_profiles.create');
+        Route::post('/user_profiles', 'ProfilesController@store')->name('user_profiles.store');
+    });
+
     Route::group(['middleware' => ['auth', 'permission']], function () {
         Route::group(['prefix' => 'users', 'namespace' => 'admin'], function () {
             Route::get('/', 'UsersController@index')->name('users.index');
@@ -83,25 +112,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::get('/{user}/edit', 'UsersController@edit')->name('users.edit');
             Route::patch('/{user}/update', 'UsersController@update')->name('users.update');
             Route::delete('/{user}/destroy', 'UsersController@destroy')->name('users.destroy');
-        });
-
-        Route::group(['namespace' => 'admin'], function () {
-            Route::get('/user_profiles', 'ProfilesController@index')->name('user_profiles.index');
-            Route::get('/user_profiles/{id}/edit', 'ProfilesController@edit')->name('user_profiles.edit');
-            Route::delete('/user_profiles/{id}', 'ProfilesController@destroy')->name('user_profiles.destroy');
-            Route::put('/user_profiles/{id}', 'ProfilesController@update')->name('user_profiles.update');
-            Route::get('/import/user_profiles/', 'ProfilesController@import')->name('user_profiles.import');
-            Route::post('import_user_profiles','ProfilesController@importUserProfilesExcel')->name('user_profiles.importUserProfilesExcel');
-      
-            Route::get('user_profiles/{id}/download', [App\Http\Controllers\admin\ProfilesController::class, 'download'])
-    ->name('user_profiles.download');
-            // Link to download invoice PDF
-            Route::get('user_profiles/{id}/invoice', [App\Http\Controllers\admin\ProfilesController::class, 'downloadInvoice'])
-                ->name('user_profiles.download_invoice');
-
-         // New routes for adding a profile/user/member
-    Route::get('/user_profiles/create', 'ProfilesController@create')->name('user_profiles.create');
-    Route::post('/user_profiles', 'ProfilesController@store')->name('user_profiles.store');
         });
 
         Route::get('/user/profile/{id}', [UserProfilesController::class, 'show'])->name('user.profile');

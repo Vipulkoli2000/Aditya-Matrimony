@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Default\UpdateProfileRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class ProfilesController extends Controller
 {
@@ -27,10 +28,16 @@ class ProfilesController extends Controller
     public function index(Request $request)
     {
         $query = Profile::query()
-            ->join('users', 'profiles.user_id', '=', 'users.id') // Ensure the join is done first
-            ->select('profiles.*', 'users.email', 'users.mobile', 'users.active') // Select necessary fields
+            ->join('users', 'profiles.user_id', '=', 'users.id')
+            ->select('profiles.*', 'users.email', 'users.mobile', 'users.active')
             ->orderByDesc('users.active')
             ->orderByDesc('profiles.id');
+
+        // If logged in as franchise, filter profiles by franchise_code
+        if (Auth::guard('franchise')->check()) {
+            $franchise = Auth::guard('franchise')->user();
+            $query->where('profiles.franchise_code', $franchise->franchise_code);
+        }
     
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -57,7 +64,7 @@ class ProfilesController extends Controller
     
     
     
-
+    
 
     public function edit(string $id)
     {
@@ -422,6 +429,11 @@ class ProfilesController extends Controller
 
     public function destroy(string $id)
     {
+        // Authorization: Only allow deletion when an Admin (web guard) is logged in
+        if (!(Auth::check() && Auth::user()->hasRole('admin'))) {
+            return redirect()->back()->with('error', 'You do not have permission to delete profiles.');
+        }
+
         // Find the profile by ID
         $profile = Profile::find($id);
     
@@ -475,6 +487,11 @@ class ProfilesController extends Controller
      */
     public function store(Request $request)
 {
+    // If franchise logged in, auto-assign franchise_code
+    if (Auth::guard('franchise')->check()) {
+        $request->merge(['franchise_code' => Auth::guard('franchise')->user()->franchise_code]);
+    }
+
     // Normalize mobile before validation
     $mobile = $request->input('mobile');
     if (strpos($mobile, '+91') !== 0) {
@@ -533,6 +550,7 @@ $user->assignRole('member');
         'role'       => $request->role,
         'mobile'     => $mobile,
         'email'      => $request->email,
+        'franchise_code' => $request->franchise_code,
     ]);
 
     // Process package selection
@@ -562,19 +580,25 @@ $user->assignRole('member');
 
 public function download($id)
 {
-    $profile = Profile::findOrFail($id);
-    // Get the authenticated user's profile which contains img_1
-    $user = auth()->user()->profile()->first();
+    try {
+        $profile = Profile::findOrFail($id);
+        
+        // Load the Blade view for PDF
+        $pdf = Pdf::loadView('admin.user_profiles.pdf', compact('profile'));
 
-    // Load the Blade view for PDF, passing both profile and user variables
-    $pdf = Pdf::loadView('admin.user_profiles.pdf', compact('profile', 'user'));
+        // Generate a dynamic filename - handle null middle names
+        $nameParts = array_filter([
+            $profile->first_name,
+            $profile->middle_name,
+            $profile->last_name
+        ]);
+        $filename = implode('.', $nameParts) . '(' . date('d-m-Y') . ').pdf';
 
-    // Generate a dynamic filename
-    $filename = $profile->first_name . '.' . $profile->middle_name . '.' . $profile->last_name
-                  . '(' . date('d') . '-' . date('m') . '-' . date('Y') . ').pdf';
-
-    // Return the PDF as a download
-    return $pdf->download($filename);
+        // Return the PDF as a download
+        return $pdf->download($filename);
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Error generating PDF: ' . $e->getMessage());
+    }
 }
 
     /**
@@ -582,24 +606,37 @@ public function download($id)
      */
     public function downloadInvoice($profileId)
     {
-        $profile = Profile::findOrFail($profileId);
-        if (empty($profile->profile_package_id)) {
-            return redirect()->back()->with('error', 'No invoice available for this user.');
+        try {
+            $profile = Profile::findOrFail($profileId);
+            
+            if (empty($profile->profile_package_id)) {
+                return redirect()->back()->with('error', 'No invoice available for this user.');
+            }
+            
+            // Retrieve the purchased package with pivot data
+            $package = $profile->profilePackages()
+                ->wherePivot('id', $profile->profile_package_id)
+                ->first();
+                
+            if (!$package) {
+                return redirect()->back()->with('error', 'Package not found for this invoice.');
+            }
+
+            // Generate PDF using the invoice view
+            $pdf = Pdf::loadView('default.view.profile.user_packages.invoice', [
+                'package' => $package,
+                'user' => $profile,
+                'invoiceDate' => now(),
+                'invoiceNumber' => 'INV-' . str_pad($profile->profile_package_id, 6, '0', STR_PAD_LEFT),
+            ]);
+
+            // Generate safe filename
+            $filename = 'invoice-' . preg_replace('/[^a-zA-Z0-9-_]/', '', $package->name) . '-' . date('dmY') . '.pdf';
+            
+            // Download the generated PDF
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error generating invoice: ' . $e->getMessage());
         }
-        // Retrieve the purchased package with pivot data
-        $package = $profile->profilePackages()
-            ->wherePivot('id', $profile->profile_package_id)
-            ->firstOrFail();
-
-        // Generate PDF using the invoice view
-        $pdf = Pdf::loadView('default.view.profile.user_packages.invoice', [
-            'package' => $package,
-            'user' => $profile,
-            'invoiceDate' => now(),
-            'invoiceNumber' => 'INV-' . time(),
-        ]);
-
-        // Download the generated PDF
-        return $pdf->download('invoice-' . $package->name . '.pdf');
     }
 }

@@ -36,24 +36,44 @@ class AuthenticatedSessionController extends Controller
         // Determine the login field (email or mobile) based on the input
         $loginField = filter_var($credentials['email'], FILTER_VALIDATE_EMAIL) ? 'email' : 'mobile';
     
-        // Attempt authentication using the determined field
-        if (Auth::attempt([$loginField => $credentials['email'], 'password' => $credentials['password']])) {
-            $request->session()->regenerate();
-    
-            // Check if the login request is for admin login
-            $isAdminRequest = $request->input('is_admin');
-    
-            if ($isAdminRequest == "true" || $isAdminRequest === true) {
+        // Check if the login request is for admin login
+        $isAdminRequest = $request->input('is_admin');
+        
+        if ($isAdminRequest == "true" || $isAdminRequest === true) {
+            // First, try franchise authentication
+            if (Auth::guard('franchise')->attempt([
+                $loginField => $credentials['email'], 
+                'password' => $credentials['password'],
+                'active' => 1
+            ])) {
+                $request->session()->regenerate();
+                return redirect()->intended(route('franchise.welcome'));
+            }
+            
+            // If franchise authentication fails, try admin authentication
+            if (Auth::attempt([$loginField => $credentials['email'], 'password' => $credentials['password']])) {
+                $request->session()->regenerate();
+                
                 // Admin login path: ensure the user has admin privileges
                 if (auth()->user()->roles->pluck('name')->first() === 'admin') {
-                    return redirect()->intended('/admin');
+                    return redirect()->intended('/admin/dashboard');
                 } else {
                     Auth::logout();
                     throw ValidationException::withMessages([
                         'email' => ['You do not have admin privileges to log in as admin.'],
                     ]);
                 }
-            } else {
+            }
+            
+            // Both franchise and admin authentication failed
+            throw ValidationException::withMessages([
+                'email' => ['Invalid credentials.'],
+            ]);
+        } else {
+            // Member login flow
+            if (Auth::attempt([$loginField => $credentials['email'], 'password' => $credentials['password']])) {
+                $request->session()->regenerate();
+                
                 if (auth()->user()->roles->pluck('name')->first() === 'member') {
                     $user = auth()->user();
                     $profile = $user->profile;
@@ -90,7 +110,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        // Check which guard is authenticated and logout accordingly
+        if (Auth::guard('franchise')->check()) {
+            Auth::guard('franchise')->logout();
+        } else {
+            Auth::guard('web')->logout();
+        }
 
         $request->session()->invalidate();
 

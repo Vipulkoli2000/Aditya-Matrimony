@@ -35,10 +35,14 @@ return [
     |
     */
 
-    'guards' => [
+'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'franchise' => [
+            'driver' => 'session',
+            'provider' => 'franchises',
         ],
     ],
 
@@ -59,10 +63,14 @@ return [
     |
     */
 
-    'providers' => [
+'providers' => [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'franchises' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Franchise::class,
         ],
 
         // 'users' => [

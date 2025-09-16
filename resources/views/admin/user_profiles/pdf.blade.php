@@ -321,7 +321,7 @@
       </div>
 
         @if($profile->img_patrika)
-            <img src="file://{{ public_path('storage/images/' . $profile->img_1) }}" alt="Profile Image 1" 
+            <img src="file://{{ public_path('storage/images/' . $profile->img_patrika) }}" alt="Patrika Image" 
               style="display: inline-block; width: 630px; height: 300px;">
        @else
          <div style="width:500px; height:200px; display:flex; align-items:center; justify-content:center; text-align:center; border:1px solid #ccc; margin: 0 auto;">
