@@ -19,7 +19,7 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        if(auth()->user()->roles->pluck('name')->first() === 'member'){
+        if(auth()->user() && auth()->user()->roles && auth()->user()->roles->pluck('name')->first() === 'member'){
             
             
         }
@@ -28,7 +28,7 @@ class ProfileController extends Controller
 
     public function edit(User $user)
     {
-        if(auth()->user()->roles->pluck('name')->first() === 'member'){
+        if(auth()->user() && auth()->user()->roles && auth()->user()->roles->pluck('name')->first() === 'member'){
             
         }
 
@@ -55,7 +55,7 @@ class ProfileController extends Controller
             #Commit Transaction
             DB::commit();
 
-            if(auth()->user()->roles->pluck('name')->first() === 'member'){
+            if(auth()->user() && auth()->user()->roles && auth()->user()->roles->pluck('name')->first() === 'member'){
                
             }
 
@@ -82,7 +82,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        if(auth()->user()->roles->pluck('name')->first() === 'member'){
+        if(auth()->user() && auth()->user()->roles && auth()->user()->roles->pluck('name')->first() === 'member'){
          
         }
 

@@ -24,8 +24,8 @@ class AuthenticateAdminOrFranchise
 
         // Check if user is authenticated as admin
         if (Auth::guard('web')->check()) {
-            $user = Auth::user();
-            if ($user->roles && $user->roles->pluck('name')->contains('admin')) {
+            $user = Auth::guard('web')->user();
+            if ($user && $user->roles && $user->roles->pluck('name')->contains('admin')) {
                 return $next($request);
             }
         }

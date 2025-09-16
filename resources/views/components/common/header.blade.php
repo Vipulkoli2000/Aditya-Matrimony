@@ -200,8 +200,9 @@
                                 </div>
                             </div>
                         </li>
+                        @if(!Auth::guard('franchise')->check())
                         <li>
-                            <a href="/profile" class="dark:hover:text-white" @click="toggle">
+                            <a href="{{ route('profiles.update_password') }}" class="dark:hover:text-white" @click="toggle">
                                 <svg class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" width="18" height="18"
                                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -215,7 +216,7 @@
                                             d="M9 16C9 16.5523 8.55228 17 8 17C7.44772 17 7 16.5523 7 16C7 15.4477 7.44772 15 8 15C8.55228 15 9 15.4477 9 16Z"
                                             fill="currentColor" />
                                         <path
-                                            d="M13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16C11 15.4477 11.4477 15 12 15C12.5523 15 13 15.4477 13 16Z"
+                                            d="M13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16C11.4477 15 12 15C12.5523 15 13 15.4477 13 16Z"
                                             fill="currentColor" />
                                         <path
                                             d="M17 16C17 16.5523 16.5523 17 16 17C15.4477 17 15 16.5523 15 16C15 15.4477 15.4477 15 16 15C16.5523 15 17 15.4477 17 16Z"
@@ -224,6 +225,7 @@
                                 </svg>
                                 Change Password</a>
                         </li>
+                        @endif
                         @if(!Auth::guard('franchise')->check())
                         <li>
                                 <a href="{{ route('profile.edit', ['user' => Auth::id()]) }}" class="dark:hover:text-white" @click="toggle">
@@ -238,11 +240,14 @@
                                 Profile</a>
                         </li>
                         @endif
-                        <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                        @if(Auth::guard('franchise')->check())
+                            <form id="logout-form" method="POST" action="{{ route('franchise.logout') }}">
+                        @else
+                            <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                        @endif
                             @csrf
                             <li class="border-t border-white-light dark:border-white-light/10">
-                                <!-- <a href="{{ route('logout') }}" class=" text-danger !py-3" onclick="event.preventDefault(); this.closest('form').submit();"> -->
-                                <a href="{{ route('logout') }}" class=" text-danger !py-3" @click="event.preventDefault(); logout();">
+                                <a href="#" class=" text-danger !py-3" @click="event.preventDefault(); logout();">
                                     <svg class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0 rotate-90" width="18" height="18"
                                         viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path opacity="0.5"

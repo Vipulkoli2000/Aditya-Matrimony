@@ -15,7 +15,7 @@ class EnsureValidPackage
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->roles->pluck('name')->first() === 'member') {
+        if (Auth::check() && Auth::user()->roles && Auth::user()->roles->pluck('name')->first() === 'member') {
             $allowed = [
                 'user_packages.create',
                 'purchase_packages.store',

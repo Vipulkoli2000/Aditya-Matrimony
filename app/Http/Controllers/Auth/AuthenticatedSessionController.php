@@ -55,7 +55,7 @@ class AuthenticatedSessionController extends Controller
                 $request->session()->regenerate();
                 
                 // Admin login path: ensure the user has admin privileges
-                if (auth()->user()->roles->pluck('name')->first() === 'admin') {
+                if (auth()->user()->roles && auth()->user()->roles->pluck('name')->first() === 'admin') {
                     return redirect()->intended('/admin/dashboard');
                 } else {
                     Auth::logout();
@@ -74,7 +74,7 @@ class AuthenticatedSessionController extends Controller
             if (Auth::attempt([$loginField => $credentials['email'], 'password' => $credentials['password']])) {
                 $request->session()->regenerate();
                 
-                if (auth()->user()->roles->pluck('name')->first() === 'member') {
+                if (auth()->user()->roles && auth()->user()->roles->pluck('name')->first() === 'member') {
                     $user = auth()->user();
                     $profile = $user->profile;
                     // Redirect to package purchase if no package or expired

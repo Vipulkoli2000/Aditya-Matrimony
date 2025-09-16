@@ -27,6 +27,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\admin\AdvertisementController;
 use App\Http\Controllers\admin\FranchiseController;
+use App\Http\Controllers\FranchiseAuthController;
 
 /*
  * |--------------------------------------------------------------------------
@@ -78,6 +79,15 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/franchise/welcome', [App\Http\Controllers\FranchiseController::class, 'welcome'])
         ->name('franchise.welcome')
         ->middleware('auth.admin_or_franchise');
+    
+    // Franchise Authentication Routes
+    Route::middleware('guest:franchise')->group(function () {
+        Route::post('/franchise/login', [FranchiseAuthController::class, 'login'])->name('franchise.login');
+    });
+    
+    Route::middleware('auth:franchise')->group(function () {
+        Route::post('/franchise/logout', [FranchiseAuthController::class, 'logout'])->name('franchise.logout');
+    });
     
     // User Profiles routes - accessible by both admin and franchise
     Route::group(['namespace' => 'admin', 'middleware' => 'auth.admin_or_franchise'], function () {
