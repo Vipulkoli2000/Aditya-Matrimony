@@ -96,13 +96,13 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             ->name('franchise.dashboard');
 
         Route::middleware(['auth.admin_or_franchise'])->group(function () {
-            Route::get('/user_profiles', [ProfileController::class, 'index'])->name('user_profiles.index');
-            Route::get('/user_profiles/create', [ProfileController::class, 'create'])->name('user_profiles.create');
-            Route::post('/user_profiles', [ProfileController::class, 'store'])->name('user_profiles.store');
-            Route::get('/user_profiles/{profile}', [ProfileController::class, 'show'])->name('user_profiles.show');
-            Route::get('/user_profiles/{profile}/edit', [ProfileController::class, 'edit'])->name('user_profiles.edit');
-            Route::put('/user_profiles/{profile}', [ProfileController::class, 'update'])->name('user_profiles.update');
-            Route::delete('/user_profiles/{profile}', [ProfileController::class, 'destroy'])->name('user_profiles.destroy');
+            Route::get('/user_profiles', [ProfilesController::class, 'index'])->name('user_profiles.index');
+            Route::get('/user_profiles/create', [ProfilesController::class, 'create'])->name('user_profiles.create');
+            Route::post('/user_profiles', [ProfilesController::class, 'store'])->name('user_profiles.store');
+            Route::get('/user_profiles/{profile}', [ProfilesController::class, 'show'])->name('user_profiles.show');
+            Route::get('/user_profiles/{profile}/edit', [ProfilesController::class, 'edit'])->name('user_profiles.edit');
+            Route::put('/user_profiles/{profile}', [ProfilesController::class, 'update'])->name('user_profiles.update');
+            Route::delete('/user_profiles/{profile}', [ProfilesController::class, 'destroy'])->name('user_profiles.destroy');
             
             // Franchise Payment Tracking
             Route::get('/franchise/payments', [FranchiseController::class, 'franchisePayments'])->name('franchise.payments');
