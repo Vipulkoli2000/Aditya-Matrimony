@@ -48,6 +48,15 @@
             </div>
             
             <div>
+                <label for="gender" class="block text-sm font-medium">Gender</label>
+                <input type="text" name="gender" id="gender"
+                       value="{{ old('gender', old('role') === 'groom' ? 'male' : (old('role') === 'bride' ? 'female' : '')) }}"
+                       class="mt-1 block w-full border-gray-300 rounded-md bg-gray-100"
+                       placeholder="Auto set by Role" readonly>
+                <small class="text-gray-500">Selecting Groom sets Male; selecting Bride sets Female.</small>
+            </div>
+            
+            <div>
                 <label for="mobile" class="block text-sm font-medium">Mobile</label>
                 <input type="tel" name="mobile" id="mobile" value="{{ old('mobile') }}"
                        class="mt-1 block w-full border-gray-300 rounded-md" placeholder="e.g., +919876543210 or 9876543210">
@@ -85,4 +94,27 @@
         </form>
     </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const role = document.getElementById('role');
+            const gender = document.getElementById('gender');
+
+            function syncGender() {
+                if (!role || !gender) return;
+                const val = role.value;
+                if (val === 'groom') {
+                    gender.value = 'male';
+                } else if (val === 'bride') {
+                    gender.value = 'female';
+                } else {
+                    gender.value = '';
+                }
+            }
+
+            // Initialize on load
+            syncGender();
+            // Update on change
+            role && role.addEventListener('change', syncGender);
+        });
+    </script>
 </x-layout.admin>

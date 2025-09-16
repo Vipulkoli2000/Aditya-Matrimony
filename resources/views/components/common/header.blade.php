@@ -171,8 +171,9 @@
                         <span>
                             <!-- <img class="w-9 h-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
                                 src="/assets/images/user-profile.jpeg" alt="image" /> -->
+                            @php($headerUser = Auth::user() ?? Auth::guard('franchise')->user())
                             <img
-                                src="https://ui-avatars.com/api/?name={{ @Auth::user()->name }}&rounded=true"
+                                src="https://ui-avatars.com/api/?name={{ urlencode($headerUser?->name ?? 'User') }}&rounded=true"
                                 class="rounded-md w-10 h-10 object-cover"
                             />
                         </span>
@@ -186,16 +187,16 @@
                                         src="/assets/images/user-profile.jpeg"
                                         alt="image" /> -->
                                     <img
-                                        src="https://ui-avatars.com/api/?name={{ @Auth::user()->name }}&rounded=true"
+                                        src="https://ui-avatars.com/api/?name={{ urlencode($headerUser?->name ?? 'User') }}&rounded=true"
                                         class="rounded-md w-10 h-10 object-cover"
                                     />
                                 </div>
                                 <div class="ltr:pl-4 rtl:pr-4 truncate">
-                                    <h4 class="text-base">{{ @Auth::user()->name }}
+                                    <h4 class="text-base">{{ $headerUser?->name }}
                                         <!-- <span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span> -->
                                     </h4>
                                     <a class="text-black/60  hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
-                                        href="javascript:;">{{ @Auth::user()->email }}</a>
+                                        href="javascript:;">{{ $headerUser?->email }}</a>
                                 </div>
                             </div>
                         </li>
@@ -223,8 +224,9 @@
                                 </svg>
                                 Change Password</a>
                         </li>
+                        @if(!Auth::guard('franchise')->check())
                         <li>
-                            <a href="/profile/edit/{{ @Auth::user()->id }}" class="dark:hover:text-white" @click="toggle">
+                                <a href="{{ route('profile.edit', ['user' => Auth::id()]) }}" class="dark:hover:text-white" @click="toggle">
                             <svg class="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" width="18" height="18"
                                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="6" r="4" stroke="currentColor"
@@ -235,6 +237,7 @@
                                 </svg>
                                 Profile</a>
                         </li>
+                        @endif
                         <form id="logout-form" method="POST" action="{{ route('logout') }}">
                             @csrf
                             <li class="border-t border-white-light dark:border-white-light/10">

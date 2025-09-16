@@ -474,6 +474,52 @@ class ProfilesController extends Controller
     }
 
 
+    /**
+     * Export the filtered profiles list to PDF (franchise-aware)
+     */
+    public function exportPdf(Request $request)
+    {
+        // Build the same query as index(), including franchise scoping
+        $query = Profile::query()
+            ->join('users', 'profiles.user_id', '=', 'users.id')
+            ->select('profiles.*', 'users.email', 'users.mobile', 'users.active')
+            ->orderByDesc('users.active')
+            ->orderByDesc('profiles.id');
+
+        if (Auth::guard('franchise')->check()) {
+            $franchise = Auth::guard('franchise')->user();
+            $query->where('profiles.franchise_code', $franchise->franchise_code);
+        }
+
+        if ($request->has('search') && $request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw("CONCAT(COALESCE(profiles.first_name, ''), ' ', COALESCE(profiles.middle_name, ''), ' ', COALESCE(profiles.last_name, '')) LIKE ?", ["%{$search}%"])
+                  ->orWhere('profiles.first_name', 'like', "%{$search}%")
+                  ->orWhere('profiles.middle_name', 'like', "%{$search}%")
+                  ->orWhere('profiles.last_name', 'like', "%{$search}%")
+                  ->orWhere('users.email', 'like', "%{$search}%")
+                  ->orWhere('users.mobile', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $status = $request->input('status');
+            $query->where('users.active', $status);
+        }
+
+        $profiles = $query->get();
+
+        // Render the PDF view
+        $pdf = Pdf::loadView('admin.user_profiles.list_pdf', [
+            'profiles' => $profiles,
+            'generatedAt' => now(),
+        ]);
+
+        $fileName = 'profiles-' . now()->format('Ymd-His') . '.pdf';
+        return $pdf->download($fileName);
+    }
+
     public function create()
     {
         // Retrieve available packages
@@ -523,7 +569,8 @@ class ProfilesController extends Controller
         'package_id'  => 'required|exists:packages,id',
     ]);
 
-   
+    // Derive gender from role (server-side enforcement)
+    $gender = $request->role === 'groom' ? 'male' : 'female';
 
     // Create a new user with a fixed password "Aditya123"
     $user = User::create([
@@ -548,6 +595,7 @@ $user->assignRole('member');
         'middle_name'=> $request->middle_name,
         'last_name'  => $request->last_name,
         'role'       => $request->role,
+        'gender'     => $gender,
         'mobile'     => $mobile,
         'email'      => $request->email,
         'franchise_code' => $request->franchise_code,

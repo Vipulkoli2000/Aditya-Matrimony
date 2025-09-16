@@ -29,6 +29,7 @@
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search profiles" 
                             class="mr-2 px-2 py-1 border border-gray-300 rounded-md">
                         <button class="btn btn-primary px-4 py-2 mr-2" type="submit">Search</button>
+                        <a href="{{ route('user_profiles.export.pdf', request()->query()) }}" target="_blank" class="btn btn-secondary px-4 py-2 mr-2">Download PDF</a>
                         
                         {{-- @if(request('search'))
                             <a href="{{ route('user_profiles.index') }}" class="btn btn-secondary px-4 py-2">Reset</a>
@@ -69,6 +70,7 @@
                                 <th>Mobile</th>
                                 <th>Gender</th>
                                 <th>Email</th>
+                                <th>Franchise Code</th>
                                 <th>Status</th>
                                 <th>PDFs</th>
                                 <th>Invoice</th>
@@ -84,6 +86,7 @@
                                 <td>{{ $profile->mobile }}</td>
                                 <td>{{ $profile->gender }}</td>
                                 <td>{{ $profile->email }}</td>
+                                <td>{{ $profile->franchise_code ?? '-' }}</td>
                                 <td>
                                     @if(optional($profile->user)->active)
                                         <span class="text-green-600 font-bold text-xs">Active</span>

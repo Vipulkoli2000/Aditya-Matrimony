@@ -165,6 +165,12 @@
             {{ $profile->last_name ? ucfirst($profile->last_name) : 'NA' }}
         </div>
         <div class="profile-field">
+            <span>Registered Date:</span> {{ optional($profile->created_at)->format('d-m-Y') ?? 'NA' }}
+        </div>
+        <div class="profile-field">
+            <span>Franchise Code:</span> {{ $profile->franchise_code ?? '-' }}
+        </div>
+        <div class="profile-field">
             <span>Mother Tongue:</span> {{ $profile->mother_tongue ? ucfirst($profile->mother_tongue) : 'NA' }}
         </div>
         <div class="profile-field">
