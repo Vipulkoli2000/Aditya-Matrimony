@@ -95,15 +95,29 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/franchise/dashboard', [App\Http\Controllers\admin\AdminDashboardController::class, 'summary'])
             ->name('franchise.dashboard');
 
-        Route::get('/user_profiles', 'ProfilesController@index')->name('user_profiles.index');
-        Route::get('/user_profiles/{id}/edit', 'ProfilesController@edit')->name('user_profiles.edit');
-        Route::delete('/user_profiles/{id}', 'ProfilesController@destroy')->name('user_profiles.destroy');
-        Route::put('/user_profiles/{id}', 'ProfilesController@update')->name('user_profiles.update');
+        Route::middleware(['auth.admin_or_franchise'])->group(function () {
+            Route::get('/user_profiles', [ProfileController::class, 'index'])->name('user_profiles.index');
+            Route::get('/user_profiles/create', [ProfileController::class, 'create'])->name('user_profiles.create');
+            Route::post('/user_profiles', [ProfileController::class, 'store'])->name('user_profiles.store');
+            Route::get('/user_profiles/{profile}', [ProfileController::class, 'show'])->name('user_profiles.show');
+            Route::get('/user_profiles/{profile}/edit', [ProfileController::class, 'edit'])->name('user_profiles.edit');
+            Route::put('/user_profiles/{profile}', [ProfileController::class, 'update'])->name('user_profiles.update');
+            Route::delete('/user_profiles/{profile}', [ProfileController::class, 'destroy'])->name('user_profiles.destroy');
+            
+            // Franchise Payment Tracking
+            Route::get('/franchise/payments', [FranchiseController::class, 'franchisePayments'])->name('franchise.payments');
+        });
+
+        Route::get('user_profiles/{id}/download', [App\Http\Controllers\admin\ProfilesController::class, 'download'])
+            ->name('user_profiles.download');
+        // Link to download invoice PDF
+        Route::get('user_profiles/{id}/invoice', [App\Http\Controllers\admin\ProfilesController::class, 'downloadInvoice'])
+            ->name('user_profiles.download_invoice');
+
         Route::get('/import/user_profiles/', 'ProfilesController@import')->name('user_profiles.import');
         Route::post('import_user_profiles','ProfilesController@importUserProfilesExcel')->name('user_profiles.importUserProfilesExcel');
         Route::get('/user_profiles/export/pdf', 'ProfilesController@exportPdf')->name('user_profiles.export.pdf');
-  
-        Route::get('user_profiles/{id}/download', [App\Http\Controllers\admin\ProfilesController::class, 'download'])
+        Route::get('/user_profiles/{id}/download', [App\Http\Controllers\admin\ProfilesController::class, 'download'])
             ->name('user_profiles.download');
         // Link to download invoice PDF
         Route::get('user_profiles/{id}/invoice', [App\Http\Controllers\admin\ProfilesController::class, 'downloadInvoice'])
@@ -240,6 +254,8 @@ Route::get('/user/packages/all', [UserProfilesController::class, 'allPurchasedPa
             Route::get('/', [FranchiseController::class, 'index'])->name('index');
             Route::get('/create', [FranchiseController::class, 'create'])->name('create');
             Route::post('/', [FranchiseController::class, 'store'])->name('store');
+            Route::get('/{franchise}/payments', [FranchiseController::class, 'payments'])->name('payments');
+            Route::put('/{franchise}/payments', [FranchiseController::class, 'updatePayments'])->name('update-payments');
             Route::get('/{franchise}', [FranchiseController::class, 'show'])->name('show');
             Route::get('/{franchise}/edit', [FranchiseController::class, 'edit'])->name('edit');
             Route::put('/{franchise}', [FranchiseController::class, 'update'])->name('update');

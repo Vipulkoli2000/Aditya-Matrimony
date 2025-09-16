@@ -238,6 +238,19 @@
                         </div>
                     </a>
                 </li>
+                {{-- Payment Tracking for Franchise --}}
+                <li class="menu nav-item">
+                    <a href="{{ route('franchise.payments') }}" class="nav-link group">
+                        <div class="flex items-center">
+                            <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5" d="M2 8.5C2 7.11929 3.11929 6 4.5 6H19.5C20.8807 6 22 7.11929 22 8.5V15.5C22 16.8807 20.8807 18 19.5 18H4.5C3.11929 18 2 16.8807 2 15.5V8.5Z" fill="currentColor"/>
+                                <path d="M6 12C6 11.4477 6.44772 11 7 11H10C10.5523 11 11 11.4477 11 12C11 12.5523 10.5523 13 10 13H7C6.44772 13 6 12.5523 6 12Z" fill="currentColor"/>
+                                <path d="M14 12C14 11.4477 14.4477 11 15 11H17C17.5523 11 18 11.4477 18 12C18 12.5523 17.5523 13 17 13H15C14.4477 13 14 12.5523 14 12Z" fill="currentColor"/>
+                            </svg>
+                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Payment Tracking</span>
+                        </div>
+                    </a>
+                </li>
                 @else
                 @role(['admin','member'])
                 <li class="menu nav-item">

@@ -74,4 +74,20 @@ class Franchise extends Authenticatable
     {
         return $query->where('active', true);
     }
+
+    /**
+     * Get the payment records for the franchise.
+     */
+    public function payments()
+    {
+        return $this->hasMany(FranchisePayment::class);
+    }
+
+    /**
+     * Get the payment record for a specific year.
+     */
+    public function paymentForYear($year)
+    {
+        return $this->payments()->where('year', $year)->first();
+    }
 }

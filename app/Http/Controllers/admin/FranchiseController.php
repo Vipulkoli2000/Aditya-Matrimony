@@ -4,8 +4,10 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Franchise;
+use App\Models\FranchisePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class FranchiseController extends Controller
@@ -35,7 +37,7 @@ class FranchiseController extends Controller
             $query->where('active', $status);
         }
         
-        $franchises = $query->orderBy('created_at', 'desc')->paginate(15);
+        $franchises = $query->with('payments')->orderBy('created_at', 'desc')->paginate(15);
         
         return view('admin.franchises.index', compact('franchises'));
     }
@@ -150,5 +152,109 @@ class FranchiseController extends Controller
         
         return redirect()->back()
             ->with('success', "Franchise {$status} successfully!");
+    }
+
+    /**
+     * Show payment tracking page for a franchise
+     */
+    public function payments(string $id)
+    {
+        $franchise = Franchise::findOrFail($id);
+        $currentYear = request('year', date('Y'));
+        
+        // Dynamic year range based on selected year
+        $baseRange = 7;
+        $minYear = min($currentYear - $baseRange, date('Y') - $baseRange);
+        $maxYear = max($currentYear + $baseRange, date('Y') + $baseRange);
+        $years = range($minYear, $maxYear);
+        
+        $payment = FranchisePayment::firstOrCreate(
+            [
+                'franchise_id' => $franchise->id,
+                'year' => $currentYear
+            ],
+            [
+                'january' => false,
+                'february' => false,
+                'march' => false,
+                'april' => false,
+                'may' => false,
+                'june' => false,
+                'july' => false,
+                'august' => false,
+                'september' => false,
+                'october' => false,
+                'november' => false,
+                'december' => false,
+            ]
+        );
+        
+        return view('admin.franchises.payments', compact('franchise', 'payment', 'years', 'currentYear'));
+    }
+
+    /**
+     * Update payment tracking for a franchise
+     */
+    public function updatePayments(Request $request, string $id)
+    {
+        $franchise = Franchise::findOrFail($id);
+        $year = $request->input('year', date('Y'));
+        
+        $payment = FranchisePayment::firstOrCreate(
+            [
+                'franchise_id' => $franchise->id,
+                'year' => $year
+            ]
+        );
+        
+        // Update all month checkboxes
+        $months = ['january', 'february', 'march', 'april', 'may', 'june', 
+                   'july', 'august', 'september', 'october', 'november', 'december'];
+        
+        foreach ($months as $month) {
+            $payment->$month = $request->has($month);
+        }
+        
+        $payment->save();
+        
+        return redirect()->back()->with('success', 'Payment records updated successfully!');
+    }
+
+    /**
+     * Show payment tracking page for franchise user (their own payments)
+     */
+    public function franchisePayments()
+    {
+        $franchise = Auth::guard('franchise')->user();
+        $currentYear = request('year', date('Y'));
+        
+        // Dynamic year range based on selected year
+        $baseRange = 7;
+        $minYear = min($currentYear - $baseRange, date('Y') - $baseRange);
+        $maxYear = max($currentYear + $baseRange, date('Y') + $baseRange);
+        $years = range($minYear, $maxYear);
+        
+        $payment = FranchisePayment::firstOrCreate(
+            [
+                'franchise_id' => $franchise->id,
+                'year' => $currentYear
+            ],
+            [
+                'january' => false,
+                'february' => false,
+                'march' => false,
+                'april' => false,
+                'may' => false,
+                'june' => false,
+                'july' => false,
+                'august' => false,
+                'september' => false,
+                'october' => false,
+                'november' => false,
+                'december' => false,
+            ]
+        );
+        
+        return view('admin.franchises.payments-readonly', compact('franchise', 'payment', 'years', 'currentYear'));
     }
 }
