@@ -358,7 +358,6 @@
                     </button>
                     <ul x-cloak x-show="activeDropdown === 'franchises'" x-collapse class="sub-menu text-gray-500">
                         <li><a href="{{ route('admin.franchises.index') }}">Franchises</a></li>
-                        <li><a href="{{ route('admin.franchises.create') }}">Add Franchise</a></li>
                     </ul>
                 </li>
 

@@ -10,7 +10,7 @@
         </ul>
 
         <div class="pt-5">        
-            <form class="space-y-5" enctype="multipart/form-data" action="{{ route('user_profiles.update', ['id'=>$profile->id]) }}" method="POST">
+            <form class="space-y-5" enctype="multipart/form-data" action="{{ route('user_profiles.update', $profile) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="panel">

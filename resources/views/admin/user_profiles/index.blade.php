@@ -1,16 +1,8 @@
 <x-layout.admin>
     {{-- <x-add-button :link="route('sub_castes.create')" /> --}}
     <div class="flex justify-between">
-        @role(['admin'])
+        @if(Auth::user()->hasRole('admin') || Auth::guard('franchise')->check())
             {{-- <x-excel-button :link="route('sub_castes.import')" /> --}}
-            <x-excel-button :link="route('user_profiles.import')" />
-            <div class="w-[120px]">
-                <a href="{{ route('user_profiles.create') }}" class="btn btn-success px-4 py-2">
-                    Add Profile 
-                </a>
-            </div>
-        @endrole  
-        @if(Auth::guard('franchise')->check())
             <x-excel-button :link="route('user_profiles.import')" />
             <div class="w-[120px]">
                 <a href="{{ route('user_profiles.create') }}" class="btn btn-success px-4 py-2">

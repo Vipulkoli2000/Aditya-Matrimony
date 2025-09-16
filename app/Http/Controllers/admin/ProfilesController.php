@@ -66,9 +66,8 @@ class ProfilesController extends Controller
     
     
 
-    public function edit(string $id)
+    public function edit(Profile $profile)
     {
-        $profile = Profile::find($id);
         $castes = Caste::all();
         $subCastes = SubCaste::all();
         return view('admin.user_profiles.edit', ['profile' => $profile, 'castes' => $castes, 'subCastes' => $subCastes]);
@@ -81,11 +80,10 @@ class ProfilesController extends Controller
     // }
 
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Profile $profile)
     {
-        // dd($id);
+        // dd($profile->id);
         // dd($request->all());
-        $profile = Profile::find($id);
         
         // Check for "Other" caste/subcaste IDs and add validation rules accordingly
         $otherCasteId = Caste::where('name', 'Other')->value('id');
