@@ -70,6 +70,8 @@ class RegisteredUserController extends Controller
             'sub_caste' => ['required','exists:sub_castes,id'],
             'custom_caste' => ['nullable','string','max:100'],
             'custom_sub_caste' => ['nullable','string','max:100'],
+            'has_franchise_code' => ['nullable','in:yes,no'],
+            'franchise_code' => ['nullable','string','max:50'],
         ];
         
         // Add conditional validation for custom fields
@@ -81,10 +83,15 @@ class RegisteredUserController extends Controller
             $validationRules['custom_sub_caste'][] = 'required';
         }
         
+        // Add conditional validation for franchise code
+        if ($request->has_franchise_code === 'yes') {
+            $validationRules['franchise_code'][] = 'required';
+        }
+        
         $request->validate($validationRules);
         
         $number = $request->input('country_code') .$request->input('mobile'); 
-        $exists = \DB::table('users')->where('mobile', $number)->exists();
+        $exists = DB::table('users')->where('mobile', $number)->exists();
 
         if ($exists) {
             return back()->withErrors(['mobile' => 'The mobile number is already registered.']);
@@ -117,6 +124,7 @@ class RegisteredUserController extends Controller
 
         $profile = Profile::create([
             'user_id' => $user->id,
+            'franchise_code' => $request->has_franchise_code === 'yes' ? $request->franchise_code : null,
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
             'last_name' => $request->last_name,

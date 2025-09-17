@@ -268,6 +268,35 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <!-- Franchise Code Section -->
+                            <div class="row mb-2">
+                                <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+                                    <label class="form-label mb-0" style="color: black;">Have Franchise Code:</label>
+                                    <div class="d-flex gap-2 flex-row">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="has_franchise_code" id="has_franchise_yes" value="yes" {{ old('has_franchise_code') === 'yes' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="has_franchise_yes" style="color: black;">
+                                                Yes
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="has_franchise_code" id="has_franchise_no" value="no" {{ old('has_franchise_code') === 'no' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="has_franchise_no" style="color: black;">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Franchise Code Input Field (hidden by default) -->
+                            <div class="mb-2" id="franchise_code_field" style="display: none;">
+                                <label for="franchise_code" class="form-label" style="color: black; margin: 10px 0;">Franchise Code</label>
+                                <input id="franchise_code" name="franchise_code" type="text" class="form-control" value="{{ old('franchise_code') }}" placeholder="Enter Franchise Code" />
+                                <x-input-error :messages="$errors->get('franchise_code')" class="mt-2 text-danger small" />
+                            </div>
+                            
                             <div class="row mb-2">
                                 <div class="col-md-4">
                                     <label for="first_name" class="form-label" style="color: black; margin: 10px 0">First Name</label>
@@ -583,6 +612,29 @@
                                 brideRadio.addEventListener('change', updateMaxDate);
                                 groomRadio.addEventListener('change', updateMaxDate);
                                 updateMaxDate();
+
+                                // Franchise code field toggle functionality
+                                const franchiseYes = document.getElementById('has_franchise_yes');
+                                const franchiseNo = document.getElementById('has_franchise_no');
+                                const franchiseCodeField = document.getElementById('franchise_code_field');
+                                const franchiseCodeInput = document.getElementById('franchise_code');
+
+                                function toggleFranchiseCodeField() {
+                                    if (franchiseYes.checked) {
+                                        franchiseCodeField.style.display = 'block';
+                                        franchiseCodeInput.required = true;
+                                    } else {
+                                        franchiseCodeField.style.display = 'none';
+                                        franchiseCodeInput.required = false;
+                                        franchiseCodeInput.value = ''; // Clear the field when hidden
+                                    }
+                                }
+
+                                franchiseYes.addEventListener('change', toggleFranchiseCodeField);
+                                franchiseNo.addEventListener('change', toggleFranchiseCodeField);
+                                
+                                // Initialize on page load
+                                toggleFranchiseCodeField();
                         
                                 // New code to enable/disable the Register button based on the checkbox
                                 const termsCheckbox = document.getElementById('terms');
