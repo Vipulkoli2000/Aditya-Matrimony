@@ -233,8 +233,9 @@ Route::put('profile/update_password', [UserProfilesController::class, 'updatePas
 
 Route::get('/generate-invoice/{package}', [UserProfilesController::class, 'generateInvoice'])->name('generate.invoice');
 
-Route::get('/razorpay/pay/{package}', [RazorpayController::class, 'pay'])->name('razorpay.pay');
-Route::post('/razorpay/payment', [RazorpayController::class, 'payment'])->name('razorpay.payment');
+// Razorpay Routes - New Order-based flow
+Route::post('/razorpay/order', [RazorpayController::class, 'createOrder'])->name('razorpay.createOrder');
+Route::post('/razorpay/verify', [RazorpayController::class, 'verifyPayment'])->name('razorpay.verifyPayment');
 Route::post('/razorpay/failure', [RazorpayController::class, 'failure'])->name('razorpay.failure');
 
 Route::get('/user/packages/all', [UserProfilesController::class, 'allPurchasedPackages'])

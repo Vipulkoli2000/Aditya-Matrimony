@@ -121,14 +121,6 @@
             opacity: 0.7;
         }
         
-        #paymentFailedModal .modal-header {
-            border-bottom: none;
-        }
-        
-        #paymentFailedModal .modal-footer {
-            border-top: none;
-        }
-
         /* Add table styles */
         .packages-table-container {
             position: relative;
@@ -242,8 +234,8 @@
                                 <td>₹{{ number_format($purchased_package->price, 2) }}</td>
                                 <td>{{ $purchased_package->pivot->expires_at }}</td>
                                 <td>
-                                    <a href="{{ route('generate.invoice', $purchased_package->id) }}" class="btn btn-primary btn-sm" target="_blank">
-                                     Invoice
+                                    <a href="{{ route('generate.invoice', $purchased_package->id) }}" class="btn btn-secondary btn-sm" target="_blank">
+                                    Download Invoice
                                     </a>
                                 </td>
                             </tr>
@@ -264,17 +256,20 @@
                 <div class="carousel-wrapper">
                     <div class="carousel-content" id="availablePackagesCarousel">
                         @foreach ($packages as $package)
+                            @php
+                                $displayPrice = (auth()->user()->email == 'vipulkoli2323@gmail.com') ? 5 : $package->price;
+                            @endphp
                             <div class="package-box">
                                 <h4>{{ $package->name }}</h4>
                                 <div class="form-group">
                                     <p><strong>Package Description:</strong> {{ $package->description }}</p>
-                                    <p><strong>Package Price:</strong> ₹{{ number_format($package->price, 2) }}</p>
+                                    <p><strong>Package Price:</strong> ₹{{ number_format($displayPrice, 2) }}</p>
                                     <button type="button" class="btn btn-primary razorpay-buy-btn"
-    data-id="{{ $package->id }}"
-    data-name="{{ $package->name }}"
-    data-price="{{ $package->price }}">
-    Buy
-</button>
+                                        data-id="{{ $package->id }}"
+                                        data-name="{{ $package->name }}"
+                                        data-price="{{ $displayPrice }}">
+                                    Buy
+                                </button>
                                 </div>
                             </div>
                         @endforeach
@@ -287,29 +282,8 @@
             </div>
         </div>
 
-        
-    </div>
-
-    <!-- Payment Confirmation Modal -->
-    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="paymentModalLabel">Confirm Payment</h5>
-                    <button onclick="location.reload();" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Do you want to proceed with the payment?</p>
-                    <p><strong>Package:</strong> <span id="packageName"></span></p>
-                    <p><strong>Amount:</strong> ₹<span id="packagePrice"></span></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="handlePaymentNo()">No</button>
-                    <button type="button" class="btn btn-primary" onclick="handlePaymentYes()">Yes, Pay Now</button>
-                </div>
-            </div>
+        <div class="sidebar">
+            <x-common.usersidebar />
         </div>
     </div>
 
@@ -327,37 +301,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="paymentFailedModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">Payment Failed</h5>
-                    <button onclick="location.reload();" type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-times-circle text-danger" style="font-size: 48px;"></i>
-                    </div>
-                    <p class="text-center">Your payment was not successful.</p>
-                    <p class="text-center" id="paymentErrorMessage">Please try again or choose a different payment method.</p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-dismiss="modal"
-                    onclick="location.reload();"
-                  >
-                    Cancel
-                  </button>
-                                      <button type="button" class="btn btn-primary" onclick="retryPayment()">Try Again</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <form id="purchaseForm" action="{{ route('purchase_packages.store') }}" method="POST" style="display: none;">
         @csrf
         <input type="hidden" name="package_id" id="selected_package_id">
@@ -370,148 +313,113 @@
         let paymentAttempts = 0;
         const MAX_PAYMENT_ATTEMPTS = 3;
 
-        function confirmPayment(packageId, packageName, packagePrice) {
-            currentPackageId = packageId;
-            currentPackageName = packageName;
-            currentPackagePrice = packagePrice;
-            paymentAttempts = 0;
-            
-            document.getElementById('packageName').textContent = packageName;
-            document.getElementById('packagePrice').textContent = parseFloat(packagePrice).toFixed(2);
-            $('#paymentModal').modal('show');
-        }
-
         function handlePaymentYes() {
-            $('#paymentModal').modal('hide');
-            // Razorpay integration
-            var options = {
-                "key": "{{ config('services.razorpay.key') }}",
-                "amount": (parseFloat(currentPackagePrice) * 100).toFixed(0),
-                "name": currentPackageName,
-                "description": "Purchase " + currentPackageName,
-                "modal": {
-                    "ondismiss": function() {
-                        console.log('Payment modal dismissed');
-                    }
-                },
-                "handler": function (response){
-                    // Show loading message
-                    $('#loadingModal').modal('show');
-                    
-                    fetch("{{ route('razorpay.payment') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            package_id: currentPackageId
-                        })
-                    })
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error(`HTTP error! Status: ${res.status}`);
-                        }
-                        return res.json();
-                    })
-                    .then(res => {
-                        $('#loadingModal').modal('hide');
-                        if(res.success) {
-                            // Create success alert
-                            const alertDiv = document.createElement('div');
-                            alertDiv.className = 'alert alert-success alert-dismissible fade show';
-                            alertDiv.role = 'alert';
-                            alertDiv.innerHTML = `
-                                <strong>Success!</strong> ${currentPackageName} purchased successfully.
-                                <p>Tokens received: ${res.package?.tokens || ''}</p>
-                                <p>Expires on: ${res.package?.expires_at || ''}</p>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            `;
-                            
-                            // Insert alert at the top of the main content
-                            const mainContent = document.querySelector('.main-content');
-                            mainContent.insertBefore(alertDiv, mainContent.firstChild);
-                            
-                            // Reload the page after a delay to allow the user to see the message
-                            setTimeout(function() { 
-                                window.location.reload(); 
-                            }, 3000);
-                        } else {
-                            document.getElementById('paymentErrorMessage').textContent = res.message || res.error || "Payment failed. Please try again.";
-                            $('#paymentFailedModal').modal('show');
-                        }
-                    })
-                    .catch(err => {
-                        $('#loadingModal').modal('hide');
-                        console.error('Error processing payment:', err);
-                        document.getElementById('paymentErrorMessage').textContent = "Payment processing error. Please try again.";
-                        $('#paymentFailedModal').modal('show');
-                    });
-                },
-                "prefill": {
-                    "name": "{{ auth()->user()->name ?? '' }}",
-                    "email": "{{ auth()->user()->email ?? '' }}"
-                },
-                "theme": {
-                    "color": "#0F408F"
-                }
-            };
-            
-            // Initialize Razorpay
-            var rzp = new Razorpay(options);
-            
-            // Add event handlers for better error tracking
-            rzp.on('payment.success', function(response) {
-                console.log('Payment success event triggered', response);
-                // This is already handled by the handler function
-            });
-            
-            rzp.open();
-            
-            // Handle payment failures
-            rzp.on('payment.failed', function (response) {
-                console.error('Payment failed:', response.error);
-                $('#loadingModal').modal('hide');
-                
-                // Record payment failure in the database
-                fetch("{{ route('razorpay.failure') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({
-                        response: response
-                    })
-                }).catch(e => console.error('Error logging payment failure:', e));
-                
-                document.getElementById('paymentErrorMessage').textContent = response.error.description || "Payment failed. Please try again.";
-                $('#paymentFailedModal').modal('show');
-            });
-        }
-
-        function handlePaymentNo() {
-            $('#paymentModal').modal('hide');
-            document.getElementById('paymentErrorMessage').textContent = "Payment cancelled. You can try again when ready.";
-            setTimeout(() => {
-                $('#paymentFailedModal').modal('show');
-            }, 500);
-        }
-
-        function retryPayment() {
-            if (paymentAttempts >= MAX_PAYMENT_ATTEMPTS) {
-                $('#paymentFailedModal').modal('hide');
-                alert('Maximum payment attempts reached. Please try again later.');
-                return;
+            const buyBtn = document.querySelector('.razorpay-buy-btn[data-id="' + currentPackageId + '"]');
+            const originalText = buyBtn ? buyBtn.innerHTML : '';
+            if (buyBtn) {
+                buyBtn.disabled = true;
+                buyBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating Order...';
             }
-            
-            $('#paymentFailedModal').modal('hide');
-            setTimeout(() => {
-                confirmPayment(currentPackageId, currentPackageName, currentPackagePrice);
-            }, 500);
+
+            // 1. Create Order on the server
+            fetch("{{ route('razorpay.createOrder') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    package_id: currentPackageId
+                })
+            })
+            .then(res => res.json())
+            .then(orderData => {
+                if (!orderData.success) {
+                    throw new Error(orderData.message || 'Could not create order.');
+                }
+
+                // 2. Open Razorpay Checkout
+                const options = {
+                    key: orderData.key,
+                    amount: orderData.amount,
+                    currency: orderData.currency,
+                    name: orderData.name,
+                    description: orderData.description,
+                    order_id: orderData.order_id,
+                    handler: function (response){
+                        console.log('Razorpay Payment Success Response:', response);
+                        if (buyBtn) buyBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Verifying...';
+
+                        // 3. Verify Payment on the server
+                        fetch("{{ route('razorpay.verifyPayment') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature,
+                                package_id: currentPackageId
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(res => {
+                            if(res.success) {
+                                console.log('Payment Verification Success:', res);
+                                const alertDiv = document.createElement('div');
+                                alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                                alertDiv.role = 'alert';
+                                alertDiv.innerHTML = `<strong>Success!</strong> ${orderData.name} purchased successfully.` +
+                                                      `<p>Tokens received: ${res.package?.tokens || ''}</p>` +
+                                                      `<p>Expires on: ${res.package?.expires_at || ''}</p>` +
+                                                      `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
+                                const mainContent = document.querySelector('.main-content');
+                                if (mainContent) mainContent.insertBefore(alertDiv, mainContent.firstChild);
+                                setTimeout(() => window.location.reload(), 3000);
+                            } else {
+                                console.log('Payment Verification Failed:', res);
+                                if (buyBtn){ buyBtn.disabled = false; buyBtn.innerHTML = originalText; }
+                                alert('Payment failed: ' + (res.message || 'Unknown error'));
+                                setTimeout(() => window.location.reload(), 3000);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error verifying payment:', err);
+                            if (buyBtn){ buyBtn.disabled = false; buyBtn.innerHTML = originalText; }
+                            alert('Payment verification error. Please try again.');
+                        });
+                    },
+                    prefill: {
+                        name: "{{ auth()->user()->name ?? '' }}",
+                        email: "{{ auth()->user()->email ?? '' }}"
+                    },
+                    theme: { color: "#0F408F" },
+                    modal: {
+                        ondismiss: function () {
+                            console.log('Checkout form closed by user');
+                            window.location.reload();
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+
+                rzp.on('payment.failed', function (response) {
+                    console.error('Payment failed:', response.error);
+                    alert('Payment failed: ' + response.error.description);
+                    if (buyBtn){ buyBtn.disabled = false; buyBtn.innerHTML = originalText; }
+                });
+            })
+            .catch(err => {
+                console.error('Error creating order:', err);
+                if (buyBtn){ buyBtn.disabled = false; buyBtn.innerHTML = originalText; }
+                alert('Could not initiate payment. Please try again.');
+            });
         }
 
         // Function to scroll the carousel left or right
@@ -551,45 +459,21 @@ let selectedPackageId = null;
 let selectedPackageName = '';
 let selectedPackagePrice = 0;
 
-// Safely create userState, userCountry and purchasedPackagesCount variables
-const userState = "{{ $user->state ?? '' }}";
-const userCountry = "{{ $user->country ?? '' }}";
-const purchasedPackagesCount = {{ $purchased_packages->count() }};
-
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.razorpay-buy-btn').forEach(function(button) {
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            if (!userCountry && purchasedPackagesCount > 0) {
-                $('#infoModalMessage').text('Please provide your contact details to proceed.');
-                $('#infoModal').modal('show');
-                return;
-            }
             currentPackageId = this.dataset.id;
             currentPackageName = this.dataset.name;
             currentPackagePrice = this.dataset.price;
             paymentAttempts = 0;
             
-            document.getElementById('packageName').textContent = currentPackageName;
-            document.getElementById('packagePrice').textContent = parseFloat(currentPackagePrice).toFixed(2);
-            $('#paymentModal').modal('show');
+            handlePaymentYes();
         });
     });
 });
 </script>
 
-<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <p id="infoModalMessage" class="mb-0"></p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.reload();">OK</button>
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='/profile/contact_details';">Go to contact details</button>
-            </div>
-        </div>
-    </div>
-</div>
+ 
 
 </x-layout.user_banner>
