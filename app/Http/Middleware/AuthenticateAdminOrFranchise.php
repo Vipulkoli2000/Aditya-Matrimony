@@ -31,6 +31,6 @@ class AuthenticateAdminOrFranchise
         }
 
         // If neither, redirect to admin login
-        return redirect()->route('admin');
+        return redirect('/admin');
     }
 }

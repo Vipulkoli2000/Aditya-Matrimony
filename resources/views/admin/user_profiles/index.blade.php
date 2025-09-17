@@ -1,7 +1,7 @@
 <x-layout.admin>
     {{-- <x-add-button :link="route('sub_castes.create')" /> --}}
     <div class="flex justify-between">
-        @if(Auth::user()->hasRole('admin') || Auth::guard('franchise')->check())
+        @if((Auth::user() && Auth::user()->hasRole('admin')) || Auth::guard('franchise')->check())
             {{-- <x-excel-button :link="route('sub_castes.import')" /> --}}
             <x-excel-button :link="route('user_profiles.import')" />
             <div class="w-[120px]">

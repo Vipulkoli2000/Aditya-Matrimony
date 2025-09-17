@@ -428,7 +428,8 @@ class ProfilesController extends Controller
     public function destroy(string $id)
     {
         // Authorization: Only allow deletion when an Admin (web guard) is logged in
-        if (!(Auth::check() && Auth::user()->hasRole('admin'))) {
+        $user = Auth::user();
+        if (!(Auth::check() && $user && $user->hasRole('admin'))) {
             return redirect()->back()->with('error', 'You do not have permission to delete profiles.');
         }
 
