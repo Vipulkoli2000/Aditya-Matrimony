@@ -635,6 +635,30 @@
                                 
                                 // Initialize on page load
                                 toggleFranchiseCodeField();
+
+                                // Handle franchise code from URL parameter
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const franchiseCodeFromUrl = urlParams.get('franchise_code');
+                                
+                                if (franchiseCodeFromUrl) {
+                                    // Auto-select "Yes" for franchise code
+                                    franchiseYes.checked = true;
+                                    franchiseNo.checked = false;
+                                    
+                                    // Show the franchise code field and fill it
+                                    franchiseCodeField.style.display = 'block';
+                                    franchiseCodeInput.required = true;
+                                    franchiseCodeInput.value = franchiseCodeFromUrl;
+                                    
+                                    // Make the field readonly to prevent changes
+                                    franchiseCodeInput.readOnly = true;
+                                    franchiseCodeInput.style.backgroundColor = '#f8f9fa';
+                                    franchiseCodeInput.style.cursor = 'not-allowed';
+                                    
+                                    // Disable the radio buttons to prevent changes
+                                    franchiseYes.disabled = true;
+                                    franchiseNo.disabled = true;
+                                }
                         
                                 // New code to enable/disable the Register button based on the checkbox
                                 const termsCheckbox = document.getElementById('terms');
@@ -763,9 +787,9 @@
                                 const customCasteInput = document.getElementById('custom_caste');
                                 const customSubCasteContainer = document.getElementById('custom_sub_caste_container');
                                 const customSubCasteInput = document.getElementById('custom_sub_caste');
-                                const oldSubCaste = {{ old('sub_caste') ?? 'null' }};
-                                const oldCustomCaste = '{{ old('custom_caste', '') }}';
-                                const oldCustomSubCaste = '{{ old('custom_sub_caste', '') }}';
+                                const oldSubCaste = {!! json_encode(old('sub_caste')) !!};
+                                const oldCustomCaste = {!! json_encode(old('custom_caste', '')) !!};
+                                const oldCustomSubCaste = {!! json_encode(old('custom_sub_caste', '')) !!};
 
                                 // Function to handle caste selection
                                 function handleCasteChange() {

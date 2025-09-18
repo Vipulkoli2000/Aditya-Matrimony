@@ -251,6 +251,19 @@
                         </div>
                     </a>
                 </li>
+                {{-- Share Link for Franchise --}}
+                <li class="menu nav-item">
+                    <button type="button" class="nav-link group" onclick="openShareLinkModal()">
+                        <div class="flex items-center">
+                            <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5" d="M13 2.05C12.6711 2.01645 12.3375 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 11.6625 21.9835 11.3289 21.95 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M7.5 12L10.5 15L16.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 8L18 6M22 2L18 6M18 6L16 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Share Link</span>
+                        </div>
+                    </button>
+                </li>
                 @else
                 @role(['admin','member'])
                 <li class="menu nav-item">

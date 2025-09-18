@@ -135,6 +135,142 @@
     <script src="/assets/js/swiper-bundle.min.js"></script>
     <script src="/assets/js/simple-datatables.js"></script>
 
+    <!-- Share Link Modal -->
+    @if(Auth::guard('franchise')->check())
+    <div id="shareLinkModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-96 max-w-md mx-auto">
+            <!-- Header with Icon -->
+            <div class="text-center pt-6 pb-2">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-3">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">Share Registration Link</h3>
+                <p class="text-sm text-blue-600 px-4 leading-tight">Share this link with users to register with your franchise code</p>
+            </div>
+            
+            <!-- Link Input -->
+            <div class="px-4 py-4">
+                <div class="relative flex items-stretch">
+                    <input type="text" id="franchiseLink" readonly 
+                           class="flex-1 py-3 pl-3 pr-3 border border-gray-200 rounded-l-lg bg-gray-50 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-100 border-r-0"
+                           value="{{ url('/register?franchise_code=' . Auth::guard('franchise')->user()->franchise_code) }}">
+                    <button onclick="copyFranchiseLink()" 
+                            class="px-3 py-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 bg-gray-50 border border-gray-200 rounded-r-lg border-l-gray-300 transition-all duration-200"
+                            title="Copy Link">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex border-t border-gray-200">
+                <button onclick="closeShareLinkModal()" 
+                        class="flex-1 py-3 text-gray-600 hover:text-gray-800 font-medium transition-colors text-sm">
+                    Cancel
+                </button>
+                <div class="w-px bg-gray-200"></div>
+                <button onclick="copyFranchiseLink()" 
+                        class="flex-1 py-3 text-blue-600 hover:text-blue-800 font-medium transition-colors text-sm">
+                    Copy Link
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openShareLinkModal() {
+            document.getElementById('shareLinkModal').classList.remove('hidden');
+        }
+
+        function closeShareLinkModal() {
+            document.getElementById('shareLinkModal').classList.add('hidden');
+        }
+
+        function copyFranchiseLink() {
+            const linkInput = document.getElementById('franchiseLink');
+            
+            // Modern clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(linkInput.value).then(() => {
+                    showCopySuccess();
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    fallbackCopyTextToClipboard(linkInput.value);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopyTextToClipboard(linkInput.value);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            const linkInput = document.getElementById('franchiseLink');
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                showCopySuccess();
+            } catch (err) {
+                console.error('Failed to copy link: ', err);
+                alert('Failed to copy link. Please copy manually.');
+            }
+        }
+
+        function showCopySuccess() {
+            // Update all copy buttons
+            const copyButtons = document.querySelectorAll('[onclick="copyFranchiseLink()"]');
+            copyButtons.forEach((button, index) => {
+                if (index === 0) { // The button inside the input field
+                    const originalHTML = button.innerHTML;
+                    
+                    // Change to success state with checkmark icon
+                    button.innerHTML = `
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    `;
+                    button.classList.add('text-green-600', 'bg-green-50');
+                    button.classList.remove('text-gray-400', 'hover:bg-blue-50', 'bg-gray-50');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('text-green-600', 'bg-green-50');
+                        button.classList.add('text-gray-400', 'bg-gray-50');
+                    }, 1500);
+                } else { // Other copy buttons (like the one at the bottom)
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.classList.add('text-green-600');
+                    button.classList.remove('text-blue-600');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('text-green-600');
+                        button.classList.add('text-blue-600');
+                    }, 1500);
+                }
+            });
+            
+            // Auto close modal after successful copy
+            setTimeout(() => {
+                closeShareLinkModal();
+            }, 2000);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('shareLinkModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeShareLinkModal();
+            }
+        });
+    </script>
+    @endif
+
 </body>
 
 </html>
