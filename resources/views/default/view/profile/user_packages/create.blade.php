@@ -1,28 +1,11 @@
 <x-layout.user_banner>
     <style>
-        /* New wrapper to hold panel and sidebar side-by-side */
-        .content-wrapper {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-        }
-        
-        /* Sidebar style */
-        .sidebar {
-            width: 300px;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            background-color: #f5f5f5;
-            padding: 15px;
-            border-left: 1px solid #ddd;
-        }
-
-        /* Main content area now becomes a flex item that takes remaining space */
+        /* Main content area takes full width */
         .main-content {
-            flex: 1;
-            max-width: 900px; /* Adjust width as needed */
+            width: 100%;
+            max-width: 1200px; /* Increased width for better use of space */
             margin: 0 auto;
+            padding: 0 20px;
         }
 
         /* Package box as card styling */
@@ -106,20 +89,6 @@
         .package-box .btn-primary {
             margin-top: 10px;
         }
-
-        #loadingModal .modal-content {
-            background-color: rgba(255, 255, 255, 0.9);
-            border: none;
-        }
-        
-        #loadingModal .spinner-border {
-            width: 3rem;
-            height: 3rem;
-        }
-        
-        .modal-backdrop.show {
-            opacity: 0.7;
-        }
         
         /* Add table styles */
         .packages-table-container {
@@ -162,34 +131,13 @@
             }
         }
 
-        /* Add these new styles for modal centering */
-        .modal-dialog.modal-dialog-centered {
-            display: flex;
-            align-items: center;
-            min-height: calc(100% - 1rem);
-        }
-        
-        /* Ensure modal content is properly centered */
-        .modal-content {
-            width: 100%;
-            margin: auto;
-        }
         
         /* Media queries for mobile responsiveness */
         @media (max-width: 768px) {
-            .content-wrapper {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                border-left: none;
-                border-top: 1px solid #ddd;
-            }
             .main-content {
                 max-width: 100%;
                 margin: 0;
+                padding: 0 10px;
             }
             .package-box {
                 width: 100%;
@@ -200,106 +148,82 @@
                 overflow-x: auto;
                 white-space: nowrap;
             }
-            .modal-dialog {
-                width: 100%;
-                margin: 0;
-            }
         }
     </style>
 
-    <!-- Wrap the panel and sidebar in the new flex container -->
-    <div class="content-wrapper">
-        <div class="main-content">
-            <h3 class="text-center m-3">Available Tokens: {{$user->available_tokens}}</h3>
+    <div class="main-content">
+        <h3 class="text-center m-3">Available Tokens: {{$user->available_tokens}}</h3>
 
-            @if($purchased_packages->isNotEmpty())
-            <h3 class="text-center m-3">Purchased Packages</h3>
-            <div class="container pl-4">
-                <div class="packages-table-container">
-                    <table class="packages-table">
-                        <thead>
-                            <tr>
-                                <th>Package Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>Expiry Date</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($purchased_packages->take(3) as $purchased_package)
-                            <tr>
-                                <td>{{ $purchased_package->name }}</td>
-                                <td>{{ $purchased_package->description }}</td>
-                                <td>₹{{ number_format($purchased_package->price, 2) }}</td>
-                                <td>{{ $purchased_package->pivot->expires_at }}</td>
-                                <td>
-                                    <a href="{{ route('generate.invoice', $purchased_package->id) }}" class="btn btn-secondary btn-sm" target="_blank">
-                                    Download Invoice
-                                    </a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    @if($purchased_packages->count() > 3)
-                        <div class="view-all-link">
-                            <a href="{{ route('all.purchased.packages') }}" class="btn btn-sm btn-link">View All Purchased Packages →</a>
-                        </div>
-                    @endif
-                </div>
-            </div>
-            @endif
-
-            <div class="container">
-                <h3 class="text-center m-3">Packages</h3>
-                <div class="carousel-wrapper">
-                    <div class="carousel-content" id="availablePackagesCarousel">
-                        @foreach ($packages as $package)
-                            @php
-                                $displayPrice = (auth()->user()->email == 'vipulkoli2323@gmail.com') ? 5 : $package->price;
-                            @endphp
-                            <div class="package-box">
-                                <h4>{{ $package->name }}</h4>
-                                <div class="form-group">
-                                    <p><strong>Package Description:</strong> {{ $package->description }}</p>
-                                    <p><strong>Package Price:</strong> ₹{{ number_format($displayPrice, 2) }}</p>
-                                    <button type="button" class="btn btn-primary razorpay-buy-btn"
-                                        data-id="{{ $package->id }}"
-                                        data-name="{{ $package->name }}"
-                                        data-price="{{ $displayPrice }}">
-                                    Buy
-                                </button>
-                                </div>
-                            </div>
+        @if($purchased_packages->isNotEmpty())
+        <h3 class="text-center m-3">Purchased Packages</h3>
+        <div class="container pl-4">
+            <div class="packages-table-container">
+                <table class="packages-table">
+                    <thead>
+                        <tr>
+                            <th>Package Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Expiry Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($purchased_packages->take(3) as $purchased_package)
+                        <tr>
+                            <td>{{ $purchased_package->name }}</td>
+                            <td>{{ $purchased_package->description }}</td>
+                            <td>₹{{ number_format($purchased_package->price, 2) }}</td>
+                            <td>{{ $purchased_package->pivot->expires_at }}</td>
+                            <td>
+                                <a href="{{ route('generate.invoice', $purchased_package->id) }}" class="btn btn-secondary btn-sm" target="_blank">
+                                Download Invoice
+                                </a>
+                            </td>
+                        </tr>
                         @endforeach
+                    </tbody>
+                </table>
+                @if($purchased_packages->count() > 3)
+                    <div class="view-all-link">
+                        <a href="{{ route('all.purchased.packages') }}" class="btn btn-sm btn-link">View All Purchased Packages →</a>
                     </div>
-                    <div class="carousel-controls">
-                        <button class="carousel-button" onclick="scrollCarousel('left', 'availablePackagesCarousel')">&#8249;</button>
-                        <button class="carousel-button" onclick="scrollCarousel('right', 'availablePackagesCarousel')">&#8250;</button>
-                    </div>
+                @endif
+            </div>
+        </div>
+        @endif
+
+        <div class="container">
+            <h3 class="text-center m-3">Packages</h3>
+            <div class="carousel-wrapper">
+                <div class="carousel-content" id="availablePackagesCarousel">
+                    @foreach ($packages as $package)
+                        @php
+                            $displayPrice = (auth()->user()->email == 'vipulkoli2323@gmail.com') ? 5 : $package->price;
+                        @endphp
+                        <div class="package-box">
+                            <h4>{{ $package->name }}</h4>
+                            <div class="form-group">
+                                <p><strong>Package Description:</strong> {{ $package->description }}</p>
+                                <p><strong>Package Price:</strong> ₹{{ number_format($displayPrice, 2) }}</p>
+                                <button type="button" class="btn btn-primary razorpay-buy-btn"
+                                    data-id="{{ $package->id }}"
+                                    data-name="{{ $package->name }}"
+                                    data-price="{{ $displayPrice }}">
+                                Buy
+                            </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-button" onclick="scrollCarousel('left', 'availablePackagesCarousel')">&#8249;</button>
+                    <button class="carousel-button" onclick="scrollCarousel('right', 'availablePackagesCarousel')">&#8250;</button>
                 </div>
             </div>
         </div>
-
-        <div class="sidebar">
-            <x-common.usersidebar />
-        </div>
     </div>
 
-    <!-- Add Loading Spinner Modal -->
-    <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="sr-only">Processing payment...</span>
-                    </div>
-                    <p class="mt-2">Processing your payment...</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <form id="purchaseForm" action="{{ route('purchase_packages.store') }}" method="POST" style="display: none;">
         @csrf
@@ -313,7 +237,7 @@
         let paymentAttempts = 0;
         const MAX_PAYMENT_ATTEMPTS = 3;
 
-        function handlePaymentYes() {
+        function handleRazorpayPayment() {
             const buyBtn = document.querySelector('.razorpay-buy-btn[data-id="' + currentPackageId + '"]');
             const originalText = buyBtn ? buyBtn.innerHTML : '';
             if (buyBtn) {
@@ -333,7 +257,25 @@
                     package_id: currentPackageId
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                // Check if response is ok and content-type is JSON
+                if (!res.ok) {
+                    if (res.status === 401) {
+                        throw new Error('Please login to continue');
+                    } else if (res.status === 403) {
+                        throw new Error('Access denied');
+                    } else {
+                        throw new Error('Server error occurred');
+                    }
+                }
+                
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Invalid response format. Please try again or contact support.');
+                }
+                
+                return res.json();
+            })
             .then(orderData => {
                 if (!orderData.success) {
                     throw new Error(orderData.message || 'Could not create order.');
@@ -356,7 +298,7 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                                'Accept': 'application/json',
                                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
                             },
                             body: JSON.stringify({
@@ -366,7 +308,25 @@
                                 package_id: currentPackageId
                             })
                         })
-                        .then(res => res.json())
+                        .then(res => {
+                            // Check if response is ok and content-type is JSON
+                            if (!res.ok) {
+                                if (res.status === 401) {
+                                    throw new Error('Session expired. Please login again.');
+                                } else if (res.status === 403) {
+                                    throw new Error('Access denied');
+                                } else {
+                                    throw new Error('Payment verification failed');
+                                }
+                            }
+                            
+                            const contentType = res.headers.get('content-type');
+                            if (!contentType || !contentType.includes('application/json')) {
+                                throw new Error('Invalid response format during verification');
+                            }
+                            
+                            return res.json();
+                        })
                         .then(res => {
                             if(res.success) {
                                 console.log('Payment Verification Success:', res);
@@ -390,7 +350,7 @@
                         .catch(err => {
                             console.error('Error verifying payment:', err);
                             if (buyBtn){ buyBtn.disabled = false; buyBtn.innerHTML = originalText; }
-                            alert('Payment verification error. Please try again.');
+                            alert('Payment verification error: ' + err.message);
                         });
                     },
                     prefill: {
@@ -401,7 +361,7 @@
                     modal: {
                         ondismiss: function () {
                             console.log('Checkout form closed by user');
-                            window.location.reload();
+                            if (buyBtn){ buyBtn.disabled = false; buyBtn.innerHTML = originalText; }
                         }
                     }
                 };
@@ -418,7 +378,7 @@
             .catch(err => {
                 console.error('Error creating order:', err);
                 if (buyBtn){ buyBtn.disabled = false; buyBtn.innerHTML = originalText; }
-                alert('Could not initiate payment. Please try again.');
+                alert('Could not initiate payment: ' + err.message);
             });
         }
 
@@ -433,31 +393,10 @@
                 carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
             }
         }
-
-        $(document).ready(function() {
-            // Initialize the modal
-            $('#paymentFailedModal').modal({
-                backdrop: 'static',
-                keyboard: false,
-                show: false
-            });
-
-            // Handle modal close button
-            $('#paymentFailedModal .close').on('click', function() {
-                $('#paymentFailedModal').modal('hide');
-            });
-
-            // Handle modal hidden event
-            $('#paymentFailedModal').on('hidden.bs.modal', function () {
-                paymentAttempts = 0; // Reset payment attempts when modal is closed
-            });
-        });
     </script>
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-let selectedPackageId = null;
-let selectedPackageName = '';
-let selectedPackagePrice = 0;
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.razorpay-buy-btn').forEach(function(button) {
@@ -468,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
             currentPackagePrice = this.dataset.price;
             paymentAttempts = 0;
             
-            handlePaymentYes();
+            handleRazorpayPayment();
         });
     });
 });

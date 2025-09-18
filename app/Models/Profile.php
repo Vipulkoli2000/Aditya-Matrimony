@@ -211,4 +211,38 @@ class Profile extends Model
     {
         return $this->subCaste && $this->subCaste->name === 'Other';
     }
+    
+    /**
+     * Check if profile has an active (non-expired) package
+     */
+    public function hasActivePackage()
+    {
+        return ProfilePackage::where('profile_id', $this->id)
+            ->where('status', true)
+            ->where('expires_at', '>', now())
+            ->exists();
+    }
+    
+    /**
+     * Get the active package for this profile
+     */
+    public function getActivePackage()
+    {
+        return ProfilePackage::where('profile_id', $this->id)
+            ->where('status', true)
+            ->where('expires_at', '>', now())
+            ->latest('id')
+            ->first();
+    }
+    
+    /**
+     * Get all packages (active and expired) for this profile
+     */
+    public function getAllPackages()
+    {
+        return ProfilePackage::where('profile_id', $this->id)
+            ->where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
 }

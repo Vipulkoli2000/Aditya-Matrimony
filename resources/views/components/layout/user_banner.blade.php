@@ -452,45 +452,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const lastSegment = segments[segments.length - 1];
 
     // Check for the specific case of '/user/profile/9'
-    if (segments.length === 4 && segments[2] === 'profile' && !isNaN(lastSegment)) {
-        // If the URL is specifically '/user/profile/ID', only show 'Profile'
-        document.getElementById('urlOverlay').innerText = 'Profile';
-    } else {
-        // Capitalize and display the full path, like 'Profile / Basic Details'
-        const capitalizedFirstSegment = segments[segments.length - 2].charAt(0).toUpperCase() + segments[segments.length - 2].slice(1);
-
-        // If the last segment has underscores, format it (e.g., "basic_details" -> "Basic Details")
-        const formattedText = lastSegment
-            .split('_')                // Split by underscores
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))  // Capitalize each word
-            .join(' ');                // Join with spaces
-
-        // If the URL has multiple path segments, display the first segment followed by the last formatted segment
-        const formattedPath = capitalizedFirstSegment + ' / ' + formattedText;
-        document.getElementById('urlOverlay').innerText = formattedPath;
-    }
-});
-document.addEventListener("DOMContentLoaded", function() {
-    // Get the current page's URL
-    const currentUrl = window.location.href;
-
-    // Extract the path and check if there are query parameters
-    const urlPath = currentUrl.split('?')[0];  // Split by '?' to ignore query parameters
-
-    // Extract the path segments
-    const segments = urlPath.split('/');
-    const lastSegment = segments[segments.length - 1];
-
-    // Check for specific cases: /login and /register
-    if (lastSegment === 'login') {
-        document.getElementById('urlOverlay').innerText = 'Login';
-    } else if (lastSegment === 'register') {
-        document.getElementById('urlOverlay').innerText = 'Register';
-    } else {
-        // Check for the specific case of '/user/profile/9'
+    const urlOverlayElement = document.getElementById('urlOverlay');
+    if (urlOverlayElement) {
         if (segments.length === 4 && segments[2] === 'profile' && !isNaN(lastSegment)) {
             // If the URL is specifically '/user/profile/ID', only show 'Profile'
-            document.getElementById('urlOverlay').innerText = 'Profile';
+            urlOverlayElement.innerText = 'Profile';
         } else {
             // Capitalize and display the full path, like 'Profile / Basic Details'
             const capitalizedFirstSegment = segments[segments.length - 2].charAt(0).toUpperCase() + segments[segments.length - 2].slice(1);
@@ -503,7 +469,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // If the URL has multiple path segments, display the first segment followed by the last formatted segment
             const formattedPath = capitalizedFirstSegment + ' / ' + formattedText;
-            document.getElementById('urlOverlay').innerText = formattedPath;
+            urlOverlayElement.innerText = formattedPath;
         }
     }
 });

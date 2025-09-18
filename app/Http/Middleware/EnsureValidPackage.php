@@ -15,37 +15,39 @@ class EnsureValidPackage
      */
     public function handle(Request $request, Closure $next)
     {
+        // Only apply to authenticated users with 'member' role
         if (Auth::check() && Auth::user()->roles && Auth::user()->roles->pluck('name')->first() === 'member') {
+            
+            // Routes that are always allowed (even without active package)
             $allowed = [
+                'dashboard',
                 'user_packages.create',
                 'purchase_packages.store',
                 'logout',
                 'profiles.update_password',
-                'profiles.password.update'
+                'profiles.password.update',
+                'razorpay.createOrder',
+                'razorpay.verifyPayment',
+                'razorpay.failure',
+                'all.purchased.packages',
+                'generate.invoice'
             ];
+            
             $routeName = $request->route()->getName();
-            if (!in_array($routeName, $allowed)) {
-                $profile = Auth::user()->profile;
-                $valid = false;
-                if ($profile && $profile->profile_package_id) {
-                    $pkg = ProfilePackage::find($profile->profile_package_id);
-                }
+            
+            // If route is in allowed list, let them through
+            if (in_array($routeName, $allowed)) {
+                return $next($request);
             }
-            $routeName = $request->route()->getName();
-            if (!in_array($routeName, $allowed)) {
-                $valid = false;
-                $profile = Auth::user()->profile;
-                if ($profile) {
-                    $pkg = ProfilePackage::where('profile_id', $profile->id)
-                        ->latest('id')
-                        ->first();
-                    if ($pkg && Carbon::parse($pkg->expires_at)->isFuture()) {
-                        $valid = true;
-                    }
-                }
-                if (!$valid) {
-                    return redirect()->route('user_packages.create');
-                }
+            
+            // Check if user has valid package
+            $profile = Auth::user()->profile;
+            $hasValidPackage = $profile && $profile->hasActivePackage();
+            
+            // If no valid package, redirect to packages page
+            if (!$hasValidPackage) {
+                return redirect()->route('user_packages.create')
+                    ->with('error', 'You need an active package to access this feature. Please purchase a package to continue.');
             }
         }
 

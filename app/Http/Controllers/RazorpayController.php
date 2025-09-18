@@ -31,6 +31,15 @@ class RazorpayController extends Controller
      */
     public function createOrder(Request $request): JsonResponse
     {
+        // Check authentication
+        if (!auth()->check()) {
+            return response()->json(['success' => false, 'message' => 'Authentication required'], 401);
+        }
+
+        if (!auth()->user()->profile) {
+            return response()->json(['success' => false, 'message' => 'User profile not found'], 404);
+        }
+
         $request->validate([
             'package_id' => 'required|exists:packages,id',
         ]);
@@ -74,7 +83,7 @@ class RazorpayController extends Controller
                     'expires_at'      => null,
                     'order_id'        => $razorpayOrder['id'],
                     'payment_ref_id'  => null,
-                    'status'          => null, // NULL means pending
+                    'status'          => false, // false means pending
                     'created_at'      => now(),
                     'updated_at'      => now(),
                 ]);
@@ -107,6 +116,15 @@ class RazorpayController extends Controller
      */
     public function verifyPayment(Request $request): JsonResponse
     {
+        // Check authentication
+        if (!auth()->check()) {
+            return response()->json(['success' => false, 'message' => 'Authentication required'], 401);
+        }
+
+        if (!auth()->user()->profile) {
+            return response()->json(['success' => false, 'message' => 'User profile not found'], 404);
+        }
+
         $request->validate([
             'razorpay_payment_id' => 'required|string',
             'razorpay_order_id'   => 'required|string',
@@ -156,20 +174,41 @@ class RazorpayController extends Controller
                 return response()->json(['success' => false, 'message' => 'User or Package not found.'], 404);
             }
 
-            // Create profile package record
-            $profilePackageId = DB::table('profile_packages')->insertGetId([
-                'profile_id'      => $user->id,
-                'package_id'      => $package->id,
-                'tokens_received' => $package->tokens,
-                'tokens_used'     => 0,
-                'starts_at'       => now(),
-                'expires_at'      => now()->addDays($package->validity),
-                'order_id'        => $request->razorpay_order_id,
-                'payment_ref_id'  => $request->razorpay_payment_id,
-                'status'          => true,
-                'created_at'      => now(),
-                'updated_at'      => now()
-            ]);
+            // Find and update existing pending record or create new one
+            $existingRecord = DB::table('profile_packages')
+                ->where('order_id', $request->razorpay_order_id)
+                ->where('profile_id', $user->id)
+                ->first();
+
+            if ($existingRecord) {
+                // Update existing pending record
+                DB::table('profile_packages')
+                    ->where('id', $existingRecord->id)
+                    ->update([
+                        'tokens_received' => $package->tokens,
+                        'starts_at'       => now(),
+                        'expires_at'      => now()->addDays($package->validity),
+                        'payment_ref_id'  => $request->razorpay_payment_id,
+                        'status'          => true,
+                        'updated_at'      => now()
+                    ]);
+                $profilePackageId = $existingRecord->id;
+            } else {
+                // Create new record if none exists
+                $profilePackageId = DB::table('profile_packages')->insertGetId([
+                    'profile_id'      => $user->id,
+                    'package_id'      => $package->id,
+                    'tokens_received' => $package->tokens,
+                    'tokens_used'     => 0,
+                    'starts_at'       => now(),
+                    'expires_at'      => now()->addDays($package->validity),
+                    'order_id'        => $request->razorpay_order_id,
+                    'payment_ref_id'  => $request->razorpay_payment_id,
+                    'status'          => true,
+                    'created_at'      => now(),
+                    'updated_at'      => now()
+                ]);
+            }
 
             $user->profile_package_id = $profilePackageId;
             $user->available_tokens += $package->tokens;
