@@ -122,6 +122,13 @@ class UserProfilesController extends Controller
 
     public function search(Request $request)
     {
+        // Block access when user has zero tokens
+        $profile = auth()->user()->profile ?? null;
+        if (!$profile || (int)($profile->available_tokens ?? 0) <= 0) {
+            return redirect()->route('user_packages.create')
+                ->with('error', 'You need tokens to access the Search page. Please purchase a package.');
+        }
+
         // Enable DB query logging to debug the issue
         DB::enableQueryLog();
         
@@ -819,107 +826,10 @@ class UserProfilesController extends Controller
     public function astronomy_details()
     {
         $user = auth()->user()->profile()->first();
-        if ($user && $user->celestial_bodies) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies = explode(',', $user->celestial_bodies);
-        } else {
-            $storedCelestialBodies = [];
-        }
-
-        if ($user && $user->celestial_bodies_2) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies2 = explode(',', $user->celestial_bodies_2);
-        } else {
-            $storedCelestialBodies2 = [];
-        }
-
-        if ($user && $user->celestial_bodies_3) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies3 = explode(',', $user->celestial_bodies_3);
-        } else {
-            $storedCelestialBodies3 = [];
-        }
-
-        if ($user && $user->celestial_bodies_4) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies4 = explode(',', $user->celestial_bodies_4);
-        } else {
-            $storedCelestialBodies4 = [];
-        }
-
-        if ($user && $user->celestial_bodies_5) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies5 = explode(',', $user->celestial_bodies_5);
-        } else {
-            $storedCelestialBodies5 = [];
-        }
-
-        if ($user && $user->celestial_bodies_6) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies6 = explode(',', $user->celestial_bodies_6);
-        } else {
-            $storedCelestialBodies6 = [];
-        }
-
-        if ($user && $user->celestial_bodies_7) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies7 = explode(',', $user->celestial_bodies_7);
-        } else {
-            $storedCelestialBodies7 = [];
-        }
-
-        if ($user && $user->celestial_bodies_8) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies8 = explode(',', $user->celestial_bodies_8);
-        } else {
-            $storedCelestialBodies8 = [];
-        }
-
-        if ($user && $user->celestial_bodies_9) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies9 = explode(',', $user->celestial_bodies_9);
-        } else {
-            $storedCelestialBodies9 = [];
-        }
-
-        if ($user && $user->celestial_bodies_10) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies10 = explode(',', $user->celestial_bodies_10);
-        } else {
-            $storedCelestialBodies10 = [];
-        }
-
-        if ($user && $user->celestial_bodies_11) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies11 = explode(',', $user->celestial_bodies_11);
-        } else {
-            $storedCelestialBodies11 = [];
-        }
-
-        if ($user && $user->celestial_bodies_12) {
-            // If stored as a comma-separated string, convert it into an array
-            $storedCelestialBodies12 = explode(',', $user->celestial_bodies_12);
-        } else {
-            $storedCelestialBodies12 = [];
-        }
-
-
         $profileCompletion = $this->calculateProfileCompletion($user);
         return view('default.view.profile.astronomy_details.create',
          ['user' => $user,
-          'profileCompletion' => $profileCompletion,
-        'storedCelestialBodies'=>$storedCelestialBodies,
-        'storedCelestialBodies2'=>$storedCelestialBodies2,
-        'storedCelestialBodies3'=>$storedCelestialBodies3,
-        'storedCelestialBodies4'=>$storedCelestialBodies4,
-        'storedCelestialBodies5'=>$storedCelestialBodies5,
-        'storedCelestialBodies6'=>$storedCelestialBodies6,
-        'storedCelestialBodies7'=>$storedCelestialBodies7,
-        'storedCelestialBodies8'=>$storedCelestialBodies8,
-        'storedCelestialBodies9'=>$storedCelestialBodies9,
-        'storedCelestialBodies10'=>$storedCelestialBodies10,
-        'storedCelestialBodies11'=>$storedCelestialBodies11,
-        'storedCelestialBodies12'=>$storedCelestialBodies12,        
+          'profileCompletion' => $profileCompletion
         ]);
     }
 
@@ -941,45 +851,9 @@ class UserProfilesController extends Controller
             'nadi' => 'nullable|string|max:50',
             'chart' => 'nullable|string|max:50',
             'more_about_patrika' => 'nullable|string',
-            // 'celestial_bodies' => 'nullable|string|max:50',
             'img_patrika' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         $data = $validated;
-        $celestial_bodies = implode(',', $request->input('celestial_bodies', []));
-        $data['celestial_bodies'] = $celestial_bodies;
-
-        $celestial_bodies2 = implode(',', $request->input('celestial_bodies_2', []));
-        $data['celestial_bodies_2'] = $celestial_bodies2;
-        
-        $celestial_bodies3 = implode(',', $request->input('celestial_bodies_3', []));
-        $data['celestial_bodies_3'] = $celestial_bodies3;
-
-        $celestial_bodies4 = implode(',', $request->input('celestial_bodies_4', []));
-        $data['celestial_bodies_4'] = $celestial_bodies4;
-
-        $celestial_bodies5 = implode(',', $request->input('celestial_bodies_5', []));
-        $data['celestial_bodies_5'] = $celestial_bodies5;
-
-        $celestial_bodies6 = implode(',', $request->input('celestial_bodies_6', []));
-        $data['celestial_bodies_6'] = $celestial_bodies6;
-
-        $celestial_bodies7 = implode(',', $request->input('celestial_bodies_7', []));
-        $data['celestial_bodies_7'] = $celestial_bodies7;
-
-        $celestial_bodies8 = implode(',', $request->input('celestial_bodies_8', []));
-        $data['celestial_bodies_8'] = $celestial_bodies8;
-
-        $celestial_bodies9 = implode(',', $request->input('celestial_bodies_9', []));
-        $data['celestial_bodies_9'] = $celestial_bodies9;
-
-        $celestial_bodies10 = implode(',', $request->input('celestial_bodies_10', []));
-        $data['celestial_bodies_10'] = $celestial_bodies10;
-
-        $celestial_bodies11 = implode(',', $request->input('celestial_bodies_11', []));
-        $data['celestial_bodies_11'] = $celestial_bodies11;
-
-        $celestial_bodies12 = implode(',', $request->input('celestial_bodies_12', []));
-        $data['celestial_bodies_12'] = $celestial_bodies12;
         
         if ($request->hasFile('img_patrika')) {
             
@@ -1158,19 +1032,32 @@ class UserProfilesController extends Controller
     public function user_packages()
     {
         $user = auth()->user()->profile()->first();
+        // Active packages
         $purchased_packages = auth()
             ->user()
             ->profile
             ->profilePackages()
             ->withPivot('tokens_received', 'tokens_used', 'starts_at', 'expires_at')
             ->where('expires_at', '>', now())
+            ->orderBy('profile_packages.expires_at', 'desc')
+            ->get();
+
+        // Expired packages
+        $expired_packages = auth()
+            ->user()
+            ->profile
+            ->profilePackages()
+            ->withPivot('tokens_received', 'tokens_used', 'starts_at', 'expires_at')
+            ->where('expires_at', '<=', now())
+            ->orderBy('profile_packages.expires_at', 'desc')
             ->get();
 
         $packages = Package::all();
         return view('default.view.profile.user_packages.create', [
             'user' => $user, 
             'packages' => $packages, 
-            'purchased_packages' => $purchased_packages
+            'purchased_packages' => $purchased_packages,
+            'expired_packages' => $expired_packages,
         ]);
     }
 
@@ -1455,6 +1342,13 @@ class UserProfilesController extends Controller
 
     public function view_favorite()
     {
+        // Block access when user has zero tokens
+        $profile = auth()->user()->profile ?? null;
+        if (!$profile || (int)($profile->available_tokens ?? 0) <= 0) {
+            return redirect()->route('user_packages.create')
+                ->with('error', 'You need tokens to access Favorites. Please purchase a package.');
+        }
+
         $users = auth()->user()->profile->favoriteProfiles()
             ->join('users', 'profiles.user_id', '=', 'users.id')
             ->where('users.active', 1)
@@ -1565,12 +1459,13 @@ class UserProfilesController extends Controller
 
     public function allPurchasedPackages()
     {
+        // Show all packages (active and expired)
         $purchased_packages = auth()
             ->user()
             ->profile
             ->profilePackages()
             ->withPivot('tokens_received', 'tokens_used', 'starts_at', 'expires_at')
-            ->where('expires_at', '>', now())
+            ->orderBy('profile_packages.expires_at', 'desc')
             ->get();
 
         return view('default.view.profile.user_packages.all_packages', [

@@ -118,7 +118,6 @@ class UpdateProfileRequest extends FormRequest
             'nadi' => 'nullable|string|max:50',
             'chart' => 'nullable|string|max:50',
             'more_about_patrika' => 'nullable|string',
-            'celestial_bodies' => 'nullable|string|max:50',
             
         ];
     }

@@ -27,7 +27,7 @@
         <div style="flex: 1; text-align: center;">
         <h1>Payment Report</h1>
                 </div>
-        <p>Generated on: {{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}</p>
+        <p>Generated on: {{ \Carbon\Carbon::now()->format('d-m-Y H:i:s') }}</p>
         @if($from_date || $to_date)
             <p>
                 @if($from_date)

@@ -78,7 +78,7 @@
                                         {{ $user->email ?? 'N/A' }}
                                     </td>
                                     <td class="border border-gray-300 px-4 py-2">
-                                        {{ \Carbon\Carbon::parse($package->expires_at)->format('M d, Y') }}
+                                        {{ \Carbon\Carbon::parse($package->expires_at)->format('d-m-Y') }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -131,7 +131,7 @@
                             {{ $user->email ?? 'N/A' }}
                         </td>
                         <td class="border border-gray-300 px-4 py-2">
-                            {{ \Carbon\Carbon::parse($user->date_of_birth)->format('M d') }}
+                            {{ \Carbon\Carbon::parse($user->date_of_birth)->format('d-m') }}
                         </td>
                     </tr>
                     @endforeach

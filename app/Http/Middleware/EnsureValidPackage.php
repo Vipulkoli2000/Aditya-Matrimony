@@ -19,6 +19,7 @@ class EnsureValidPackage
         if (Auth::check() && Auth::user()->roles && Auth::user()->roles->pluck('name')->first() === 'member') {
             
             // Routes that are always allowed (even without active package)
+            // Users without packages can only access: package purchase, password update, and logout
             $allowed = [
                 'dashboard',
                 'user_packages.create',
@@ -26,6 +27,12 @@ class EnsureValidPackage
                 'logout',
                 'profiles.update_password',
                 'profiles.password.update',
+                'password.request',
+                'password.email',
+                'password.reset',
+                'password.store',
+                'password.update',
+                'password.confirm',
                 'razorpay.createOrder',
                 'razorpay.verifyPayment',
                 'razorpay.failure',
@@ -47,7 +54,7 @@ class EnsureValidPackage
             // If no valid package, redirect to packages page
             if (!$hasValidPackage) {
                 return redirect()->route('user_packages.create')
-                    ->with('error', 'You need an active package to access this feature. Please purchase a package to continue.');
+                    ->with('error', 'Your package has expired or you don\'t have an active package. You can only access the Package Purchase page and Update Password. Please purchase a package to access all features.');
             }
         }
 

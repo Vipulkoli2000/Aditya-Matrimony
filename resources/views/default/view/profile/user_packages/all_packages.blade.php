@@ -102,6 +102,10 @@
             font-size: 0.875rem; /* Make text smaller */
             padding: 0.25rem 0.5rem; /* Reduce padding */
         }
+        /* Expired row coloring */
+        .expired-row td, .expired-row th {
+            color: #dc3545;
+        }
     </style>
 
     <div class="content-wrapper">
@@ -122,16 +126,25 @@
                             <th>Description</th>
                             <th>Price</th>
                             <th>Expiry Date</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($purchased_packages as $purchased_package)
-                        <tr>
+                        @php $isExpired = \Carbon\Carbon::parse($purchased_package->pivot->expires_at)->isPast(); @endphp
+                        <tr class="{{ $isExpired ? 'expired-row' : ''}}">
                             <td>{{ $purchased_package->name }}</td>
                             <td>{{ $purchased_package->description }}</td>
                             <td>₹{{ number_format($purchased_package->price, 2) }}</td>
-                            <td>{{ $purchased_package->pivot->expires_at }}</td>
+                            <td>{{ \Carbon\Carbon::parse($purchased_package->pivot->expires_at)->format('d-m-Y') }}</td>
+                            <td>
+                                @if($isExpired)
+                                    <span class="badge bg-secondary">Expired</span>
+                                @else
+                                    <span class="badge bg-success">Active</span>
+                                @endif
+                            </td>
                             <td>
                                 <a href="{{ route('generate.invoice', $purchased_package->id) }}" class="btn btn-secondary btn-sm" target="_blank">
                                     Download Invoice

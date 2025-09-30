@@ -675,22 +675,6 @@ return [
         'graduation' => 'Graduation',
         'post_graduation' => 'Post Graduation',
     ],
-    // astronomy details
-    'celestial_bodies' => [
-        'Sun' => 'sun(रवि)',
-        'Moon' => 'moon(चंद्र)',
-        'Mercury' => 'mercury(बुध)',
-        'Venus' => 'venus(शुक्र)',
-        'Mars' => 'mars(मंगळ)',
-        'Jupiter' => 'jupiter(गुरु)',
-        'Saturn' => 'saturn(शनी)',
-        'Rahu' => 'rahu(राहु)',
-        'Ketu' => 'ketu(केतू)',
-        'Harshel' => 'harshel(हर्षल)',
-        'Uranus' => 'uranus(युरेनस)',
-        'Neptune' => 'neptune(नेपच्यून)',
-        'Pluto' => 'pluto(प्लुटो)',
-    ],
     'rashee' => [
         'Aries' => 'aries(मेष)',
         'Taurus' => 'taurus(वृषभ)',

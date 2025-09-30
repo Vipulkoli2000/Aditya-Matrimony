@@ -149,9 +149,89 @@
                 white-space: nowrap;
             }
         }
+        .expired-row td, .expired-row th {
+            color: #dc3545;
+        }
     </style>
 
     <div class="main-content">
+        @if(session('error'))
+            <div class="alert alert-danger mt-3" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+        {{-- Package Status Alert --}}
+        @if(auth()->check() && auth()->user()->profile)
+            @php
+                $profile = auth()->user()->profile;
+                $hasActivePackage = $profile->hasActivePackage();
+            @endphp
+            
+            @if(!$hasActivePackage)
+                <div class="alert alert-warning mt-3 mb-4" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle me-3" style="font-size: 1.2em;"></i>
+                        <div>
+                            <strong>No Active Package!</strong><br>
+                            <small>You currently don't have an active package. Purchase a package below to access all matrimony features like viewing profiles, showing interest, etc.</small>
+                        </div>
+                    </div>
+                </div>
+            @else
+                @php
+                    $activePackage = $profile->getActivePackage();
+                @endphp
+                <div class="alert alert-success mt-3 mb-4" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-check-circle me-3" style="font-size: 1.2em;"></i>
+                        <div>
+                            <strong>Active Package:</strong> {{ $activePackage->package->name ?? 'N/A' }}<br>
+                            <small><strong>Expires:</strong> {{ \Carbon\Carbon::parse($activePackage->expires_at)->format('d-m-Y') }} ({{ \Carbon\Carbon::parse($activePackage->expires_at)->diffForHumans() }})</small>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+        @if(isset($expired_packages) && $expired_packages->isNotEmpty())
+        <h3 class="text-center m-3">Expired Packages</h3>
+        <div class="container pl-4">
+            <div class="packages-table-container">
+                <table class="packages-table">
+                    <thead>
+                        <tr>
+                            <th>Package Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Expired On</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($expired_packages->take(3) as $expired)
+                        <tr class="expired-row">
+                            <td>{{ $expired->name }}</td>
+                            <td>{{ $expired->description }}</td>
+                            <td>₹{{ number_format($expired->price, 2) }}</td>
+                            <td>{{ \Carbon\Carbon::parse($expired->pivot->expires_at)->format('d-m-Y') }}</td>
+                            <td>
+                                <a href="{{ route('generate.invoice', $expired->id) }}" class="btn btn-secondary btn-sm" target="_blank">
+                                    Download Invoice
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                @if($expired_packages->count() > 3)
+                    <div class="view-all-link">
+                        <a href="{{ route('all.purchased.packages') }}" class="btn btn-sm btn-link">View All Purchased Packages →</a>
+                    </div>
+                @endif
+            </div>
+        </div>
+        @endif
+        @endif
+
         <h3 class="text-center m-3">Available Tokens: {{$user->available_tokens}}</h3>
 
         @if($purchased_packages->isNotEmpty())
@@ -174,7 +254,7 @@
                             <td>{{ $purchased_package->name }}</td>
                             <td>{{ $purchased_package->description }}</td>
                             <td>₹{{ number_format($purchased_package->price, 2) }}</td>
-                            <td>{{ $purchased_package->pivot->expires_at }}</td>
+                            <td>{{ \Carbon\Carbon::parse($purchased_package->pivot->expires_at)->format('d-m-Y') }}</td>
                             <td>
                                 <a href="{{ route('generate.invoice', $purchased_package->id) }}" class="btn btn-secondary btn-sm" target="_blank">
                                 Download Invoice

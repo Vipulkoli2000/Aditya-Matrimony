@@ -18,7 +18,7 @@
 
         <div class="mt-8 text-xs text-gray-500 dark:text-white-light">
             <span class="inline-block mr-2">Period:</span>
-            <span>{{ now()->startOfMonth()->format('d M Y') }} - {{ now()->endOfMonth()->format('d M Y') }}</span>
+            <span>{{ now()->startOfMonth()->format('d-m-Y') }} - {{ now()->endOfMonth()->format('d-m-Y') }}</span>
         </div>
     </div>
 </x-layout.admin>

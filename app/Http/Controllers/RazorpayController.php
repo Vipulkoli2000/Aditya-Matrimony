@@ -231,7 +231,7 @@ class RazorpayController extends Controller
                 'package' => [
                     'name'       => $package->name,
                     'tokens'     => $package->tokens,
-                    'expires_at' => now()->addDays($package->validity)->format('Y-m-d H:i:s')
+                    'expires_at' => now()->addDays($package->validity)->format('d-m-Y H:i:s')
                 ]
             ]);
 

@@ -117,18 +117,6 @@ class Profile extends Model
         'nadi',
         'chart',
         'more_about_patrika',
-        'celestial_bodies',
-        'celestial_bodies_2',
-        'celestial_bodies_3',
-        'celestial_bodies_4',
-        'celestial_bodies_5',
-        'celestial_bodies_6',
-        'celestial_bodies_7',
-        'celestial_bodies_8',
-        'celestial_bodies_9',
-        'celestial_bodies_10',
-        'celestial_bodies_11',
-        'celestial_bodies_12',
         'img_patrika',
         'profile_package_id',
         'franchise_code'
@@ -218,7 +206,6 @@ class Profile extends Model
     public function hasActivePackage()
     {
         return ProfilePackage::where('profile_id', $this->id)
-            ->where('status', true)
             ->where('expires_at', '>', now())
             ->exists();
     }
@@ -229,7 +216,6 @@ class Profile extends Model
     public function getActivePackage()
     {
         return ProfilePackage::where('profile_id', $this->id)
-            ->where('status', true)
             ->where('expires_at', '>', now())
             ->latest('id')
             ->first();
@@ -241,7 +227,6 @@ class Profile extends Model
     public function getAllPackages()
     {
         return ProfilePackage::where('profile_id', $this->id)
-            ->where('status', true)
             ->orderBy('created_at', 'desc')
             ->get();
     }

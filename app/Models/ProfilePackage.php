@@ -30,6 +30,13 @@ public function package()
         'tokens_used',
         'starts_at',
         'expires_at',
+        'status',
+    ];
+
+    protected $casts = [
+        'starts_at' => 'datetime',
+        'expires_at' => 'datetime',
+        'status' => 'boolean',
     ];
     
 }

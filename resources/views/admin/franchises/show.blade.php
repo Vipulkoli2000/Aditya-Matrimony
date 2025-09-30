@@ -75,18 +75,18 @@
                     <div class="space-y-3">
                         <div>
                             <label class="font-semibold text-sm text-gray-600 dark:text-gray-400">Created At</label>
-                            <div class="text-lg">{{ $franchise->created_at->format('d M Y, h:i A') }}</div>
+                            <div class="text-lg">{{ $franchise->created_at->format('d-m-Y, h:i A') }}</div>
                         </div>
 
                         <div>
                             <label class="font-semibold text-sm text-gray-600 dark:text-gray-400">Updated At</label>
-                            <div class="text-lg">{{ $franchise->updated_at->format('d M Y, h:i A') }}</div>
+                            <div class="text-lg">{{ $franchise->updated_at->format('d-m-Y, h:i A') }}</div>
                         </div>
 
                         @if($franchise->email_verified_at)
                         <div>
                             <label class="font-semibold text-sm text-gray-600 dark:text-gray-400">Email Verified At</label>
-                            <div class="text-lg">{{ $franchise->email_verified_at->format('d M Y, h:i A') }}</div>
+                            <div class="text-lg">{{ $franchise->email_verified_at->format('d-m-Y, h:i A') }}</div>
                         </div>
                         @else
                         <div>

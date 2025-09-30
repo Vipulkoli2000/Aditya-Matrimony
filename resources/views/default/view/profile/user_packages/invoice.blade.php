@@ -52,7 +52,7 @@ Dombivli (West), Maharashtra 421202
             <strong>Invoice No:</strong> {{ $invoiceNumber }}
         </span>
         <span style="float: right; margin: 0;">
-            <strong>Date:</strong> {{ $invoiceDate->format('d/m/Y') }}
+            <strong>Date:</strong> {{ $invoiceDate->format('d-m-Y') }}
         </span>
     </div>
 
@@ -91,8 +91,8 @@ Dombivli (West), Maharashtra 421202
             <tr>
                 <td style="border: 1px solid #ddd; padding: 12px;">{{ $package->name }}</td>
                 <td style="border: 1px solid #ddd; padding: 12px;">{{ $package->description }}</td>
-                 <td style="border: 1px solid #ddd; padding: 12px;">{{ optional($package->pivot)->created_at ? $package->pivot->created_at->format('d/m/Y') : $package->created_at->format('d/m/Y') }}</td>
-                <td style="border: 1px solid #ddd; padding: 12px;">{{ (optional($package->pivot)->created_at ?? $package->created_at)->copy()->addDays($package->validity)->format('d/m/Y') }}</td>
+                 <td style="border: 1px solid #ddd; padding: 12px;">{{ optional($package->pivot)->created_at ? $package->pivot->created_at->format('d-m-Y') : $package->created_at->format('d-m-Y') }}</td>
+                <td style="border: 1px solid #ddd; padding: 12px;">{{ (optional($package->pivot)->created_at ?? $package->created_at)->copy()->addDays($package->validity)->format('d-m-Y') }}</td>
                 <td style="border: 1px solid #ddd; padding: 12px;">Rs. {{ number_format($netAmount, 2) }}</td>
             </tr>
         </tbody>

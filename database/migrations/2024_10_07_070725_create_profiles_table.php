@@ -135,18 +135,6 @@ return new class extends Migration {
             $table->string('chart', 50)->nullable();
             $table->text('more_about_patrika')->nullable();
             $table->string('img_patrika', 255)->nullable();
-            $table->string('celestial_bodies', 50)->nullable();
-            $table->string('celestial_bodies_2', 50)->nullable();
-            $table->string('celestial_bodies_3', 50)->nullable();
-            $table->string('celestial_bodies_4', 50)->nullable();
-            $table->string('celestial_bodies_5', 50)->nullable();
-            $table->string('celestial_bodies_6', 50)->nullable();
-            $table->string('celestial_bodies_7', 50)->nullable();
-            $table->string('celestial_bodies_8', 50)->nullable();
-            $table->string('celestial_bodies_9', 50)->nullable();
-            $table->string('celestial_bodies_10', 50)->nullable();
-            $table->string('celestial_bodies_11', 50)->nullable();
-            $table->string('celestial_bodies_12', 50)->nullable();
             $table->timestamps();
         });
     }

@@ -26,7 +26,7 @@
         <div style="flex: 1; text-align: center;">
         <h1>User Registrations Report</h1>
                 </div>
-        <p>Generated on: {{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}</p>
+        <p>Generated on: {{ \Carbon\Carbon::now()->format('d-m-Y H:i:s') }}</p>
         @if($from_date || $to_date)
             <p>
                 @if($from_date)
@@ -60,7 +60,9 @@
                     <td>{{ ucfirst($user->email) }}</td>
                     <td>{{ $user->profile->mobile ?? 'N/A' }}</td>
                     <td>{{ ucfirst($user->profile->gender ?? 'N/A') }}</td>
-                    <td>{{ $user->profile->date_of_birth ?? 'N/A' }}</td>
+                    <td>
+                        {{ optional($user->profile)->date_of_birth ? \Carbon\Carbon::parse($user->profile->date_of_birth)->format('d-m-Y') : 'N/A' }}
+                    </td>
                     <td>{{ $user->created_at->format('d-m-Y') }}</td>
                 </tr>
             @empty

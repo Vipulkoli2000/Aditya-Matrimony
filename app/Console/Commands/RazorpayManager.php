@@ -30,7 +30,7 @@ class RazorpayManager extends Command
     public function handle()
     {
         $this->info('🚀 Starting Razorpay Payment Status Check...');
-        $this->info('Time: ' . now()->format('Y-m-d H:i:s'));
+        $this->info('Time: ' . now()->format('d-m-Y H:i:s'));
         $this->line('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
         try {
@@ -231,6 +231,6 @@ class RazorpayManager extends Command
 
         $this->line('');
         $this->info('✅ Razorpay Management Completed Successfully!');
-        $this->info('⏰ Finished at: ' . now()->format('Y-m-d H:i:s'));
+        $this->info('⏰ Finished at: ' . now()->format('d-m-Y H:i:s'));
     }
 }

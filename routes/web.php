@@ -106,6 +106,14 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             
             // Franchise Payment Tracking
             Route::get('/franchise/payments', [FranchiseController::class, 'franchisePayments'])->name('franchise.payments');
+            
+            // Profile Packages Routes - accessible by both admin and franchise
+            Route::get('/profile-packages', [App\Http\Controllers\ProfilePackagesController::class, 'index'])->name('profile_packages.index');
+            Route::get('/profile-packages/{id}', [App\Http\Controllers\ProfilePackagesController::class, 'show'])->name('profile_packages.show');
+            Route::get('/profile-packages-pending', [App\Http\Controllers\ProfilePackagesController::class, 'pendingTransactions'])->name('profile_packages.pending');
+            Route::get('/profile-packages-edit-status/{id}', [App\Http\Controllers\ProfilePackagesController::class, 'editStatus'])->name('profile_packages.edit_status');
+            Route::put('/profile-packages-update-status/{id}', [App\Http\Controllers\ProfilePackagesController::class, 'updateStatus'])->name('profile_packages.update_status');
+            Route::post('/profile-packages/add-to-user', [App\Http\Controllers\ProfilePackagesController::class, 'addPackageToUser'])->name('profile_packages.add_to_user');
         });
 
         Route::get('user_profiles/{id}/download', [App\Http\Controllers\admin\ProfilesController::class, 'download'])
@@ -180,6 +188,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         // Route::get('profile/update_password', [UserProfilesController::class, 'update_password'])->name('profiles.update_password');
         Route::get('profile/view_interested', [ProfilePackagesController::class, 'view_interested'])->name('profiles.view_interested');
         Route::post('/show_interest', [ProfilePackagesController::class, 'show_interest'])->name('profiles.show_interest');
+        
         Route::post('/remove-interest', [UserProfilesController::class, 'remove_interest'])->name('profiles.remove_interest');
 
         Route::get('/dashboard/load', [DashboardController::class, 'load_users'])->name('dashboard.view_load_users');

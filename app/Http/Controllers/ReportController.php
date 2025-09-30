@@ -133,7 +133,7 @@ class ReportController extends Controller
         $to_date = $request->to_date ?? null;
 
         $pdf = PDF::loadView('admin.reports.exports.registrations_pdf', compact('registrations', 'from_date', 'to_date'));
-        return $pdf->download('user_registrations_' . Carbon::now()->format('Y-m-d') . '.pdf');
+        return $pdf->download('user_registrations_' . Carbon::now()->format('d-m-Y') . '.pdf');
     }
 
     /**
@@ -141,7 +141,7 @@ class ReportController extends Controller
      */
     public function exportRegistrationsExcel(Request $request)
     {
-        return Excel::download(new RegistrationsExport($request), 'user_registrations_' . Carbon::now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new RegistrationsExport($request), 'user_registrations_' . Carbon::now()->format('d-m-Y') . '.xlsx');
     }
 
     /**
@@ -166,7 +166,7 @@ class ReportController extends Controller
         $to_date = $request->to_date ?? null;
 
         $pdf = PDF::loadView('admin.reports.exports.payments_pdf', compact('payments', 'from_date', 'to_date'));
-        return $pdf->download('payment_report_' . Carbon::now()->format('Y-m-d') . '.pdf');
+        return $pdf->download('payment_report_' . Carbon::now()->format('d-m-Y') . '.pdf');
     }
 
     /**
@@ -174,7 +174,7 @@ class ReportController extends Controller
      */
     public function exportPaymentsExcel(Request $request)
     {
-        return Excel::download(new PaymentsExport($request), 'payment_report_' . Carbon::now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new PaymentsExport($request), 'payment_report_' . Carbon::now()->format('d-m-Y') . '.xlsx');
     }
 
     /**
@@ -199,7 +199,7 @@ class ReportController extends Controller
         $to_date = $request->to_date ?? null;
 
         $pdf = PDF::loadView('admin.reports.exports.expiring_packages_pdf', compact('expiringPackages', 'from_date', 'to_date'));
-        return $pdf->download('expiring_packages_' . Carbon::now()->format('Y-m-d') . '.pdf');
+        return $pdf->download('expiring_packages_' . Carbon::now()->format('d-m-Y') . '.pdf');
     }
 
     /**
@@ -207,7 +207,7 @@ class ReportController extends Controller
      */
     public function exportExpiringPackagesExcel(Request $request)
     {
-        return Excel::download(new ExpiringPackagesExport($request), 'expiring_packages_' . Carbon::now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new ExpiringPackagesExport($request), 'expiring_packages_' . Carbon::now()->format('d-m-Y') . '.xlsx');
     }
 
     /**
@@ -229,7 +229,7 @@ class ReportController extends Controller
         }
         $brideGrooms = $query->orderBy('created_at', 'desc')->get();
         $pdf = PDF::loadView('admin.reports.exports.bride_grooms_pdf', compact('brideGrooms'));
-        return $pdf->download('bride_grooms_' . Carbon::now()->format('Y-m-d') . '.pdf');
+        return $pdf->download('bride_grooms_' . Carbon::now()->format('d-m-Y') . '.pdf');
     }
 
     /**
@@ -237,6 +237,6 @@ class ReportController extends Controller
      */
     public function exportBrideGroomsExcel(Request $request)
     {
-        return Excel::download(new BrideGroomsExport($request), 'bride_grooms_' . Carbon::now()->format('Y-m-d') . '.xlsx');
+        return Excel::download(new BrideGroomsExport($request), 'bride_grooms_' . Carbon::now()->format('d-m-Y') . '.xlsx');
     }
 }

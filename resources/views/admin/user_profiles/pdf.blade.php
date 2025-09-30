@@ -317,7 +317,7 @@
 <div class="profile-section">
       <h2>Astronomy Details</h2>
      <div class="profile-field">
-        <span>Date of Birth:</span> {{ $profile->date_of_birth ? ucfirst($profile->date_of_birth) : 'NA' }}
+        <span>Date of Birth:</span> {{ $profile->date_of_birth ? \Carbon\Carbon::parse($profile->date_of_birth)->format('d-m-Y') : 'NA' }}
      </div>
       <div class="profile-field">
          <span>Birth Time:</span> {{ $profile->birth_time ? ucfirst($profile->birth_time) : 'NA' }}
@@ -456,7 +456,7 @@
     </div>
     <!-- Printed On Timestamp -->
     <div class="print-timestamp">
-        Printed on: {{ date("Y-m-d H:i:s") }}
+        Printed on: {{ date("d-m-Y H:i:s") }}
     </div>
 </body>
 </html>

@@ -127,6 +127,7 @@ class ProfilePackagesController extends Controller
         $profilePackages->tokens_used = 0;
         $profilePackages->starts_at = $startsAt;
         $profilePackages->expires_at = $startsAt->copy()->addDays($package->validity);
+        $profilePackages->status = true; // Set as active/successful purchase
         $profilePackages->save();
         // dd($profilePackages);
 
@@ -324,7 +325,198 @@ class ProfilePackagesController extends Controller
         }
         return false;
     }
-   
-    
 
+    // Admin Methods
+    public function index(Request $request)
+    {
+        $search = trim((string) $request->input('search', ''));
+
+        $users = \App\Models\User::with([
+                'profile.profilePackages' => function($query) {
+                    $query->orderBy('expires_at', 'desc');
+                }
+            ])
+            ->whereHas('profile', function($query) {
+                // If logged in as franchise, filter by franchise_code
+                if (\Auth::guard('franchise')->check()) {
+                    $franchise = \Auth::guard('franchise')->user();
+                    $query->where('franchise_code', $franchise->franchise_code);
+                }
+            })
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%")
+                      ->orWhereHas('profile', function ($q2) use ($search) {
+                          $q2->where('mobile', 'like', "%{$search}%");
+                      });
+                });
+            })
+            ->get();
+
+        return view('admin.profile_packages.index', compact('users'));
+    }
+
+    public function show($id)
+    {
+        $user = \App\Models\User::with(['profile.profilePackages' => function($query) {
+            $query->orderBy('expires_at', 'desc');
+        }])->findOrFail($id);
+
+        // If logged in as franchise, verify the profile belongs to this franchise
+        if (\Auth::guard('franchise')->check()) {
+            $franchise = \Auth::guard('franchise')->user();
+            if (!$user->profile || $user->profile->franchise_code !== $franchise->franchise_code) {
+                abort(403, 'Unauthorized access to this profile.');
+            }
+        }
+
+        $availablePackages = Package::all();
+
+        return view('admin.profile_packages.show', compact('user', 'availablePackages'));
+    }
+
+    public function pendingTransactions(Request $request)
+    {
+        $search = trim((string) $request->input('search', ''));
+
+        $pendingPackages = ProfilePackage::with(['profile.user', 'package'])
+            ->whereNull('status')
+            ->when(\Auth::guard('franchise')->check(), function ($query) {
+                // If logged in as franchise, filter by franchise_code
+                $franchise = \Auth::guard('franchise')->user();
+                $query->whereHas('profile', function ($q) use ($franchise) {
+                    $q->where('franchise_code', $franchise->franchise_code);
+                });
+            })
+            ->when($search !== '', function ($query) use ($search) {
+                $query->whereHas('profile.user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                })->orWhereHas('profile', function ($q) use ($search) {
+                    $q->where('mobile', 'like', "%{$search}%");
+                })->orWhereHas('package', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.profile_packages.pending', compact('pendingPackages'));
+    }
+
+    public function editStatus($id)
+    {
+        $profilePackage = ProfilePackage::with(['profile.user', 'package'])->findOrFail($id);
+        
+        // If logged in as franchise, verify the profile belongs to this franchise
+        if (\Auth::guard('franchise')->check()) {
+            $franchise = \Auth::guard('franchise')->user();
+            if (!$profilePackage->profile || $profilePackage->profile->franchise_code !== $franchise->franchise_code) {
+                abort(403, 'Unauthorized access to this transaction.');
+            }
+        }
+        
+        return view('admin.profile_packages.edit_status', compact('profilePackage'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'payment_ref_id' => 'required|string|max:255',
+        ]);
+
+        $profilePackage = ProfilePackage::with('profile')->findOrFail($id);
+        
+        // If logged in as franchise, verify the profile belongs to this franchise
+        if (\Auth::guard('franchise')->check()) {
+            $franchise = \Auth::guard('franchise')->user();
+            if (!$profilePackage->profile || $profilePackage->profile->franchise_code !== $franchise->franchise_code) {
+                abort(403, 'Unauthorized access to this transaction.');
+            }
+        }
+        
+        $profilePackage->payment_ref_id = $request->payment_ref_id;
+        $profilePackage->status = 1; // Set to success
+        $profilePackage->save();
+
+        return redirect()->route('profile_packages.pending')->with('success', 'Transaction status updated successfully!');
+    }
+
+    // Admin/Franchise Method to Add Package to User
+    public function addPackageToUser(Request $request)
+    {
+        $validated = $request->validate([
+            'package_id' => 'required|exists:packages,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $user = \App\Models\User::with('profile')->findOrFail($validated['user_id']);
+        
+        if (!$user->profile) {
+            return redirect()->back()->with('error', 'User has no profile. Cannot add package.');
+        }
+
+        // If logged in as franchise, verify the profile belongs to this franchise
+        if (\Auth::guard('franchise')->check()) {
+            $franchise = \Auth::guard('franchise')->user();
+            if ($user->profile->franchise_code !== $franchise->franchise_code) {
+                abort(403, 'Unauthorized access to this profile.');
+            }
+        }
+
+        $package = Package::findOrFail($validated['package_id']);
+
+        // Get the latest package to determine start date
+        $latestUserPackage = $user->profile->profilePackages()
+            ->withPivot('tokens_received', 'tokens_used', 'starts_at', 'expires_at')
+            ->orderBy('expires_at', 'desc')
+            ->first();
+        
+        if ($latestUserPackage && $latestUserPackage->pivot->expires_at > now()) {
+            $startsAt = $latestUserPackage->pivot->expires_at;
+        } else {
+            $startsAt = now();
+        }
+        $startsAt = Carbon::parse($startsAt);
+
+        // Create new package assignment
+        $profilePackages = new ProfilePackage();
+        $profilePackages->profile_id = $user->profile->id;
+        $profilePackages->package_id = $package->id;
+        $profilePackages->tokens_received = $package->tokens;
+        $profilePackages->tokens_used = 0;
+        $profilePackages->starts_at = $startsAt;
+        $profilePackages->expires_at = $startsAt->copy()->addDays($package->validity);
+        $profilePackages->status = true; // Set as active/successful purchase
+        $profilePackages->save();
+
+        // Update profile's package_id with the latest purchased package
+        $user->profile->update([
+            'profile_package_id' => $profilePackages->id
+        ]);
+
+        // Update total tokens
+        $this->updateTotalTokensForProfile($user->profile->id);
+         
+        return redirect()->back()->with('success', 'Package added successfully!');
+    }
+
+    private function updateTotalTokensForProfile($profileId)
+    {
+        $profile = Profile::find($profileId);
+        if (!$profile) {
+            return;
+        }
+
+        $totalTokens = ProfilePackage::where('profile_id', $profileId)
+            ->where('expires_at', '>', now())
+            ->get()
+            ->sum(function ($package) {
+                return $package->tokens_received - $package->tokens_used;
+            });
+
+        $profile->update(['available_tokens' => $totalTokens]);
+    }
+   
 }
