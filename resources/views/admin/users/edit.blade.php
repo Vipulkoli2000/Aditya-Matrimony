@@ -18,14 +18,14 @@
                 </div>   
                 <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-3">
                         <x-text-input name="name" value="{{ old('name', $user->name) }}" :label="__('Name')" :require="true" :messages="$errors->get('name')"/>  
-                        <x-text-input name="email" value="{{ old('email', $user->email) }}" :require="true" :label="__('Email')" :messages="$errors->get('email')"/>
+                        <x-text-input name="email" value="{{ old('email', $user->email) }}" :require="true" :label="__('Email (Required)')" :messages="$errors->get('email')"/>
                        
                             <x-text-input 
                             id="mobile" 
                             name="mobile" 
                             value="{{ old('mobile', (str_starts_with($user->mobile, '+91') ? $user->mobile : '+91' . $user->mobile)) }}" 
-                            :require="true" 
-                            :label="__('Mobile')" 
+                            :require="false" 
+                            :label="__('Mobile (Optional)')" 
                             :messages="$errors->get('mobile')"/>
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
@@ -56,7 +56,7 @@
 
                           
                                 
-                        <x-text-input name="password" type="password" value="{{ old('password', $user->password) }}" :require="true" :label="__('Password')" :messages="$errors->get('password')"/>   
+                        <x-text-input name="password" type="password" value="" placeholder="Leave blank to keep current password" :require="false" :label="__('Password (Optional)')" :messages="$errors->get('password')"/>   
                     <div>
                         <label for="actionRole">Role:</label>
                         <select class="form-input" name="role">

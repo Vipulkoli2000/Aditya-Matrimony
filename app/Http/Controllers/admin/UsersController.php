@@ -90,15 +90,32 @@ class UsersController extends Controller
 
     public function update(User $user, UserRequest $request) 
     {
+        // Prepare update data
+        $updateData = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'mobile' => $request->input('mobile'),
+            'active' => $request->input('active'),
+        ];
         
-        $user->update($request->all());
+        // Only update password if provided
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($request->input('password'));
+        }
         
-        // $profile = Profile::find($user->id);
+        $user->update($updateData);
+        
+        // Update or create profile
         $profile = $user->profile ?? new Profile();
+        if (!$profile->exists) {
+            $profile->user_id = $user->id;
+        }
+        
         $profile->email = $request->input("email");
         $profile->mobile = $request->input("mobile");
         $profile->first_name = $request->input('name');
         $profile->save();
+        
         $user->syncRoles($request->get('role'));
         $request->session()->flash('success', 'User updated successfully!');
         return redirect()->route('users.index');

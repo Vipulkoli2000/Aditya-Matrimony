@@ -28,9 +28,9 @@ class UserRequest extends FormRequest
 
         return [
             'name' => 'required',
-           'email' => 'nullable|required_without:mobile|regex:/^[\w\.\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,6}$/|unique:users,email,' . ($this->user ? $this->user->id : ''),
-           'mobile' => 'nullable|required_without:email|regex:/^\+91\d{10}$/|unique:users,mobile,' . ($user ? $user->id : 'NULL') . ',id',
-           'password' => 'required',
+           'email' => 'required|regex:/^[\w\.\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,6}$/|unique:users,email,' . ($this->user ? $this->user->id : ''),
+           'mobile' => 'nullable|regex:/^\+91\d{10}$/|unique:users,mobile,' . ($user ? $user->id : 'NULL') . ',id',
+           'password' => 'nullable',
         ];
     }
 }
