@@ -230,4 +230,54 @@ class Profile extends Model
             ->orderBy('created_at', 'desc')
             ->get();
     }
+    
+    /**
+     * Boot method to handle cascading deletes
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        
+        // When a profile is deleted, delete all related records and the user
+        static::deleting(function($profile) {
+            // Delete password reset tokens for this profile's user
+            if ($profile->email) {
+                \DB::table('password_reset_tokens')->where('email', $profile->email)->delete();
+            }
+            
+            // Delete profile packages
+            \DB::table('profile_packages')->where('profile_id', $profile->id)->delete();
+            
+            // Delete profile favorites (where this profile is the favorite)
+            \DB::table('profile_favorites')->where('profile_id', $profile->id)->delete();
+            \DB::table('profile_favorites')->where('favorite_profile_id', $profile->id)->delete();
+            
+            // Delete profile views
+            \DB::table('profile_views')->where('profile_id', $profile->id)->delete();
+            \DB::table('profile_views')->where('view_profile_id', $profile->id)->delete();
+            
+            // Delete profile interests
+            \DB::table('profile_interests')->where('profile_id', $profile->id)->delete();
+            \DB::table('profile_interests')->where('interest_profile_id', $profile->id)->delete();
+            
+            // Delete profile images from storage if they exist
+            if ($profile->img_1 && \Storage::exists('public/images/' . $profile->img_1)) {
+                \Storage::delete('public/images/' . $profile->img_1);
+            }
+            if ($profile->img_2 && \Storage::exists('public/images/' . $profile->img_2)) {
+                \Storage::delete('public/images/' . $profile->img_2);
+            }
+            if ($profile->img_3 && \Storage::exists('public/images/' . $profile->img_3)) {
+                \Storage::delete('public/images/' . $profile->img_3);
+            }
+            if ($profile->img_patrika && \Storage::exists('public/images/' . $profile->img_patrika)) {
+                \Storage::delete('public/images/' . $profile->img_patrika);
+            }
+            
+            // Delete the associated user directly to avoid circular deletion
+            if ($profile->user_id) {
+                \DB::table('users')->where('id', $profile->user_id)->delete();
+            }
+        });
+    }
 }

@@ -315,23 +315,23 @@
                                 </div>
                             </div>
                             <div class="mb-2">
-                                <label for="email" class="form-label" style="color: black; margin: 10px 0;">Email</label>
-                                <input id="email" name="email" type="email" class="form-control" value="{{ old('email') }}" placeholder="Enter Email" required autofocus autocomplete="" />
+                                <label for="email" class="form-label" style="color: black; margin: 10px 0;">Email <span class="text-muted">(Email or Mobile required)</span></label>
+                                <input id="email" name="email" type="email" class="form-control" value="{{ old('email') }}" placeholder="Enter Email" autofocus autocomplete="" />
                                 <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger small" />
                             </div>
                             <!-- Mobile -->
                             <div class="mb-2">
-                                <label for="mobile" class="form-label" style="color: black; margin: 10px 0;">Mobile</label>
+                                <label for="mobile" class="form-label" style="color: black; margin: 10px 0;">Mobile <span class="text-muted">(Email or Mobile required)</span></label>
                                 <div class="input-group">
                                     <!-- Country Code Dropdown -->
-                                    <select class="form-select" name="country_code" id="country_code" style="max-width: 87px; color: black;" required>
+                                    <select class="form-select" name="country_code" id="country_code" style="max-width: 87px; color: black;">
                                         @foreach (config('data.countryCodes') as $value => $name)
                                         <option value="{{$value}}">{{ $value. " ".$name }}</option>
                                         @endforeach
                                     </select>
                                      <input id="mobile" name="mobile" type="tel" class="form-control @error('mobile') is-invalid @enderror"
-                                           value="{{ old('mobile') }}" placeholder="Mobile Number" required autofocus autocomplete="off"
-                                           pattern="^[0-9]{10}$" title="Please enter a valid mobile number" style="color: black;" />
+                                           value="{{ old('mobile') }}" placeholder="Mobile Number" autofocus autocomplete="off"
+                                           pattern="^[0-9]{10}$" title="Please enter a valid 10-digit mobile number" style="color: black;" />
                                 </div>
                                 <x-input-error :messages="$errors->get('mobile')" class="mt-2 text-danger small" />
                             </div>

@@ -102,7 +102,7 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
-            'expire' => 60,
+            'expire' => 2, // Token expires in 2 minutes
             'throttle' => 0,
         ],
     ],

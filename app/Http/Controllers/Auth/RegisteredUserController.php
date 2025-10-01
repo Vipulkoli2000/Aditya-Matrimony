@@ -46,8 +46,8 @@ class RegisteredUserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'regex:/^[\w\.\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,6}$/', 'max:255', 'unique:users'],
-            'mobile' => ['required', 'digits:10'],
+            'email' => ['nullable', 'required_without:mobile', 'string', 'regex:/^[\w\.\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,6}$/', 'max:255', 'unique:users'],
+            'mobile' => ['nullable', 'required_without:email', 'digits:10'],
             'date_of_birth' => ['required', 'date'],    
             'role' =>  ['required'],
             'height' => ['required'],
@@ -90,109 +90,142 @@ class RegisteredUserController extends Controller
         
         $request->validate($validationRules);
         
-        $number = $request->input('country_code') .$request->input('mobile'); 
-        $exists = DB::table('users')->where('mobile', $number)->exists();
-
-        if ($exists) {
-            return back()->withErrors(['mobile' => 'The mobile number is already registered.']);
+        // Build mobile number with country code if provided
+        $number = null;
+        if ($request->filled('mobile')) {
+            $number = $request->input('country_code') . $request->input('mobile');
+            
+            // Check if mobile already exists
+            $exists = DB::table('users')->where('mobile', $number)->exists();
+            if ($exists) {
+                return back()->withErrors(['mobile' => 'The mobile number is already registered.'])->withInput();
+            }
         }
+        
+        // Check if there's a pending password reset token for this email
+        if ($request->filled('email')) {
+            $existingToken = DB::table('password_reset_tokens')
+                ->where('email', $request->email)
+                ->first();
+            
+            if ($existingToken) {
+                $tokenCreatedAt = \Carbon\Carbon::parse($existingToken->created_at);
+                $tokenExpiryMinutes = config('auth.passwords.users.expire', 15);
+                $tokenExpiresAt = $tokenCreatedAt->addMinutes($tokenExpiryMinutes);
+                
+                // Check if token is still valid (not expired)
+                if ($tokenExpiresAt->isFuture()) {
+                    $minutesRemaining = now()->diffInMinutes($tokenExpiresAt);
+                    $secondsRemaining = now()->diffInSeconds($tokenExpiresAt) % 60;
+                    
+                    return back()->withErrors([
+                        'email' => "A registration with this email is already in progress. Please check your email or try again in {$minutesRemaining} minute(s) and {$secondsRemaining} second(s)."
+                    ])->withInput();
+                } else {
+                    // Token has expired, delete it
+                    DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+                }
+            }
+        }
+        
         $fullName = trim($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name);
         $ranToken = Str::random(60); // Generate a random token
-        $user = User::create([
-            'name' => $fullName,
-            'email' => $request->email,
-            'mobile' => $number,
-            'password' => Hash::make(Str::random(32)), // Temporary password, will be set via email
-        ]);
-       
-        // dd($user->id);
-           if($request->role ==='bride'){
-              $userRole = 'groom';
-           }
-
-           if($request->role ==='groom'){
-            $userRole = 'bride';
-         }
-
-         DB::table('password_reset_tokens')->insert([
-            'email' => $user->email,
-            'token' => Hash::make($ranToken),
-            'created_at' => now(),
-        ]);
         
-
-        $profile = Profile::create([
-            'user_id' => $user->id,
-            'franchise_code' => $request->has_franchise_code === 'yes' ? $request->franchise_code : null,
-            'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'date_of_birth' => $request->date_of_birth,
-             'mobile' => $number,
-             'role' => $userRole,
-            'height' => $request->height,
-            'weight' => $request->weight,
-            'complexion' => $request->complexion,
-            'address_line_1' => $request->address_line1,
-            'address_line_2' => $request->address_line2,
-            'landmark' => $request->landmark,
-            'pincode' => $request->pincode,
-            'highest_education' => $request->highest_education,
-
-            // Father details
-            'father_is_alive' => $request->father_is_alive,
-            'father_name' => $request->father_name,
-            'father_address' => $request->father_address,
-            'father_mobile' => $request->father_mobile,
-            // Mother details
-            'mother_is_alive' => $request->mother_is_alive,
-            'mother_name' => $request->mother_name,
-            'mother_address' => $request->mother_address,
-            'mother_mobile' => $request->mother_mobile,
-            // Caste details
-            'caste' => $request->caste,
-            'sub_caste' => $request->sub_caste,
-            'custom_caste' => $request->custom_caste,
-            'custom_sub_caste' => $request->custom_sub_caste,
-        ]);
-
-        $memberRole = Role::where('name', 'member')->first();
-        $user->assignRole($memberRole);
-        // Auth::login($user);
-        // event(new Registered($user));
-
-        // start
-        // $user = User::where('email', $request->email)->first();
-
-        // if($user){
-        //     $status = Password::sendResetLink(
-        //         $request->only('email')
-        //     );
-        // }
-      
-
-
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-       
-
-        // return $status == Password::RESET_LINK_SENT
-        //             ? back()->with('status', __('we have emailed you a link to set password.'))
-        //             : back()->withInput($request->only('email'))
-        //                     ->withErrors(['email' => __($status)]);
-        // end
-
-        // new start
-        $url = route('password.reset', ['token' => $ranToken]). '?email=' . urlencode($user->email); // Adjust this route as necessary
-
-       
-        Mail::to($user->email)
-           ->send(new SetPasswordMail($url));
+        try {
+            // Start database transaction
+            DB::beginTransaction();
+            
+            // Create user
+            $user = User::create([
+                'name' => $fullName,
+                'email' => $request->email,
+                'mobile' => $number,
+                'password' => Hash::make(Str::random(32)), // Temporary password, will be set via email
+            ]);
            
-          return redirect()->back()->with('status','we have emailed you a link to set password.');
-        // end end
+            // Determine user role
+            if($request->role ==='bride'){
+                $userRole = 'groom';
+            }
+
+            if($request->role ==='groom'){
+                $userRole = 'bride';
+            }
+
+            // Insert password reset token only if email is provided
+            if ($user->email) {
+                DB::table('password_reset_tokens')->insert([
+                    'email' => $user->email,
+                    'token' => Hash::make($ranToken),
+                    'created_at' => now(),
+                ]);
+            }
+            
+            // Create profile
+            $profile = Profile::create([
+                'user_id' => $user->id,
+                'franchise_code' => $request->has_franchise_code === 'yes' ? $request->franchise_code : null,
+                'first_name' => $request->first_name,
+                'middle_name' => $request->middle_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'date_of_birth' => $request->date_of_birth,
+                'mobile' => $number,
+                'role' => $userRole,
+                'height' => $request->height,
+                'weight' => $request->weight,
+                'complexion' => $request->complexion,
+                'address_line_1' => $request->address_line1,
+                'address_line_2' => $request->address_line2,
+                'landmark' => $request->landmark,
+                'pincode' => $request->pincode,
+                'highest_education' => $request->highest_education,
+                // Father details
+                'father_is_alive' => $request->father_is_alive,
+                'father_name' => $request->father_name,
+                'father_address' => $request->father_address,
+                'father_mobile' => $request->father_mobile,
+                // Mother details
+                'mother_is_alive' => $request->mother_is_alive,
+                'mother_name' => $request->mother_name,
+                'mother_address' => $request->mother_address,
+                'mother_mobile' => $request->mother_mobile,
+                // Caste details
+                'caste' => $request->caste,
+                'sub_caste' => $request->sub_caste,
+                'custom_caste' => $request->custom_caste,
+                'custom_sub_caste' => $request->custom_sub_caste,
+            ]);
+
+            // Assign role
+            $memberRole = Role::where('name', 'member')->first();
+            $user->assignRole($memberRole);
+            
+            $successMessage = 'Registration successful!';
+            
+            // Send password reset email only if email is provided
+            if ($user->email) {
+                // Generate password reset URL
+                $url = route('password.reset', ['token' => $ranToken]). '?email=' . urlencode($user->email);
+
+                // Try to send email
+                Mail::to($user->email)->send(new SetPasswordMail($url));
+                
+                $successMessage = 'We have emailed you a link to set password.';
+            }
+            
+            // If everything successful, commit the transaction
+            DB::commit();
+            
+            return redirect()->back()->with('status', $successMessage);
+            
+        } catch (\Exception $e) {
+            // If anything fails, rollback all database changes
+            DB::rollBack();
+            
+            // Return error message
+            return back()->withErrors(['error' => 'Registration failed. Please try again. Error: ' . $e->getMessage()])->withInput();
+        }
     }
     
 }

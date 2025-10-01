@@ -13,6 +13,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        
+        // Delete expired password reset tokens every minute
+        $schedule->call(function () {
+            $expiryMinutes = config('auth.passwords.users.expire', 15);
+            $expiryTime = now()->subMinutes($expiryMinutes);
+            
+            \DB::table('password_reset_tokens')
+                ->where('created_at', '<', $expiryTime)
+                ->delete();
+        })->everyMinute();
     }
 
     /**

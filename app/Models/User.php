@@ -37,6 +37,59 @@ class User extends Authenticatable implements MustVerifyEmail
       {
           return $this->hasOne(Profile::class);
       }
+      
+      /**
+       * Boot method to handle cascading deletes
+       */
+      protected static function boot()
+      {
+          parent::boot();
+          
+          // When a user is deleted, delete their profile and all related records
+          static::deleting(function($user) {
+              // Delete password reset tokens for this user
+              if ($user->email) {
+                  \DB::table('password_reset_tokens')->where('email', $user->email)->delete();
+              }
+              
+              if ($user->profile) {
+                  // Delete related profile records without triggering User deletion again
+                  $profile = $user->profile;
+                  
+                  // Delete profile packages
+                  \DB::table('profile_packages')->where('profile_id', $profile->id)->delete();
+                  
+                  // Delete profile favorites
+                  \DB::table('profile_favorites')->where('profile_id', $profile->id)->delete();
+                  \DB::table('profile_favorites')->where('favorite_profile_id', $profile->id)->delete();
+                  
+                  // Delete profile views
+                  \DB::table('profile_views')->where('profile_id', $profile->id)->delete();
+                  \DB::table('profile_views')->where('view_profile_id', $profile->id)->delete();
+                  
+                  // Delete profile interests
+                  \DB::table('profile_interests')->where('profile_id', $profile->id)->delete();
+                  \DB::table('profile_interests')->where('interest_profile_id', $profile->id)->delete();
+                  
+                  // Delete profile images
+                  if ($profile->img_1 && \Storage::exists('public/images/' . $profile->img_1)) {
+                      \Storage::delete('public/images/' . $profile->img_1);
+                  }
+                  if ($profile->img_2 && \Storage::exists('public/images/' . $profile->img_2)) {
+                      \Storage::delete('public/images/' . $profile->img_2);
+                  }
+                  if ($profile->img_3 && \Storage::exists('public/images/' . $profile->img_3)) {
+                      \Storage::delete('public/images/' . $profile->img_3);
+                  }
+                  if ($profile->img_patrika && \Storage::exists('public/images/' . $profile->img_patrika)) {
+                      \Storage::delete('public/images/' . $profile->img_patrika);
+                  }
+                  
+                  // Delete profile record directly to avoid circular deletion
+                  \DB::table('profiles')->where('id', $profile->id)->delete();
+              }
+          });
+      }
 
     /**
      * The attributes that should be hidden for serialization.
