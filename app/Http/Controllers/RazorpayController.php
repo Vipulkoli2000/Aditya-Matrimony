@@ -71,23 +71,8 @@ class RazorpayController extends Controller
 
             $razorpayOrder = $api->order->create($orderData);
 
-            // Create a pending profile_packages row to track this order (NULL status = pending)
-            // Only if the user has a profile (user flow). Admin flow should continue to use admin controller.
-            if (auth()->check() && auth()->user()->profile) {
-                DB::table('profile_packages')->insert([
-                    'profile_id'      => auth()->user()->profile->id,
-                    'package_id'      => $package->id,
-                    'tokens_received' => 0, // will be updated on success
-                    'tokens_used'     => 0,
-                    'starts_at'       => null,
-                    'expires_at'      => null,
-                    'order_id'        => $razorpayOrder['id'],
-                    'payment_ref_id'  => null,
-                    'status'          => false, // false means pending
-                    'created_at'      => now(),
-                    'updated_at'      => now(),
-                ]);
-            }
+            // No longer creating pending transactions in database
+            // Successful transactions will be created only after payment verification
 
             return response()->json([
                 'success'       => true,
@@ -174,41 +159,21 @@ class RazorpayController extends Controller
                 return response()->json(['success' => false, 'message' => 'User or Package not found.'], 404);
             }
 
-            // Find and update existing pending record or create new one
-            $existingRecord = DB::table('profile_packages')
-                ->where('order_id', $request->razorpay_order_id)
-                ->where('profile_id', $user->id)
-                ->first();
-
-            if ($existingRecord) {
-                // Update existing pending record
-                DB::table('profile_packages')
-                    ->where('id', $existingRecord->id)
-                    ->update([
-                        'tokens_received' => $package->tokens,
-                        'starts_at'       => now(),
-                        'expires_at'      => now()->addDays($package->validity),
-                        'payment_ref_id'  => $request->razorpay_payment_id,
-                        'status'          => true,
-                        'updated_at'      => now()
-                    ]);
-                $profilePackageId = $existingRecord->id;
-            } else {
-                // Create new record if none exists
-                $profilePackageId = DB::table('profile_packages')->insertGetId([
-                    'profile_id'      => $user->id,
-                    'package_id'      => $package->id,
-                    'tokens_received' => $package->tokens,
-                    'tokens_used'     => 0,
-                    'starts_at'       => now(),
-                    'expires_at'      => now()->addDays($package->validity),
-                    'order_id'        => $request->razorpay_order_id,
-                    'payment_ref_id'  => $request->razorpay_payment_id,
-                    'status'          => true,
-                    'created_at'      => now(),
-                    'updated_at'      => now()
-                ]);
-            }
+            // Create successful transaction record only
+            // No pending transactions are stored in database anymore
+            $profilePackageId = DB::table('profile_packages')->insertGetId([
+                'profile_id'      => $user->id,
+                'package_id'      => $package->id,
+                'tokens_received' => $package->tokens,
+                'tokens_used'     => 0,
+                'starts_at'       => now(),
+                'expires_at'      => now()->addDays($package->validity),
+                'order_id'        => $request->razorpay_order_id,
+                'payment_ref_id'  => $request->razorpay_payment_id,
+                'status'          => true, // Only successful transactions are stored
+                'created_at'      => now(),
+                'updated_at'      => now()
+            ]);
 
             $user->profile_package_id = $profilePackageId;
             $user->available_tokens += $package->tokens;

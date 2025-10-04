@@ -22,32 +22,27 @@ class RazorpayManager extends Command
      *
      * @var string
      */
-    protected $description = 'Check pending Razorpay payments and update their statuses';
+    protected $description = 'DEPRECATED: Pending payments no longer exist - only successful transactions are stored';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('🚀 Starting Razorpay Payment Status Check...');
-        $this->info('Time: ' . now()->format('d-m-Y H:i:s'));
+        $this->info('⚠️  DEPRECATED COMMAND');
+        $this->info('This command is no longer needed as pending transactions have been removed.');
+        $this->info('Only successful transactions are stored in the database now.');
         $this->line('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
-        try {
-            $results = $this->checkPaymentStatus();
-            $this->displaySummary($results);
-            
-            Log::info('Razorpay payment check completed successfully', $results);
-            return 0;
-
-        } catch (\Exception $e) {
-            $this->error('❌ Critical error in Razorpay payment check: ' . $e->getMessage());
-            Log::error('Razorpay payment check failed', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            return 1;
-        }
+        
+        $this->warn('📋 System Change:');
+        $this->line('   • Pending transactions are no longer created in the database');
+        $this->line('   • Only successful payments create database records');
+        $this->line('   • Failed/cancelled payments leave no database footprint');
+        
+        $this->info('✅ No action required - command completed');
+        
+        Log::info('RazorpayManager command executed but deprecated - no pending transactions exist');
+        return 0;
     }
 
     /**

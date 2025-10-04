@@ -16,7 +16,6 @@
                             class="mr-2 px-2 py-1 border border-gray-300 rounded-md">
                         <button class="btn btn-primary px-4 py-2 mr-2" type="submit">Search</button>
 
-                        <a href="{{ route('profile_packages.pending') }}" class="btn btn-warning px-4 py-2 mr-2">Pending Transactions</a>
 
                         @if(request('search'))
                             <a href="{{ route('profile_packages.index') }}" class="btn btn-secondary px-4 py-2">Reset</a>

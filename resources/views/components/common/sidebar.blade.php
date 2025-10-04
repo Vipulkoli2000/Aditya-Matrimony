@@ -266,8 +266,7 @@
                 </li>
                 {{-- Profile Packages for Franchise --}}
                 <li class="menu nav-item">
-                    <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'franchise_profile_packages' }"
-                        @click="activeDropdown === 'franchise_profile_packages' ? activeDropdown = null : activeDropdown = 'franchise_profile_packages'">
+                    <a href="{{ route('profile_packages.index') }}" class="nav-link group">
                         <div class="flex items-center">
                             <svg class="group-hover:!text-primary shrink-0" width="20" height="20"
                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -281,24 +280,12 @@
                             <span
                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Profile Packages</span>
                         </div>
-                        <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'franchise_profile_packages' }">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                    </button>
-                    <ul x-cloak x-show="activeDropdown === 'franchise_profile_packages'" x-collapse class="sub-menu text-gray-500">
-                        <li><a href="{{ route('profile_packages.index') }}">All Profile Packages</a></li>
-                        <li><a href="{{ route('profile_packages.pending') }}">Pending Transactions</a></li>
-                    </ul>
+                    </a>
                 </li>
                 @else
                 @role(['admin','member'])
                 <li class="menu nav-item">
-                    <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'profile' }"
-                        @click="activeDropdown === 'profile' ? activeDropdown = null : activeDropdown = 'profile'">
+                    <a href="/user_profiles" class="nav-link group">
                         <div class="flex items-center">
                         <svg class="group-hover:!text-primary shrink-0" width="20" height="20"
                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -313,27 +300,16 @@
                                     fill="currentColor" />
                             </svg>
                             <span
-                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Profile Details  </span>
+                                class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Profiles</span>
                         </div>
-                        <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'profile' }">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                    </button>
-                    <ul x-cloak x-show="activeDropdown === 'profile'" x-collapse class="sub-menu text-gray-500">
-                        <li><a href="/user_profiles">Profiles</a></li>
-                    </ul>
+                    </a>
                 </li>
                 @endrole
 
                 {{-- Profile Packages Management --}}
                 @role(['admin'])
                 <li class="menu nav-item">
-                    <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'profile_packages' }"
-                        @click="activeDropdown === 'profile_packages' ? activeDropdown = null : activeDropdown = 'profile_packages'">
+                    <a href="{{ route('profile_packages.index') }}" class="nav-link group">
                         <div class="flex items-center">
                             <svg class="group-hover:!text-primary shrink-0" width="20" height="20"
                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -347,18 +323,7 @@
                             <span
                                 class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Profile Packages</span>
                         </div>
-                        <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'profile_packages' }">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                    </button>
-                    <ul x-cloak x-show="activeDropdown === 'profile_packages'" x-collapse class="sub-menu text-gray-500">
-                        <li><a href="{{ route('profile_packages.index') }}">All Profile Packages</a></li>
-                        <li><a href="{{ route('profile_packages.pending') }}">Pending Transactions</a></li>
-                    </ul>
+                    </a>
                 </li>
                 @endrole
                 @endif

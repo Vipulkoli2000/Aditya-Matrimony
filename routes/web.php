@@ -110,9 +110,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             // Profile Packages Routes - accessible by both admin and franchise
             Route::get('/profile-packages', [App\Http\Controllers\ProfilePackagesController::class, 'index'])->name('profile_packages.index');
             Route::get('/profile-packages/{id}', [App\Http\Controllers\ProfilePackagesController::class, 'show'])->name('profile_packages.show');
-            Route::get('/profile-packages-pending', [App\Http\Controllers\ProfilePackagesController::class, 'pendingTransactions'])->name('profile_packages.pending');
-            Route::get('/profile-packages-edit-status/{id}', [App\Http\Controllers\ProfilePackagesController::class, 'editStatus'])->name('profile_packages.edit_status');
-            Route::put('/profile-packages-update-status/{id}', [App\Http\Controllers\ProfilePackagesController::class, 'updateStatus'])->name('profile_packages.update_status');
+            // Pending transaction routes removed - only successful transactions are stored now
             Route::post('/profile-packages/add-to-user', [App\Http\Controllers\ProfilePackagesController::class, 'addPackageToUser'])->name('profile_packages.add_to_user');
         });
 

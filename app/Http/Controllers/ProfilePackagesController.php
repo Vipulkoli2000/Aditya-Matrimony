@@ -9,6 +9,7 @@ use App\Models\Profile;
 use App\Models\SubCaste;
 use Illuminate\Http\Request;
 use App\Models\ProfilePackage;
+use Illuminate\Support\Facades\Auth;
 
 class ProfilePackagesController extends Controller
 {
@@ -376,72 +377,11 @@ class ProfilePackagesController extends Controller
         return view('admin.profile_packages.show', compact('user', 'availablePackages'));
     }
 
-    public function pendingTransactions(Request $request)
-    {
-        $search = trim((string) $request->input('search', ''));
+    // Pending transactions feature removed - only successful transactions are stored now
 
-        $pendingPackages = ProfilePackage::with(['profile.user', 'package'])
-            ->whereNull('status')
-            ->when(\Auth::guard('franchise')->check(), function ($query) {
-                // If logged in as franchise, filter by franchise_code
-                $franchise = \Auth::guard('franchise')->user();
-                $query->whereHas('profile', function ($q) use ($franchise) {
-                    $q->where('franchise_code', $franchise->franchise_code);
-                });
-            })
-            ->when($search !== '', function ($query) use ($search) {
-                $query->whereHas('profile.user', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
-                })->orWhereHas('profile', function ($q) use ($search) {
-                    $q->where('mobile', 'like', "%{$search}%");
-                })->orWhereHas('package', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%");
-                });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
+    // Edit status feature removed - only successful transactions are stored now
 
-        return view('admin.profile_packages.pending', compact('pendingPackages'));
-    }
-
-    public function editStatus($id)
-    {
-        $profilePackage = ProfilePackage::with(['profile.user', 'package'])->findOrFail($id);
-        
-        // If logged in as franchise, verify the profile belongs to this franchise
-        if (\Auth::guard('franchise')->check()) {
-            $franchise = \Auth::guard('franchise')->user();
-            if (!$profilePackage->profile || $profilePackage->profile->franchise_code !== $franchise->franchise_code) {
-                abort(403, 'Unauthorized access to this transaction.');
-            }
-        }
-        
-        return view('admin.profile_packages.edit_status', compact('profilePackage'));
-    }
-
-    public function updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'payment_ref_id' => 'required|string|max:255',
-        ]);
-
-        $profilePackage = ProfilePackage::with('profile')->findOrFail($id);
-        
-        // If logged in as franchise, verify the profile belongs to this franchise
-        if (\Auth::guard('franchise')->check()) {
-            $franchise = \Auth::guard('franchise')->user();
-            if (!$profilePackage->profile || $profilePackage->profile->franchise_code !== $franchise->franchise_code) {
-                abort(403, 'Unauthorized access to this transaction.');
-            }
-        }
-        
-        $profilePackage->payment_ref_id = $request->payment_ref_id;
-        $profilePackage->status = 1; // Set to success
-        $profilePackage->save();
-
-        return redirect()->route('profile_packages.pending')->with('success', 'Transaction status updated successfully!');
-    }
+    // Update status feature removed - only successful transactions are stored now
 
     // Admin/Franchise Method to Add Package to User
     public function addPackageToUser(Request $request)
