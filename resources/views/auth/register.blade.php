@@ -1,4 +1,9 @@
 <x-layout.user_banner>
+    @if(config('services.recaptcha.enabled'))
+    <!-- Google reCAPTCHA Script -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
+    
     <style>
         /* Existing style for other 'a' tags styled as buttons */
         a.btn {
@@ -534,6 +539,14 @@
                                     I agree to the <a href="/terms-and-conditions" target="_blank" class="text-primary">Terms and Conditions</a>
                                 </label>
                             </div>
+                            
+                            @if(config('services.recaptcha.enabled'))
+                            <!-- reCAPTCHA -->
+                            <div class="mb-3">
+                                <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.key') }}"></div>
+                                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2 text-danger small" />
+                            </div>
+                            @endif
                         </div> {{-- end step 4 --}}
 
                         <div class="d-flex justify-content-between mt-4">

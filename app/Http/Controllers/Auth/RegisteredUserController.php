@@ -8,18 +8,17 @@ use App\Models\Profile;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Mail\SetPasswordMail;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class RegisteredUserController extends Controller
 {
@@ -88,7 +87,19 @@ class RegisteredUserController extends Controller
             $validationRules['franchise_code'][] = 'required';
         }
         
+        // Add reCAPTCHA validation if enabled
+        if (config('services.recaptcha.enabled')) {
+            $validationRules['g-recaptcha-response'] = ['required'];
+        }
+        
         $request->validate($validationRules);
+        
+        // Verify reCAPTCHA if enabled
+        if (config('services.recaptcha.enabled')) {
+            if (!$this->verifyRecaptcha($request->input('g-recaptcha-response'))) {
+                return back()->withErrors(['g-recaptcha-response' => 'Please verify that you are not a robot.'])->withInput();
+            }
+        }
         
         // Build mobile number with country code if provided
         $number = null;
@@ -102,45 +113,18 @@ class RegisteredUserController extends Controller
             }
         }
         
-        // Check if there's a pending password reset token for this email
-        if ($request->filled('email')) {
-            $existingToken = DB::table('password_reset_tokens')
-                ->where('email', $request->email)
-                ->first();
-            
-            if ($existingToken) {
-                $tokenCreatedAt = \Carbon\Carbon::parse($existingToken->created_at);
-                $tokenExpiryMinutes = config('auth.passwords.users.expire', 15);
-                $tokenExpiresAt = $tokenCreatedAt->addMinutes($tokenExpiryMinutes);
-                
-                // Check if token is still valid (not expired)
-                if ($tokenExpiresAt->isFuture()) {
-                    $minutesRemaining = now()->diffInMinutes($tokenExpiresAt);
-                    $secondsRemaining = now()->diffInSeconds($tokenExpiresAt) % 60;
-                    
-                    return back()->withErrors([
-                        'email' => "A registration with this email is already in progress. Please check your email or try again in {$minutesRemaining} minute(s) and {$secondsRemaining} second(s)."
-                    ])->withInput();
-                } else {
-                    // Token has expired, delete it
-                    DB::table('password_reset_tokens')->where('email', $request->email)->delete();
-                }
-            }
-        }
-        
         $fullName = trim($request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name);
-        $ranToken = Str::random(60); // Generate a random token
         
         try {
             // Start database transaction
             DB::beginTransaction();
             
-            // Create user
+            // Create user with fixed password
             $user = User::create([
                 'name' => $fullName,
                 'email' => $request->email,
                 'mobile' => $number,
-                'password' => Hash::make(Str::random(32)), // Temporary password, will be set via email
+                'password' => Hash::make('Aditya123'), // Fixed password
             ]);
            
             // Determine user role
@@ -152,14 +136,6 @@ class RegisteredUserController extends Controller
                 $userRole = 'bride';
             }
 
-            // Insert password reset token only if email is provided
-            if ($user->email) {
-                DB::table('password_reset_tokens')->insert([
-                    'email' => $user->email,
-                    'token' => Hash::make($ranToken),
-                    'created_at' => now(),
-                ]);
-            }
             
             // Create profile
             $profile = Profile::create([
@@ -201,23 +177,11 @@ class RegisteredUserController extends Controller
             $memberRole = Role::where('name', 'member')->first();
             $user->assignRole($memberRole);
             
-            $successMessage = 'Registration successful!';
-            
-            // Send password reset email only if email is provided
-            if ($user->email) {
-                // Generate password reset URL
-                $url = route('password.reset', ['token' => $ranToken]). '?email=' . urlencode($user->email);
-
-                // Try to send email
-                Mail::to($user->email)->send(new SetPasswordMail($url));
-                
-                $successMessage = 'We have emailed you a link to set password.';
-            }
-            
             // If everything successful, commit the transaction
             DB::commit();
             
-            return redirect()->back()->with('status', $successMessage);
+            // Redirect to registration success page
+            return redirect('/registration-success');
             
         } catch (\Exception $e) {
             // If anything fails, rollback all database changes
@@ -225,6 +189,39 @@ class RegisteredUserController extends Controller
             
             // Return error message
             return back()->withErrors(['error' => 'Registration failed. Please try again. Error: ' . $e->getMessage()])->withInput();
+        }
+    }
+
+    /**
+     * Display the registration success view.
+     */
+    public function success(): View
+    {
+        return view('auth.registration-success');
+    }
+    
+    /**
+     * Verify reCAPTCHA response
+     */
+    private function verifyRecaptcha($recaptchaResponse)
+    {
+        if (empty($recaptchaResponse)) {
+            return false;
+        }
+
+        try {
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => config('services.recaptcha.secret'),
+                'response' => $recaptchaResponse,
+                'remoteip' => request()->ip(),
+            ]);
+
+            $responseData = $response->json();
+            return isset($responseData['success']) && $responseData['success'] === true;
+        } catch (\Exception $e) {
+            // Log the error if needed
+            Log::error('reCAPTCHA verification failed: ' . $e->getMessage());
+            return false;
         }
     }
     

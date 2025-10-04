@@ -11,6 +11,10 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+// Registration success route - accessible by both guests and authenticated users
+Route::get('registration-success', [RegisteredUserController::class, 'success'])
+            ->name('registration.success');
+
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');

@@ -37,7 +37,13 @@ return [
     ],
 
     'brevo' => [
-    'key' => env('BREVO_API_KEY'),
-],
+        'key' => env('BREVO_API_KEY'),
+    ],
+
+    'recaptcha' => [
+        'enabled' => env('RECAPTCHA_ENABLED', false),
+        'key' => env('RECAPTCHA_SITE_KEY'),
+        'secret' => env('RECAPTCHA_SECRET_KEY'),
+    ],
 
 ];
