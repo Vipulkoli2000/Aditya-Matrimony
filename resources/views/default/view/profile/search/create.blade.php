@@ -503,7 +503,7 @@
                         </div> --}}
                     </div>
                     <h3>{{ $user->first_name }} {{ $user->last_name }}</h3>
-                    <p>Age: {{ $user->age }}</p>
+                    <p>Age: {{ $user->age ?? 'N/A' }}</p>
                  {{-- start --}}
                 <div style="position: absolute; top: 10px; right: 10px;">
                 <div  x-data="favoriteToggle({{ $user->id }}, {{ $user->is_favorited ? 'true' : 'false' }})" >

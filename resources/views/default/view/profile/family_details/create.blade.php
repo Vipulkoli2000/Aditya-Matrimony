@@ -182,8 +182,8 @@
                                 <label for="father_is_alive">Father is Alive</label>
                                 <select class="form-input" name="father_is_alive" id="father_is_alive">
                                     <option value="" selected>Select an option</option>
-                                    <option value="1" {{ $user->father_is_alive === 1 ? 'selected' : '' }}>Yes</option>
-                                    <option value="0" {{ $user->father_is_alive === 0 ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('father_is_alive', $user->father_is_alive) == 1 ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('father_is_alive', $user->father_is_alive) == 0 ? 'selected' : '' }}>No</option>
                                 </select>
                                 @if ($errors->has('father_is_alive'))
                                     <span class="text-danger small">{{ $errors->first('father_is_alive') }}</span>
@@ -315,8 +315,8 @@
                                 <label for="mother_is_alive">Is Alive</label>
                                 <select class="form-input" name="mother_is_alive" id="mother_is_alive">
                                     <option value="" selected>Select an option</option>
-                                    <option value="1" {{ $user->mother_is_alive === 1 ? 'selected' : '' }}>Yes</option>
-                                    <option value="0" {{ $user->mother_is_alive === 0 ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('mother_is_alive', $user->mother_is_alive) == 1 ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('mother_is_alive', $user->mother_is_alive) == 0 ? 'selected' : '' }}>No</option>
                                 </select>
                                 @if ($errors->has('mother_is_alive'))
                                     <span class="text-danger small">{{ $errors->first('mother_is_alive') }}</span>

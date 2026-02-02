@@ -735,12 +735,12 @@ return [
     'gana' => [
         'dev' => 'dev(देव)',
         'manushya' => 'manushya(मनुष्य)',
-        'rakshasa' => 'rakshasa(रक्षस)',
+        'rakshasa' => 'rakshasa(राक्षस)',
         'maahiti_naahi' => 'maahiti_naahi(माहिती नाही)',
     ],
     'nadi' => [
         'madhya' => 'madhya(मध्य)',
-        'aantya' => 'aantya(आंत्य)',
+        'aantya' => 'aantya(अंत्य)',
         'adaya' => 'adaya(आदय)',
         'maahiti_naahi' => 'maahiti_naahi(माहिती नाही)',
     ],

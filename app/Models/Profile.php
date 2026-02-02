@@ -6,8 +6,11 @@ use App\Models\Caste;
 use App\Models\Package;
 use App\Models\SubCaste;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Profile extends Model
 {
@@ -122,6 +125,21 @@ class Profile extends Model
         'franchise_code'
     ];
 
+    protected $casts = [
+        'physical_abnormality' => 'boolean',
+        'spectacles' => 'boolean',
+        'lens' => 'boolean',
+        'father_is_alive' => 'boolean',
+        'mother_is_alive' => 'boolean',
+        'when_meet' => 'boolean',
+        'number_of_brothers_married' => 'integer',
+        'number_of_brothers_unmarried' => 'integer',
+        'number_of_sisters_married' => 'integer',
+        'number_of_sisters_unmarried' => 'integer',
+        'partner_min_age' => 'integer',
+        'partner_max_age' => 'integer',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -183,6 +201,19 @@ class Profile extends Model
         
         return $this->subCaste ? $this->subCaste->name : null;
     }
+
+    public function getAgeAttribute()
+    {
+        if (!$this->date_of_birth) {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($this->date_of_birth)->age;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
     
     /**
      * Check if caste is 'Other' option
@@ -242,41 +273,41 @@ class Profile extends Model
         static::deleting(function($profile) {
             // Delete password reset tokens for this profile's user
             if ($profile->email) {
-                \DB::table('password_reset_tokens')->where('email', $profile->email)->delete();
+                DB::table('password_reset_tokens')->where('email', $profile->email)->delete();
             }
             
             // Delete profile packages
-            \DB::table('profile_packages')->where('profile_id', $profile->id)->delete();
+            DB::table('profile_packages')->where('profile_id', $profile->id)->delete();
             
             // Delete profile favorites (where this profile is the favorite)
-            \DB::table('profile_favorites')->where('profile_id', $profile->id)->delete();
-            \DB::table('profile_favorites')->where('favorite_profile_id', $profile->id)->delete();
+            DB::table('profile_favorites')->where('profile_id', $profile->id)->delete();
+            DB::table('profile_favorites')->where('favorite_profile_id', $profile->id)->delete();
             
             // Delete profile views
-            \DB::table('profile_views')->where('profile_id', $profile->id)->delete();
-            \DB::table('profile_views')->where('view_profile_id', $profile->id)->delete();
+            DB::table('profile_views')->where('profile_id', $profile->id)->delete();
+            DB::table('profile_views')->where('view_profile_id', $profile->id)->delete();
             
             // Delete profile interests
-            \DB::table('profile_interests')->where('profile_id', $profile->id)->delete();
-            \DB::table('profile_interests')->where('interest_profile_id', $profile->id)->delete();
+            DB::table('profile_interests')->where('profile_id', $profile->id)->delete();
+            DB::table('profile_interests')->where('interest_profile_id', $profile->id)->delete();
             
             // Delete profile images from storage if they exist
-            if ($profile->img_1 && \Storage::exists('public/images/' . $profile->img_1)) {
-                \Storage::delete('public/images/' . $profile->img_1);
+            if ($profile->img_1 && Storage::exists('public/images/' . $profile->img_1)) {
+                Storage::delete('public/images/' . $profile->img_1);
             }
-            if ($profile->img_2 && \Storage::exists('public/images/' . $profile->img_2)) {
-                \Storage::delete('public/images/' . $profile->img_2);
+            if ($profile->img_2 && Storage::exists('public/images/' . $profile->img_2)) {
+                Storage::delete('public/images/' . $profile->img_2);
             }
-            if ($profile->img_3 && \Storage::exists('public/images/' . $profile->img_3)) {
-                \Storage::delete('public/images/' . $profile->img_3);
+            if ($profile->img_3 && Storage::exists('public/images/' . $profile->img_3)) {
+                Storage::delete('public/images/' . $profile->img_3);
             }
-            if ($profile->img_patrika && \Storage::exists('public/images/' . $profile->img_patrika)) {
-                \Storage::delete('public/images/' . $profile->img_patrika);
+            if ($profile->img_patrika && Storage::exists('public/images/' . $profile->img_patrika)) {
+                Storage::delete('public/images/' . $profile->img_patrika);
             }
             
             // Delete the associated user directly to avoid circular deletion
             if ($profile->user_id) {
-                \DB::table('users')->where('id', $profile->user_id)->delete();
+                DB::table('users')->where('id', $profile->user_id)->delete();
             }
         });
     }

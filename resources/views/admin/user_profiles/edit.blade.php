@@ -357,8 +357,8 @@
                                     <label>Is Alive</label>
                                     <select class="form-input" name="father_is_alive"  id="father_is_alive">
                                         <option value="" selected>select an option</option>
-                                        <option value="1" {{$profile->father_is_alive === 1 ? 'selected' : ''}} >Yes</option>
-                                        <option value="0" {{$profile->father_is_alive === 0 ? 'selected' : ''}}>No</option>
+                                        <option value="1" {{ old('father_is_alive', $profile->father_is_alive) == 1 ? 'selected' : '' }} >Yes</option>
+                                        <option value="0" {{ old('father_is_alive', $profile->father_is_alive) == 0 ? 'selected' : '' }}>No</option>
                                     </select> 
                                     <x-input-error :messages="$errors->get('isAlive')" class="mt-2" /> 
                                 </div> 
@@ -412,8 +412,8 @@
                                     <label>Is Alive</label>
                                     <select class="form-input" name="mother_is_alive" id="mother_is_alive">
                                         <option value="" selected>select an option</option>
-                                        <option value="1" {{$profile->mother_is_alive === 1 ? 'selected' : ''}} >Yes</option>
-                                        <option value="0" {{$profile->mother_is_alive === 0 ? 'selected' : ''}}>No</option>
+                                        <option value="1" {{ old('mother_is_alive', $profile->mother_is_alive) == 1 ? 'selected' : '' }} >Yes</option>
+                                        <option value="0" {{ old('mother_is_alive', $profile->mother_is_alive) == 0 ? 'selected' : '' }}>No</option>
                                     </select> 
                                     <x-input-error :messages="$errors->get('mother_is_alive')" class="mt-2" /> 
                                 </div> 

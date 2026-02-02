@@ -255,30 +255,30 @@
                     <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                         <p><strong>User ID:</strong> {{ $user->user_id }}</p>
                         <p><strong>Full Name:</strong> {{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}</p>
-                        <p><strong>Mother Tongue:</strong> {{ ucfirst($user->mother_tongue) }}</p>
+                        <p><strong>Mother Tongue:</strong> {{ config('data.mother_tongues.'.$user->mother_tongue) ?? ucfirst($user->mother_tongue) }}</p>
                         <p><strong>Native Place:</strong> {{ ucfirst($user->native_place) }}</p>
-                        <p><strong>Gender:</strong> {{ ucfirst($user->gender) }}</p>
-                        <p><strong>Marital Status:</strong> {{  ucfirst($user->marital_status) }}</p>
-                        <p><strong>Living With:</strong> {{ ucfirst($user->living_with) }}</p>
+                        <p><strong>Gender:</strong> {{ config('data.gender.'.$user->gender) ?? ucfirst($user->gender) }}</p>
+                        <p><strong>Marital Status:</strong> {{ config('data.marital_status.'.$user->marital_status) ?? ucfirst($user->marital_status) }}</p>
+                        <p><strong>Living With:</strong> {{ config('data.living_with.'.$user->living_with) ?? ucfirst($user->living_with) }}</p>
                     </div>
                     <!-- Third Row: Personal Details -->
                     <h4 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Health Information</h4>
                     <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                        <p><strong>Blood Group:</strong> {{ ucfirst($user->blood_group) }}</p>
-                        <p><strong>Height:</strong> {{ ucfirst($user->height) }}</p>
+                        <p><strong>Blood Group:</strong> {{ config('data.blood_group.'.$user->blood_group) ?? ucfirst($user->blood_group) }}</p>
+                        <p><strong>Height:</strong> {{ config('data.height.'.$user->height) ?? ucfirst($user->height) }}</p>
                         <p><strong>Weight:</strong> {{ ucfirst($user->weight) }}</p>
-                        <p><strong>Body Type:</strong> {{ ucfirst($user->body_type) }}</p>
-                        <p><strong>Complexion:</strong> {{ ucfirst($user->complexion) }}</p>
-                        <p><strong>Physical Abnormality:</strong> {{ ucfirst($user->physical_abnormality) ? 'Yes' : 'No' }}</p>
-                        <p><strong>Spectacles:</strong> {{ ucfirst($user->spectacles) ? 'Yes' : 'No' }}</p>
-                        <p><strong>Lens:</strong> {{ ucfirst($user->lens) ? 'Yes' : 'No' }}</p>
+                        <p><strong>Body Type:</strong> {{ config('data.body_type.'.$user->body_type) ?? ucfirst($user->body_type) }}</p>
+                        <p><strong>Complexion:</strong> {{ config('data.complexion.'.$user->complexion) ?? ucfirst($user->complexion) }}</p>
+                        <p><strong>Physical Abnormality:</strong> {{ $user->physical_abnormality === null ? '' : ($user->physical_abnormality ? 'Yes' : 'No') }}</p>
+                        <p><strong>Spectacles:</strong> {{ $user->spectacles ? 'Yes' : 'No' }}</p>
+                        <p><strong>Lens:</strong> {{ $user->lens ? 'Yes' : 'No' }}</p>
                      </div>
                     <!-- Fifth Row: Other Habits -->
                     <h4 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Food Habits</h4>
                     <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                        <p><strong>Eating Habits:</strong> {{ ucfirst($user->eating_habits) }}</p>
-                        <p><strong>Drinking Habits:</strong> {{ ucfirst($user->drinking_habits) }}</p>
-                        <p><strong>Smoking Habits:</strong> {{ ucfirst($user->smoking_habits) }}</p>
+                        <p><strong>Eating Habits:</strong> {{ config('data.eating_habits.'.$user->eating_habits) ?? ucfirst($user->eating_habits) }}</p>
+                        <p><strong>Drinking Habits:</strong> {{ config('data.drinking_habits.'.$user->drinking_habits) ?? ucfirst($user->drinking_habits) }}</p>
+                        <p><strong>Smoking Habits:</strong> {{ config('data.smoking_habits.'.$user->smoking_habits) ?? ucfirst($user->smoking_habits) }}</p>
                     </div>
                     <!-- Sixth Row: About Self -->
                     <div class="card-row" style="border-top: 1px solid #ccc; padding-top: 10px;">
@@ -292,7 +292,7 @@
                             <p><strong>Religion:</strong>{{ ucfirst($user->religion) }}</p>
                         </div>
                         <div>
-                            <p><strong>Caste:</strong>{{ ucfirst($castes) }}</p>
+                            <p><strong>Caste:</strong>{{ ucfirst($user->caste_display ?? $castes) }}</p>
                         </div>
                         <div>
                             <p><strong>Gotra:</strong>{{ ucfirst($user->gotra) }}</p>
@@ -338,8 +338,8 @@
                             <h4 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Brother Details</h4>
                             <div class="card-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                                 <p><strong>Resident Place:</strong> {{  ucfirst($user->brother_resident_place) }}</p>
-                                <p><strong>Married:</strong> {{ $user->brother_is_alive ?? 0 }} {{ ($user->brother_is_alive ?? 0) == 1 ? 'brother' : 'brothers' }}</p>
-                                <p><strong>Unmarried:</strong> {{ $user->brother_is_alive ?? 0 }} {{ ($user->brother_is_alive ?? 0) == 1 ? 'brother' : 'brothers' }}</p>
+                                <p><strong>Married:</strong> {{ $user->number_of_brothers_married ?? 0 }} {{ ($user->number_of_brothers_married ?? 0) == 1 ? 'brother' : 'brothers' }}</p>
+                                <p><strong>Unmarried:</strong> {{ $user->number_of_brothers_unmarried ?? 0 }} {{ ($user->number_of_brothers_unmarried ?? 0) == 1 ? 'brother' : 'brothers' }}</p>
                             </div>
                         </div>
                         <!-- Sister Details -->
@@ -450,8 +450,8 @@
                     <div>
                         <h4 class="text-center">Location Information</h4>
                         <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <p><strong>Country:</strong> {{ ucfirst($user->country) }}</p>
-                            <p><strong>State:</strong> {{ ucfirst($user->state) }}</p>
+                            <p><strong>Country:</strong> {{ config('data.country.'.$user->country) ?? ucfirst($user->country) }}</p>
+                            <p><strong>State:</strong> {{ config('data.state.'.$user->state) ?? ucfirst($user->state) }}</p>
                             <p><strong>City:</strong> {{ ucfirst($user->city) }}</p>
                         </div>
                     </div>
@@ -489,14 +489,14 @@
                         <h4 class="text-center" style="border-top: 1px solid #ccc; padding-top: 10px;">Expected Information About Partners</h4>
                         <div class="card-row" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                             <p><strong>Partner Income:</strong> {{ ucfirst($user->partner_income) }} {{ ucfirst($user->partner_currency) }}</p>
-                            <p><strong>Partner Currency:</strong> {{ ucfirst($user->partner_currency) }}</p>
-                            <p><strong>Want to See Patrika:</strong> {{ ucfirst($user->want_to_see_patrika) ? 'Yes' : 'No' }}</p>
-                            <p><strong>Partner Eating Habit:</strong> {{ ucfirst($user->partner_eating_habbit) }}</p>
+                            <p><strong>Partner Currency:</strong> {{ config('data.partner_currency.'.$user->partner_currency) ?? ucfirst($user->partner_currency) }}</p>
+                            <p><strong>Want to See Patrika:</strong> {{ $user->want_to_see_patrika === 'yes' ? 'Yes' : ($user->want_to_see_patrika === 'no' ? 'No' : '') }}</p>
+                            <p><strong>Partner Eating Habit:</strong> {{ config('data.partner_eating_habbit.'.$user->partner_eating_habbit) ?? ucfirst($user->partner_eating_habbit) }}</p>
                             <p><strong>Partner City Preference:</strong> {{ ucfirst($user->partner_city_preference) }}</p>
                             <p><strong>Partner Education:</strong> {{ ucfirst($user->partner_education) }}</p>
                             <p><strong>Partner Job:</strong> {{ ucfirst($user->partner_job) }}</p>
                             <p><strong>Partner Business:</strong> {{ ucfirst($user->partner_business) }}</p>
-                            <p><strong>Partner Foreign Resident:</strong> {{ ucfirst($user->partner_foreign_resident) ? 'Yes' : 'No' }}</p>
+                            <p><strong>Partner Foreign Resident:</strong> {{ $user->partner_foreign_resident === 'yes' ? 'Yes' : ($user->partner_foreign_resident === 'no' ? 'No' : '') }}</p>
                         </div>
                     </div>
                 </div>
