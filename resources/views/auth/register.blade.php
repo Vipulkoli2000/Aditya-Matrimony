@@ -353,9 +353,13 @@
                         <div class="step-form d-none">
                             <div class="row mb-2">
                                 <div class="col-md-6">
-                                    <label for="height" class="form-label" style="color: black; margin: 10px 0;">Height (cm)</label>
-                                    <input id="height" name="height" type="number" min="50" max="300" class="form-control"
-                                           value="{{ old('height') }}" placeholder="Height in centimeters" required />
+                                    <label for="height" class="form-label" style="color: black; margin: 10px 0;">Height <span class="text-danger">*</span></label>
+                                    <select id="height" name="height" class="form-select" required>
+                                        <option value="" disabled selected>Select Height</option>
+                                        @foreach (config('data.height') as $value => $name)
+                                            <option value="{{ $value }}" {{ old('height') == $value ? 'selected' : '' }}>{{ $name }}</option>
+                                        @endforeach
+                                    </select>
                                     <x-input-error :messages="$errors->get('height')" class="mt-2 text-danger small" />
                                 </div>
                                 <div class="col-md-6">

@@ -148,6 +148,7 @@ class RegisteredUserController extends Controller
                 'date_of_birth' => $request->date_of_birth,
                 'mobile' => $number,
                 'role' => $userRole,
+                'gender' => $userRole === 'bride' ? 'Female' : 'Male', // Set gender based on role
                 'height' => $request->height,
                 'weight' => $request->weight,
                 'complexion' => $request->complexion,

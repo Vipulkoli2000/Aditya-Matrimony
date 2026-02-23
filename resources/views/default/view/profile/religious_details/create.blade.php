@@ -300,11 +300,11 @@
                     subcasteSelect.innerHTML = '<option value="">Select Sub-Caste</option>';
                     
                     if (!casteId) {
-                        return;
+                        return Promise.resolve();
                     }
                     
-                    // Fetch subcastes for the selected caste
-                    fetch(`/castes/${casteId}/subcastes`)
+                    // Return the fetch promise
+                    return fetch(`/castes/${casteId}/subcastes`)
                         .then(response => response.json())
                         .then(data => {
                             data.forEach(subcaste => {
@@ -319,9 +319,7 @@
                             
                             // Check if selected subcaste is "Other" after loading
                             if (selectedSubcaste) {
-                                setTimeout(() => {
-                                    handleSubCasteChange();
-                                }, 100);
+                                handleSubCasteChange();
                             }
                         })
                         .catch(error => {
@@ -334,7 +332,7 @@
                 subcasteSelect.addEventListener('change', handleSubCasteChange);
 
                 // Ensure initial state is correct on load
-                handleCasteChange();
+                // We don't call handleCasteChange() here because it would trigger a loadSubcastes without waiting
                 
                 // Initialize on page load
                 if (casteSelect && casteSelect.value) {
@@ -345,26 +343,34 @@
                         customCasteInput.required = true;
                     }
                     
-                    handleCasteChange();
+                    // Handle caste change UI logic (show/hide custom input) without triggering load
+                    const selectedOption = casteSelect.options[casteSelect.selectedIndex];
+                    const selectedCasteName = selectedOption ? (selectedOption.text || selectedOption.textContent || '').trim().toLowerCase() : '';
+                    const selectedCasteId = casteSelect.value;
                     
+                    if (selectedCasteName === 'other' || (otherCasteId && selectedCasteId == otherCasteId)) {
+                        customCasteContainer.style.display = 'block';
+                        if (customCasteInput) customCasteInput.required = true;
+                    }
+
                     // Load subcastes with user selection
                     if (userSubcaste) {
-                        loadSubcastes(casteSelect.value, userSubcaste);
-                        
-                        // Set custom subcaste value if exists
-                        if (userCustomSubCaste && customSubCasteInput) {
-                            setTimeout(() => {
+                        loadSubcastes(casteSelect.value, userSubcaste).then(() => {
+                            // Set custom subcaste value if exists
+                            if (userCustomSubCaste && customSubCasteInput) {
                                 // Ensure custom subcaste input is shown when value exists
                                 customSubCasteContainer.style.display = 'block';
                                 customSubCasteInput.required = true;
                                 customSubCasteInput.value = userCustomSubCaste;
-                            }, 200);
-                        }
+                            }
+                        });
+                    } else {
+                         // If no subcaste selected, just load the options
+                         loadSubcastes(casteSelect.value);
                     }
                 } else if (casteSelect.value) {
                     loadSubcastes(casteSelect.value, userSubcaste);
                 }
-            });
         </script>
 
     <div id="customModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
