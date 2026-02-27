@@ -350,20 +350,22 @@
                                     <span class="text-danger small">{{ $errors->first('to_height') }}</span>
                                 @endif
                             </div>
+                            <!-- Income Field Commented Out 
                             <div class="form-group">
-    <label for="income" class="form-label">Income</label>
-    <select class="form-input" name="income" id="income">
-        <option value="" selected>Select an option</option>
-        <option value="50000" {{ request()->input('income') == '50000' ? 'selected' : '' }}>Up to ₹50,000</option>
-        <option value="100000" {{ request()->input('income') == '100000' ? 'selected' : '' }}>Up to ₹1 Lakh</option>
-        <option value="500000" {{ request()->input('income') == '500000' ? 'selected' : '' }}>Up to ₹5 Lakhs</option>
-        <option value="1000000" {{ request()->input('income') == '1000000' ? 'selected' : '' }}>Up to ₹10 Lakhs</option>
-        <option value="100000000" {{ request()->input('income') == '100000000' ? 'selected' : '' }}>All Income Levels</option>
-    </select>
-    @if ($errors->has('income'))
-        <span class="text-danger small">{{ $errors->first('income') }}</span>
-    @endif
-</div>
+                                <label for="income" class="form-label">Income</label>
+                                <select class="form-input" name="income" id="income">
+                                    <option value="" selected>Select an option</option>
+                                    <option value="50000" {{ request()->input('income') == '50000' ? 'selected' : '' }}>Up to ₹50,000</option>
+                                    <option value="100000" {{ request()->input('income') == '100000' ? 'selected' : '' }}>Up to ₹1 Lakh</option>
+                                    <option value="500000" {{ request()->input('income') == '500000' ? 'selected' : '' }}>Up to ₹5 Lakhs</option>
+                                    <option value="1000000" {{ request()->input('income') == '1000000' ? 'selected' : '' }}>Up to ₹10 Lakhs</option>
+                                    <option value="100000000" {{ request()->input('income') == '100000000' ? 'selected' : '' }}>All Income Levels</option>
+                                </select>
+                                @if ($errors->has('income'))
+                                    <span class="text-danger small">{{ $errors->first('income') }}</span>
+                                @endif
+                            </div>
+                            -->
 
                             
                         </div>

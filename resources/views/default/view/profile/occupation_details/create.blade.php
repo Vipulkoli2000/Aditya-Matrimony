@@ -172,8 +172,8 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="income">Income (INR)</label>
-                                        <input type="text" name="income" value="{{$user->income}}" id="income" class="form-control" placeholder="Enter income">
+                                        <label for="income">Income (INR) (Annually)</label>
+                                        <input type="number" name="income" value="{{$user->income}}" id="income" class="form-control" placeholder="Enter income" min="0">
                                         <x-input-error :messages="$errors->get('income')" class="mt-2" />
                                     </div>
                                 </div>

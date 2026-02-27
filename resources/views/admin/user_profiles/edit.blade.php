@@ -1077,7 +1077,7 @@
                     
                     <div>
                         <label for="partner_income">Income (in INR)</label>
-                        <input type="text" id="partner_income" name="partner_income" class="form-input" value="{{ $profile->partner_income }}">
+                        <input type="number" id="partner_income" name="partner_income" class="form-input" value="{{ $profile->partner_income }}" min="0">
                          <x-input-error :messages="$errors->get('partner_income')" class="mt-2" />
                     </div>  
                     <div class="form-group">

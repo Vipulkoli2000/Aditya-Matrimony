@@ -162,7 +162,8 @@ class UserProfilesController extends Controller
             });
         }
 
-        
+        // Income filter commented out per request due to inconsistent data formats
+        /*
         if ($income) {
             // Convert income to a decimal for proper comparison
             $incomeValue = (float) $income;
@@ -173,6 +174,7 @@ class UserProfilesController extends Controller
                       ->orWhere(DB::raw('CAST(income as DECIMAL(10,2))'), '<=', $incomeValue);
             });
         }
+        */
 
         
         
@@ -1027,7 +1029,7 @@ class UserProfilesController extends Controller
             'organization' => 'nullable|string|max:255',
              'designation' => 'nullable|string',
             'job_location' => 'nullable|string|max:100',
-            'income' => 'nullable|string|max:100',
+            'income' => 'nullable|numeric|min:0',
             'job_experience' => 'nullable|string|max:100',
         ]);
 
