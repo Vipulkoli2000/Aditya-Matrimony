@@ -180,7 +180,16 @@ class UserProfilesController extends Controller
 
         // Filter by marital status if provided
         if ($marital_status) {
-            $users->whereIn('marital_status', $marital_status);
+            $users->where(function ($query) use ($marital_status) {
+                // Check if 'Never Married' is among the selected statuses
+                if (in_array('Never Married', $marital_status)) {
+                    $query->whereIn('marital_status', $marital_status)
+                          ->orWhereNull('marital_status')
+                          ->orWhere('marital_status', '');
+                } else {
+                    $query->whereIn('marital_status', $marital_status);
+                }
+            });
         }
 
         
@@ -240,9 +249,36 @@ class UserProfilesController extends Controller
         }
 
         if ($from_height && $to_height) {
-            $users
-                ->whereNotNull('height')  // Ensure users have a height
-                ->whereRaw('height BETWEEN ? AND ?', [$from_height, $to_height]);
+            $heightOptions = array_keys(config('data.height', []));
+            $fromIndex = array_search($from_height, $heightOptions);
+            $toIndex = array_search($to_height, $heightOptions);
+            
+            if ($fromIndex !== false && $toIndex !== false) {
+                if ($fromIndex > $toIndex) {
+                    $temp = $fromIndex;
+                    $fromIndex = $toIndex;
+                    $toIndex = $temp;
+                }
+                
+                $validHeights = array_slice($heightOptions, $fromIndex, $toIndex - $fromIndex + 1);
+                
+                // Extract minimum and maximum CM integer bounds from labels. e.g. '5\'9" (175cm)' -> 175
+                $minLabel = config('data.height')[$heightOptions[$fromIndex]];
+                $maxLabel = config('data.height')[$heightOptions[$toIndex]];
+                
+                preg_match('/\((\d+)cm\)/', $minLabel, $minMatches);
+                preg_match('/\((\d+)cm\)/', $maxLabel, $maxMatches);
+                
+                $minCm = isset($minMatches[1]) ? (int)$minMatches[1] : 0;
+                $maxCm = isset($maxMatches[1]) ? (int)$maxMatches[1] : 999;
+
+                $users->whereNotNull('height')->where(function ($query) use ($validHeights, $minCm, $maxCm) {
+                    // Profile heights are stored variously as string (e.g., "5'9") or integers (e.g., "175").
+                    // We check numeric heights using BETWEEN cm, and non-numeric heights using exact valid strings.
+                    $query->whereRaw('CAST(height AS UNSIGNED) BETWEEN ? AND ?', [$minCm, $maxCm])
+                          ->orWhereIn('height', $validHeights);
+                });
+            }
         }
 
         // Fetch users from the database

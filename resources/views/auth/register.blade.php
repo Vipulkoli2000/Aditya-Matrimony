@@ -414,11 +414,10 @@
                                 <label for="highest_education" class="form-label" style="color: black; margin: 10px 0;">Highest Education</label>
                                 <select id="highest_education" name="highest_education" class="form-select" required>
                                     <option value="" disabled selected>Select Highest Education</option>
-                                    <option value="high_school" {{ old('highest_education') == 'high_school' ? 'selected' : '' }}>High School</option>
-                                    <option value="diploma" {{ old('highest_education') == 'diploma' ? 'selected' : '' }}>Diploma</option>
-                                    <option value="bachelors" {{ old('highest_education') == 'bachelors' ? 'selected' : '' }}>Bachelors</option>
-                                    <option value="masters" {{ old('highest_education') == 'masters' ? 'selected' : '' }}>Masters</option>
-                                    <option value="phd" {{ old('highest_education') == 'phd' ? 'selected' : '' }}>PhD</option>
+                                    @foreach (config('data.highest_education', []) as $value => $name)
+                                        <option value="{{ $value }}" {{ old('highest_education') == $value ? 'selected' : '' }}>{{ $name }}</option>
+                                    @endforeach
+                                    <option value="other" {{ old('highest_education') == 'other' ? 'selected' : '' }}>Other</option>
                                 </select>
                                 <x-input-error :messages="$errors->get('highest_education')" class="mt-2 text-danger small" />
                             </div>
