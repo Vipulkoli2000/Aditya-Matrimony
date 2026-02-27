@@ -1158,8 +1158,13 @@ class UserProfilesController extends Controller
         $profile = Profile::where('user_id', auth()->user()->id)->first();
         $user = User::find($profile->user_id);
   
-        if($request->has("email")){
+        if($request->has("email") && $request->input("email")){
             $user->email = $request->input("email");
+            $user->save();
+        }
+
+        if($request->has("mobile") && $request->input("mobile")){
+            $user->mobile = $request->input("mobile");
             $user->save();
         }
 
