@@ -519,6 +519,15 @@ class ProfilesController extends Controller
         return $pdf->download($fileName);
     }
 
+    /**
+     * Export the filtered profiles list to Excel (franchise-aware)
+     */
+    public function exportExcel(Request $request)
+    {
+        $fileName = 'profiles-' . now()->format('Ymd-His') . '.xlsx';
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\UserProfilesExport($request), $fileName);
+    }
+
     public function create()
     {
         // Retrieve available packages

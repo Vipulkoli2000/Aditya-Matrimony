@@ -123,6 +123,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/import/user_profiles/', 'ProfilesController@import')->name('user_profiles.import');
         Route::post('import_user_profiles','ProfilesController@importUserProfilesExcel')->name('user_profiles.importUserProfilesExcel');
         Route::get('/user_profiles/export/pdf', 'ProfilesController@exportPdf')->name('user_profiles.export.pdf');
+        Route::get('/user_profiles/export/excel', 'ProfilesController@exportExcel')->name('user_profiles.export.excel');
         Route::get('/user_profiles/{id}/download', [App\Http\Controllers\admin\ProfilesController::class, 'download'])
             ->name('user_profiles.download');
         // Link to download invoice PDF
