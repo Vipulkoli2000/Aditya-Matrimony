@@ -17,7 +17,9 @@
                     <h5 class="font-semibold text-lg dark:text-white-light">Edit User</h5>
                 </div>   
                 <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-3">
-                        <x-text-input name="name" value="{{ old('name', $user->name) }}" :label="__('Name')" :require="true" :messages="$errors->get('name')"/>  
+                        <x-text-input name="name_display" value="{{ old('name', $user->name) }}" :label="__('Name')" :require="true" :messages="$errors->get('name')" :disabled="true"/>  
+                        <input type="hidden" name="name" value="{{ old('name', $user->name) }}">
+
                         <x-text-input name="email" value="{{ old('email', $user->email) }}" :require="true" :label="__('Email (Required)')" :messages="$errors->get('email')"/>
                        
                             <x-text-input 

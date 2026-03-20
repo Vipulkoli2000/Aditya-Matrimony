@@ -310,5 +310,22 @@ class Profile extends Model
                 DB::table('users')->where('id', $profile->user_id)->delete();
             }
         });
+
+        // Synchronize name, email and mobile to user when profile is updated
+        static::updated(function($profile) {
+            if ($profile->user && $profile->wasChanged(['email', 'mobile', 'first_name', 'middle_name', 'last_name'])) {
+                $nameParts = array_filter([
+                    $profile->first_name,
+                    $profile->middle_name,
+                    $profile->last_name
+                ]);
+                
+                $profile->user->update([
+                    'email' => $profile->email,
+                    'mobile' => $profile->mobile,
+                    'name' => implode(' ', $nameParts),
+                ]);
+            }
+        });
     }
 }

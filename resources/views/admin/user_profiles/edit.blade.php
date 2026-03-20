@@ -18,9 +18,9 @@
                         <h5 class="font-semibold text-lg dark:text-white-light">Personal Information</h5>
                     </div>               
                     <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-3">     
-                        <x-text-input name="first_name" class="bg-gray-200" value="{{ $profile->first_name }}" :label="__('First Name')" :require="true" :disabled="true" :messages="$errors->get('first_name')"/>   
-                        <x-text-input name="middle_name" class="bg-gray-200" value="{{ $profile->middle_name }}" :label="__('Middle Name')" :require="true" :disabled="true" :messages="$errors->get('middle_name')"/>                       
-                        <x-text-input name="last_name" class="bg-gray-200" value="{{ $profile->last_name }}" :label="__('Last Name')" :require="true" :disabled="true" :messages="$errors->get('last_name')"/>                                           
+                        <x-text-input name="first_name" value="{{ $profile->first_name }}" :label="__('First Name')" :require="true" :messages="$errors->get('first_name')"/>   
+                        <x-text-input name="middle_name" value="{{ $profile->middle_name }}" :label="__('Middle Name')" :require="true" :messages="$errors->get('middle_name')"/>                       
+                        <x-text-input name="last_name" value="{{ $profile->last_name }}" :label="__('Last Name')" :require="true" :messages="$errors->get('last_name')"/>                                           
                     </div>
                     <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-3">     
                             <div>
@@ -34,7 +34,17 @@
                                 <x-input-error :messages="$errors->get('mother_tongue')" class="mt-2" /> 
                             </div> 
                         <x-text-input name="native_place" value="{{ $profile->native_place }}" :label="__('Native Place')" :require="false" :messages="$errors->get('native_place')"/>                       
-                        <x-text-input name="gender" class="bg-gray-200" value="{{$profile->gender}}" :label="__('Gender')" :require="true" :messages="$errors->get('gender')" :disabled="true"/>                                           
+                        <div>
+                            <label>Gender <span class="text-red-500">*</span></label>
+                            <select class="form-input bg-gray-100" id="gender_display" disabled>
+                                <option value="" selected>select an option</option>
+                                @foreach(config('data.gender') as $value => $name)
+                                    <option value="{{ $value }}" {{($profile->gender === $value) ? 'selected': ''}} >{{ $name }}</option>
+                                @endforeach
+                            </select> 
+                            <input type="hidden" name="gender" id="gender_hidden" value="{{ $profile->gender }}">
+                            <x-input-error :messages="$errors->get('gender')" class="mt-2" /> 
+                        </div>
                     </div>
                     <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-3">     
                         <div>
@@ -286,6 +296,8 @@
                                     <select class="form-input" name="religion" id="religion" disabled>
                                         <option value="hindu" selected>Hindu</option>
                                     </select> 
+                                    <!-- Hidden input to ensure 'religion' is sent with the form since primary select is disabled -->
+                                    <input type="hidden" name="religion" value="hindu">
                                     <x-input-error :messages="$errors->get('religion')" class="mt-2" /> 
                                 </div>
                                 
@@ -297,14 +309,14 @@
                         <select class="form-input" name="caste" id="caste">
                             <option value="" selected>select an option</option>
                             @foreach($castes as $caste)
-                            <option value="{{$caste->id}}" {{ ($profile->caste === $caste->id ) ? 'selected' : ''}}>{{$caste->name}}</option>
+                            <option value="{{$caste->id}}" {{ ($profile->caste == $caste->id ) ? 'selected' : ''}}>{{$caste->name}}</option>
                             @endforeach
                         </select> 
                         <x-input-error :messages="$errors->get('caste')" class="mt-2" /> 
                     </div>
                     
                     <!-- Custom Caste Input (hidden by default) -->
-                    <div id="custom-caste-input" style="display: none;">
+                    <div id="custom-caste-input" style="{{ $profile->is_other_caste ? 'display: block;' : 'display: none;' }}">
                         <label>Custom Caste</label>
                         <input type="text" name="custom_caste" id="custom_caste" class="form-input" 
                                value="{{ old('custom_caste', $profile->custom_caste) }}" 
@@ -319,14 +331,14 @@
                                         <select name="sub_caste" class="form-input" id="sub_caste">
                                             <option value="" selected>select an option</option>
                                             @foreach($subCastes as $subCaste)
-                                            <option value="{{$subCaste->id}}" {{ ($profile->sub_caste === $subCaste->id ) ? 'selected' : ''}}>{{$subCaste->name}}</option>
+                                            <option value="{{$subCaste->id}}" {{ ($profile->sub_caste == $subCaste->id ) ? 'selected' : ''}}>{{$subCaste->name}}</option>
                                             @endforeach
                                         </select> 
                                         <x-input-error :messages="$errors->get('sub_caste')" class="mt-2" /> 
                                     </div>
                                     
                                     <!-- Custom Subcaste Input (hidden by default) -->
-                                    <div id="custom-subcaste-input" style="display: none;">
+                                    <div id="custom-subcaste-input" style="{{ $profile->is_other_sub_caste ? 'display: block;' : 'display: none;' }}">
                                         <label>Custom Subcaste</label>
                                         <input type="text" name="custom_sub_caste" id="custom_sub_caste" class="form-input" 
                                                value="{{ old('custom_sub_caste', $profile->custom_sub_caste) }}" 
@@ -1323,8 +1335,9 @@
                             option.value = subcaste.id;
                             option.textContent = subcaste.name;
                             
+                            const userSubcasteId = @json($profile->sub_caste);
                             // Check if this subcaste should be selected
-                            if (parseInt(subcaste.id) === {{ $profile->sub_caste ?? 'null' }}) {
+                            if (userSubcasteId && parseInt(subcaste.id) === parseInt(userSubcasteId)) {
                                 option.selected = true;
                             }
                             
@@ -1357,6 +1370,31 @@
             toggleCustomInputs();
             if (casteSelect && casteSelect.value) {
                 loadSubcastes(casteSelect.value);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleSelect = document.getElementById('role');
+            const genderDisplay = document.getElementById('gender_display');
+            const genderHidden = document.getElementById('gender_hidden');
+
+            if (roleSelect && genderDisplay && genderHidden) {
+                roleSelect.addEventListener('change', function() {
+                    const selectedRole = this.value;
+                    let targetGender = '';
+
+                    if (selectedRole === 'bride') {
+                        targetGender = 'Female';
+                    } else if (selectedRole === 'groom') {
+                        targetGender = 'Male';
+                    }
+
+                    if (targetGender) {
+                        genderDisplay.value = targetGender;
+                        genderHidden.value = targetGender;
+                    }
+                });
             }
         });
     </script>

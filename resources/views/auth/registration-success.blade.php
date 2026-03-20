@@ -120,14 +120,8 @@
 
                 <!-- Success Message -->
                 <p class="success-message">
-                    Your account has been created successfully. You can now use the credentials below to login to your account.
+                    Your account has been created successfully. You can now use your email and the password you set during registration to login to your account.
                 </p>
-
-                <!-- Password Information -->
-                <div class="password-info">
-                    <div class="password-label">Your Login Password:</div>
-                    <div class="password-value">Aditya123</div>
-                </div>
 
                 <!-- Login Button -->
                 <a href="{{ route('login') }}" class="btn btn-login">

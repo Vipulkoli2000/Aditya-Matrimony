@@ -89,6 +89,16 @@ class User extends Authenticatable implements MustVerifyEmail
                   \DB::table('profiles')->where('id', $profile->id)->delete();
               }
           });
+          
+          // Synchronize email and mobile to profile when user is updated
+          static::updated(function($user) {
+              if ($user->profile && $user->wasChanged(['email', 'mobile'])) {
+                  $user->profile->update([
+                      'email' => $user->email,
+                      'mobile' => $user->mobile,
+                  ]);
+              }
+          });
       }
 
     /**

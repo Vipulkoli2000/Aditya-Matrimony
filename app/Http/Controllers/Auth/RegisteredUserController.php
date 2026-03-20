@@ -70,7 +70,8 @@ class RegisteredUserController extends Controller
             'custom_caste' => ['nullable','string','max:100'],
             'custom_sub_caste' => ['nullable','string','max:100'],
             'has_franchise_code' => ['nullable','in:yes,no'],
-            'franchise_code' => ['nullable','string','max:50'],
+            'franchise_code' => ['nullable', 'string', 'max:50'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ];
         
         // Add conditional validation for custom fields
@@ -124,7 +125,7 @@ class RegisteredUserController extends Controller
                 'name' => $fullName,
                 'email' => $request->email,
                 'mobile' => $number,
-                'password' => Hash::make('Aditya123'), // Fixed password
+                'password' => Hash::make($request->password), // User defined password
             ]);
            
             // Determine user role

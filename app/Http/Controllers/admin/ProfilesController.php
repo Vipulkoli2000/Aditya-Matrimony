@@ -29,7 +29,7 @@ class ProfilesController extends Controller
     {
         $query = Profile::query()
             ->join('users', 'profiles.user_id', '=', 'users.id')
-            ->select('profiles.*', 'users.email', 'users.mobile', 'users.active')
+            ->select('profiles.*', 'users.email as user_email', 'users.mobile as user_mobile', 'users.active')
             ->orderByDesc('users.active')
             ->orderByDesc('profiles.id');
 
@@ -87,7 +87,10 @@ class ProfilesController extends Controller
         
         // Check for "Other" caste/subcaste IDs and add validation rules accordingly
         $otherCasteId = Caste::where('name', 'Other')->value('id');
-        $otherSubcasteId = SubCaste::where('name', 'Other')->value('id');
+        // Find the "Other" subcaste specific to the selected caste (if any)
+        $otherSubcasteId = SubCaste::where('name', 'Other')
+            ->where('caste_id', $request->caste)
+            ->value('id');
         
         $validationRules = [
             // Require at least one of email or mobile; allow both

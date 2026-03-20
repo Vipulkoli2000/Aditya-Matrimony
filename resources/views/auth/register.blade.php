@@ -536,6 +536,18 @@
                         </div>
                          {{-- end step 3 --}}
                         <div class="step-form d-none">
+                            <div class="mb-3">
+                                <label for="password" class="form-label" style="color: black; margin: 10px 0;">Password <span class="text-danger">*</span></label>
+                                <input id="password" name="password" type="password" class="form-control" placeholder="Create Password" required autocomplete="new-password" />
+                                <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger small" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password_confirmation" class="form-label" style="color: black; margin: 10px 0;">Confirm Password <span class="text-danger">*</span></label>
+                                <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Confirm Password" required autocomplete="new-password" />
+                                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-danger small" />
+                            </div>
+
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" id="terms" required>
                                 <label class="form-check-label" for="terms" style="color: black;">
@@ -743,10 +755,22 @@
                                     toggleMotherDetails();
                                 }
                                 /* Stepper logic */
-                                const stepForms = Array.from(document.querySelectorAll('.step-form'));
-                                const stepIndicators = Array.from(document.querySelectorAll('.stepper .step'));
-                                let currentStep = 0;
-                                const prevBtn = document.getElementById('prevBtn');
+                                 const stepForms = Array.from(document.querySelectorAll('.step-form'));
+                                 const stepIndicators = Array.from(document.querySelectorAll('.stepper .step'));
+                                 let currentStep = 0;
+
+                                 // Set current step based on errors if any
+                                 @if($errors->any())
+                                     @if($errors->hasAny(['password', 'password_confirmation', 'g-recaptcha-response']))
+                                         currentStep = 3;
+                                     @elseif($errors->hasAny(['father_is_alive', 'mother_is_alive', 'father_name', 'father_mobile', 'father_address', 'mother_name', 'mother_mobile', 'mother_address', 'caste', 'sub_caste', 'custom_caste', 'custom_sub_caste']))
+                                         currentStep = 2;
+                                     @elseif($errors->hasAny(['height', 'weight', 'complexion', 'address_line1', 'address_line2', 'landmark', 'pincode', 'highest_education']))
+                                         currentStep = 1;
+                                     @endif
+                                 @endif
+
+                                 const prevBtn = document.getElementById('prevBtn');
                                 const nextBtn = document.getElementById('nextBtn');
 
                                 function stepIsValid(idx) {

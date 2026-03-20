@@ -111,8 +111,6 @@ class UsersController extends Controller
             $profile->user_id = $user->id;
         }
         
-        $profile->email = $request->input("email");
-        $profile->mobile = $request->input("mobile");
         $profile->first_name = $request->input('name');
         $profile->save();
         

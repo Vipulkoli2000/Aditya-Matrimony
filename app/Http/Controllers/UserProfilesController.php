@@ -47,8 +47,8 @@ class UserProfilesController extends Controller
             'img_2',
             'img_3',
             'religion',
-            'cast',
-            'sub_cast',
+            'caste',
+            'sub_caste',
             'gotra',
             'father_is_alive',
             'father_name',
@@ -366,7 +366,16 @@ class UserProfilesController extends Controller
 
     public function basic_details(Request $request)
     {
-        $user = auth()->user()->profile()->first();
+        $profile = auth()->user()->profile;
+
+        if (!$profile) {
+            if (auth()->user()->hasRole('admin')) {
+                return redirect()->route('admin.dashboard');
+            }
+            return redirect()->route('dashboard')->with('error', 'Profile not found.');
+        }
+
+        $user = $profile; // Maintain original variable name choice for compatibility
         $profileCompletion = $this->calculateProfileCompletion($user);
     
         // Get the most recent active package
@@ -1154,20 +1163,12 @@ class UserProfilesController extends Controller
     }
 
     public function store(UpdateProfileRequest $request)
-    {   
+    {
         $profile = Profile::where('user_id', auth()->user()->id)->first();
-        $user = User::find($profile->user_id);
-  
-        if($request->has("email") && $request->input("email")){
-            $user->email = $request->input("email");
-            $user->save();
+        
+        if (!$profile) {
+            return redirect()->back()->with('error', 'Profile not found.');
         }
-
-        if($request->has("mobile") && $request->input("mobile")){
-            $user->mobile = $request->input("mobile");
-            $user->save();
-        }
-
         if ($request->hasFile('img_1')) {
             if (!empty($profile->img_1) && Storage::exists('public/images/'.$profile->img_1)) {
                 Storage::delete('public/images/'.$profile->img_1);

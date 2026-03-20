@@ -76,9 +76,9 @@
                             <tr title="{{ $profile->created_at}}">
                                 {{-- <td>{{ $profile->id }}</td> --}}
                                 <td>{{ $profile->first_name . " " . $profile->middle_name . " " . $profile->last_name }}</td>
-                                <td>{{ $profile->mobile }}</td>
+                                <td>{{ $profile->user_mobile ?? $profile->mobile }}</td>
                                 <td>{{ $profile->gender }}</td>
-                                <td>{{ $profile->email }}</td>
+                                <td>{{ $profile->user_email ?? $profile->email }}</td>
                                 <td>{{ $profile->franchise_code ?? '-' }}</td>
                                 <td>
                                     @if(optional($profile->user)->active)
