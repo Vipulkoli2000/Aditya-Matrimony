@@ -481,10 +481,21 @@ class ProfilesController extends Controller
      */
     public function exportPdf(Request $request)
     {
-        // Build the same query as index(), including franchise scoping
+        // Increase memory and execution time for PDF generation
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '600');
+
+        // Build the same query as index(), including franchise scoping and caste joins
         $query = Profile::query()
             ->join('users', 'profiles.user_id', '=', 'users.id')
-            ->select('profiles.*', 'users.email', 'users.mobile', 'users.active')
+            ->leftJoin('castes', 'profiles.caste', '=', 'castes.id')
+            ->leftJoin('sub_castes', 'profiles.sub_caste', '=', 'sub_castes.id')
+            ->select(
+                'profiles.*', 
+                'users.email', 'users.mobile', 'users.active',
+                'castes.name as caste_name',
+                'sub_castes.name as sub_caste_name'
+            )
             ->orderByDesc('users.active')
             ->orderByDesc('profiles.id');
 
@@ -512,11 +523,11 @@ class ProfilesController extends Controller
 
         $profiles = $query->get();
 
-        // Render the PDF view
+        // Render the PDF view with Landscape orientation
         $pdf = Pdf::loadView('admin.user_profiles.list_pdf', [
             'profiles' => $profiles,
             'generatedAt' => now(),
-        ]);
+        ])->setPaper('a4', 'landscape');
 
         $fileName = 'profiles-' . now()->format('Ymd-His') . '.pdf';
         return $pdf->download($fileName);
@@ -527,9 +538,14 @@ class ProfilesController extends Controller
      */
     public function exportExcel(Request $request)
     {
+        // Increase memory and execution time for large image exports
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '600');
+
         $fileName = 'profiles-' . now()->format('Ymd-His') . '.xlsx';
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\UserProfilesExport($request), $fileName);
     }
+
 
     public function create()
     {

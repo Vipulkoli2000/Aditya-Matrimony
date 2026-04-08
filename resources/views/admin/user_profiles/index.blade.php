@@ -23,6 +23,7 @@
                         <button class="btn btn-primary px-4 py-2 mr-2" type="submit">Search</button>
                         <a href="{{ route('user_profiles.export.pdf', request()->query()) }}" target="_blank" class="btn btn-secondary px-4 py-2 mr-2">Download PDF</a>
                         <a href="{{ route('user_profiles.export.excel', request()->query()) }}" target="_blank" class="btn btn-success px-4 py-2 mr-2">Download Excel</a>
+
                         
                         {{-- @if(request('search'))
                             <a href="{{ route('user_profiles.index') }}" class="btn btn-secondary px-4 py-2">Reset</a>

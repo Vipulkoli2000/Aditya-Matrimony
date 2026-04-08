@@ -2,46 +2,85 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Profiles Export</title>
+    <title>Aditya Matrimony - Profiles Export</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #333; }
-        h2 { margin: 0 0 10px; font-size: 18px; }
-        .meta { font-size: 11px; color: #666; margin-bottom: 12px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ccc; padding: 6px 8px; }
-        th { background: #f5f5f5; text-align: left; }
-        .text-right { text-align: right; }
-        .status-active { color: #138a36; font-weight: bold; }
+        @page { margin: 15px; }
+        body { font-family: 'DejaVu Sans', sans-serif; font-size: 10px; color: #333; line-height: 1.4; }
+        .header { background: #1565c0; color: white; padding: 20px; margin-bottom: 20px; border-radius: 4px; }
+        .header h1 { margin: 0; font-size: 20px; letter-spacing: 1px; }
+        .header .meta { font-size: 11px; margin-top: 5px; opacity: 0.9; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th { background: #e3f2fd; color: #0d47a1; padding: 10px 8px; border: 1px solid #bbdefb; text-align: left; font-weight: bold; }
+        td { padding: 8px; border: 1px solid #eee; vertical-align: middle; }
+        tr:nth-child(even) { background-color: #fafafa; }
+        
+        .photo-cell { width: 50px; text-align: center; }
+        .profile-photo { width: 45px; height: 45px; border-radius: 4px; border: 1px solid #ddd; }
+        
+        .status-active { color: #2e7d32; font-weight: bold; }
         .status-inactive { color: #c62828; font-weight: bold; }
-        .footer { margin-top: 16px; font-size: 10px; color: #777; text-align: right; }
+        
+        .caste-info { font-size: 9px; color: #666; }
+        .footer { margin-top: 20px; padding-top: 10px; border-top: 1px solid #eee; font-size: 9px; color: #999; text-align: center; }
     </style>
 </head>
 <body>
-    <h2>Profiles Export</h2>
-    <div class="meta">
-        Generated: {{ $generatedAt->format('d-m-Y H:i') }}
+    <div class="header">
+        <h1>Aditya Matrimony</h1>
+        <div class="meta">Profiles Export Report | Total: {{ count($profiles) }} Records | Generated: {{ $generatedAt->format('d-m-Y H:i') }}</div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>Full Name</th>
+                <th class="photo-cell">Photo</th>
+                <th style="width: 150px;">Full Name</th>
+                <th>Caste / Sub Caste</th>
                 <th>Mobile</th>
-                <th>Gender</th>
                 <th>Email</th>
-                <th>Franchise Code</th>
                 <th>Status</th>
                 <th>Registered Date</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($profiles as $p)
+            @foreach($profiles as $p)
                 <tr>
-                    <td>{{ trim(($p->first_name ?? '') . ' ' . ($p->middle_name ?? '') . ' ' . ($p->last_name ?? '')) }}</td>
+                    <td class="photo-cell">
+                        @php
+                            $path = null;
+                            foreach(['img_1', 'img_2', 'img_3'] as $imgField) {
+                                if ($p->$imgField && file_exists(storage_path('app/public/images/' . $p->$imgField))) {
+                                    $path = storage_path('app/public/images/' . $p->$imgField);
+                                    break;
+                                }
+                            }
+                            
+                            $base64 = '';
+                            if ($path) {
+                                $data = file_get_contents($path);
+                                $base64 = 'data:image/' . pathinfo($path, PATHINFO_EXTENSION) . ';base64,' . base64_encode($data);
+                            }
+                        @endphp
+                        @if($base64)
+                            <img src="{{ $base64 }}" class="profile-photo">
+                        @else
+                            <div style="width: 45px; height: 45px; background: #eee; border-radius: 4px; line-height: 45px; text-align: center; color: #ccc; font-size: 8px;">No Photo</div>
+                        @endif
+                    </td>
+                    <td>
+                        <div style="font-weight: bold; color: #0d47a1;">{{ trim(($p->first_name ?? '') . ' ' . ($p->middle_name ?? '') . ' ' . ($p->last_name ?? '')) }}</div>
+                        <div style="font-size: 9px; color: #777;">ID: #{{ $p->id }}</div>
+                    </td>
+                    <td>
+                        <div>{{ $p->caste_name ?? '-' }}</div>
+                        <div class="caste-info">{{ $p->sub_caste_name ?? '-' }}</div>
+                        @if($p->custom_caste)
+                            <div style="font-style: italic; color: #1565c0;">Custom: {{ $p->custom_caste }}</div>
+                        @endif
+                    </td>
                     <td>{{ $p->mobile }}</td>
-                    <td>{{ $p->gender }}</td>
-                    <td>{{ $p->email }}</td>
-                    <td>{{ $p->franchise_code ?? '-' }}</td>
+                    <td style="word-break: break-all;">{{ $p->email }}</td>
                     <td>
                         @if($p->active)
                             <span class="status-active">Active</span>
@@ -51,14 +90,12 @@
                     </td>
                     <td>{{ optional($p->created_at)->format('d-m-Y') }}</td>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="6" class="text-right">No records found for current filters.</td>
-                </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 
-    <div class="footer">© {{ date('Y') }} {{ config('app.name') }} — All rights reserved.</div>
+    <div class="footer">
+        Generated by Aditya Matrimony Admin Portal — Confidential Report — © {{ date('Y') }}
+    </div>
 </body>
 </html>
